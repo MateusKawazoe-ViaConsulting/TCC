@@ -18,7 +18,7 @@
         width: fit-content;
         background-color: white;
         border-radius: 5px;
-        padding: 15px 15px;
+        padding: 15px 40px;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         .title-container {
             padding: 0;
@@ -34,7 +34,7 @@
         }
         .close {
             position: absolute;
-            right: 30px;
+            right: 40px;
             top: 30px;
             cursor: pointer;
         }
@@ -81,7 +81,7 @@
             padding: 0 5px;
             text-align: justify;
             cursor: default;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             span {
                 cursor: pointer;
                 color: #1877f2;
@@ -96,6 +96,7 @@
         .button-md {
             font-size: 16px;
             font-weight: bold;
+            margin-bottom: 10px;
             background-color: #ffd000 !important;
             &:hover {
                 background-color: #ffae00 !important;

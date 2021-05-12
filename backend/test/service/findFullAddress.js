@@ -5,7 +5,7 @@ module.exports = () => {
 
     test('find an address by latitude and longitude', async () => {
         result = await findFullAddress('-22.1065563,-50.1758439')
-        expect(result[1].long_name).toBe('Rua José de Aguar Morães')
+        expect(result[1].long_name).toBe('Rua José de Aguiar Moraes')
     })
 
     test('use wrong params', async () => {

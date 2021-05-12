@@ -28,51 +28,57 @@ module.exports = {
             endereco
         } = req.body
 
-        const userExists = await user.findOne({
-            usuario
-        })
+        try {
+            const userExists = await user.findOne({
+                usuario
+            })
 
-        const nameExists = await user.findOne({
-            nome
-        })
+            const nameExists = await user.findOne({
+                nome
+            })
 
-        if (userExists || nameExists) {
-            return res.json("Usuário já cadastrado!")
-        }
-
-        let localizacao
-
-        if (endereco) {
-            let latlng = await findLatlng(endereco)
-            localizacao = {
-                latitude: latlng.lat,
-                longitude: latlng.lng,
-                endereco: endereco
+            if (userExists || nameExists) {
+                return res.json("Usuário já cadastrado!")
             }
-        } else {
-            return res.json('Endereço é obrigatório!')
-        }
 
-        const token = await auth_token.generateToken({
-            usuario,
-            senha: md5(senha + global.SALT_KEY)
-        })
+            let localizacao
 
-        const users = await user.create({
-            foto: foto,
-            usuario: usuario,
-            senha: md5(senha + global.SALT_KEY),
-            nome: nome,
-            localizacao: localizacao,
-            integridade: 1,
-            token: token,
-            nivel: {
-                lvl: 0,
-                xp: 0
+            if (endereco) {
+                let latlng = await findLatlng(endereco)
+                localizacao = {
+                    latitude: latlng.lat,
+                    longitude: latlng.lng,
+                    endereco: endereco
+                }
+            } else {
+                // localizacao = {}
+                // return res.json('Endereço é obrigatório!')
             }
-        })
 
-        return res.json(users)
+            const token = await auth_token.generateToken({
+                usuario,
+                senha: md5(senha + global.SALT_KEY)
+            })
+
+            const users = await user.create({
+                foto: foto,
+                usuario: usuario,
+                senha: md5(senha + global.SALT_KEY),
+                nome: nome,
+                localizacao: localizacao,
+                integridade: 1,
+                token: token,
+                nivel: {
+                    lvl: 0,
+                    xp: 0
+                }
+            })
+
+            return res.json(users)
+        } catch (err) {
+            // console.log(err)
+            // return res.json("Erro interno do servidor!")
+        }
     },
 
     async showAll(req, res) {

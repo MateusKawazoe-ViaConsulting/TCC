@@ -9,7 +9,7 @@ export default function LoginContainer({ history }) {
     const [password, setPassword] = useState("");
     const [userError, setUserError] = useState({
         visible: false,
-        message: "Usuário inválido"
+        message: "E-mail inválido"
     });
     const [passwordError, setPasswordError] = useState({
         visible: false,
@@ -21,12 +21,12 @@ export default function LoginContainer({ history }) {
             <MyInput
                 error={userError.visible}
                 errorLabel={userError.message}
-                placeholder="Usuário"
+                placeholder="E-mail"
                 className="text-regular input-md"
                 onChange={e => {
                     if (user.length < 30)
                         setUser(e.target.value)
-                    if (user.length > 3 && /^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user))
+                    if (user.length > 7 && /^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user))
                         setUserError({ visible: false })
                 }}
             />
@@ -47,10 +47,10 @@ export default function LoginContainer({ history }) {
                 type="submit"
                 className="button-lg"
                 onClick={async () => {
-                    if (!user || user.length < 4 || !/^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user)) {
+                    if (!user || user.length < 8 || !/^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user)) {
                         setUserError({
                             visible: true,
-                            message: "Usuário inválido"
+                            message: "E-mail inválido"
                         })
                     } else {
                         setUserError({ visible: false })
@@ -66,30 +66,32 @@ export default function LoginContainer({ history }) {
                     }
 
                     try {
-                        document.getElementsByClassName("loading")[0].style.display = "flex"
-                        const result = await api.get('http://localhost:3333/user/login', {
-                            headers: {
-                                usuario: user,
-                                senha: password
-                            }
-                        })
-                        setTimeout(() => {
-                            document.getElementsByClassName("loading")[0].style.display = "none"
-                            if (result.data === 'Usuário não existe') {
-                                setUserError({
-                                    visible: true,
-                                    message: result.data
-                                })
-                            } else if (result.data === 'Senha incorreta') {
-                                setPasswordError({
-                                    visible: true,
-                                    message: result.data
-                                })
-                            } else {
-                                localStorage.setItem('urbanVG-token', result.data.token)
-                                history.push('/home')
-                            }
-                        }, 2000)
+                        if (user !== "" && password !== "" && /^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user)) {
+                            document.getElementsByClassName("loading")[0].style.display = "flex"
+                            const result = await api.get('/user/login', {
+                                headers: {
+                                    usuario: user,
+                                    senha: password
+                                }
+                            })
+                            setTimeout(() => {
+                                document.getElementsByClassName("loading")[0].style.display = "none"
+                                if (result.data === 'Usuário não existe') {
+                                    setUserError({
+                                        visible: true,
+                                        message: "E-mail não existe"
+                                    })
+                                } else if (result.data === 'Senha incorreta') {
+                                    setPasswordError({
+                                        visible: true,
+                                        message: result.data
+                                    })
+                                } else {
+                                    localStorage.setItem('urbanVG-token', result.data.token)
+                                    history.push('/home')
+                                }
+                            }, 1500)
+                        }
                     } catch (err) {
 
                     }
