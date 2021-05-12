@@ -1,0 +1,52 @@
+.login-container {
+    height: fit-content;
+    width: fit-content;
+    background-color: white;
+    border-radius: 10px;
+    padding: 35px 30px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    .input-md {
+        margin-bottom: 20px;
+        &:focus-within {
+            .MuiInputBase-input:focus {
+                color: black;
+            }
+            .MuiOutlinedInput-notchedOutline {
+                border-color: #1e9705 !important;
+            }
+            label {
+                color: #1e9705 !important;
+            }
+        }
+    }
+    .button-lg {
+        font-size: 20px;
+        font-weight: bold;
+        &:hover {
+            background-color: #1e9705 !important;
+        }
+    }
+    .text-small {
+        color: #1877f2;
+        cursor: pointer;
+        margin-top: 15px;
+        &:hover {
+            text-decoration: underline;
+        }
+        &:active {
+            color: #5ca2ff;
+        }
+    }
+    .line {
+        margin: 20px 0;
+        margin-top: 30px;
+    }
+    .button-md {
+        font-size: 15px;
+        font-weight: bold;
+        background-color: #ffd000 !important;
+        &:hover {
+            background-color: #ffae00 !important;
+        }
+    }
+}

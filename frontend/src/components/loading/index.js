@@ -3,41 +3,41 @@ import './styles.scss'
 
 export default function Loading() {
     return (
-        <div className="loading">
+        <div className="loading row-center">
             <div className="loading-background" />
-            <div className="loading-container">
+            <div className="loading-container column-center">
                 <div className="loading-image-container">
-                    <ol class="loading-plant-container">
-                        <ul class="leafs">
+                    <ol className="loading-plant-container">
+                        <ul className="leafs">
                             <li />
                             <li />
                             <div className="stalk" />
                         </ul>
-                        <li class="vase-top" />
-                        <li class="vase">
+                        <li className="vase-top" />
+                        <li className="vase">
                             <div />
                         </li>
                     </ol>
-                    <ol class="loading-plant-container">
-                        <li class="leafs">
+                    <ol className="loading-plant-container">
+                        <li className="leafs">
                             <span />
                             <span />
                             <span />
                         </li>
-                        <li class="vase-top" />
-                        <li class="vase">
+                        <li className="vase-top" />
+                        <li className="vase">
                             <div />
                         </li>
                     </ol>
-                    <ol class="loading-plant-container">
-                        <li class="leafs">
+                    <ol className="loading-plant-container">
+                        <li className="leafs">
                             <b />
                             <b />
                             <b />
                             <p />
                             <p />
                         </li>
-                        <li class="vase">
+                        <li className="vase">
                             <span />
                             <span />
                         </li>

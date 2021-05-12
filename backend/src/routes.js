@@ -4,6 +4,7 @@ const cropController = require('./controllers/cropController')
 const routes = express.Router()
 
 // Users routes --
+routes.get('/user/login', userController.login)
 
 routes.post('/user/store', userController.store)
 

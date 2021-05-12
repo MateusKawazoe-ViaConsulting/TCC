@@ -1,0 +1,66 @@
+[class^="text"] {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black;
+}
+
+.text-tiny {
+  font-size: 10px;
+}
+
+.text-small {
+  font-size: 14px;
+}
+
+.text-regular {
+  font-size: 20px;
+}
+
+.text-medium {
+  font-size: 20px;
+}
+
+.text-large {
+  font-size: 40px;
+}
+
+.input-sm {
+  width: 194px;
+}
+
+.input-md {
+  width: 400px;
+}
+
+.button-sm {
+  width: 130px;
+  height: 42px;
+}
+
+.button-md {
+  width: 200px;
+  height: 44px;
+}
+
+.button-lg {
+  width: 400px;
+  height: 46px;
+}
+
+.row-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.line {
+  height: 1px;
+  width: 100%;
+  background-color: rgb(218, 218, 218);
+}

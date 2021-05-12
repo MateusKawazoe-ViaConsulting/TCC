@@ -4,6 +4,21 @@ const md5 = require("md5")
 const findLatlng = require('../service/findLatlng')
 
 module.exports = {
+    async login(req, res) {
+        const { usuario, senha } = req.headers
+        const exists = await user.findOne({
+            usuario
+        })
+
+        if (!exists)
+            return res.json('Usuário não existe')
+
+        if (exists.senha === md5(senha + global.SALT_KEY))
+            return res.json(exists)
+        else
+            return res.json('Senha incorreta')
+    },
+
     async store(req, res) {
         const {
             foto,
@@ -24,10 +39,10 @@ module.exports = {
         if (userExists || nameExists) {
             return res.json("Usuário já cadastrado!")
         }
-    
+
         let localizacao
 
-        if(endereco) {
+        if (endereco) {
             let latlng = await findLatlng(endereco)
             localizacao = {
                 latitude: latlng.lat,
@@ -126,7 +141,7 @@ module.exports = {
                     senha: aux.senha
                 })
             }
-                
+
 
             await user.updateOne({
                 usuario
@@ -146,6 +161,6 @@ module.exports = {
     },
 
     // async xpUpdate(req, res) {
-        
+
     // }
 }

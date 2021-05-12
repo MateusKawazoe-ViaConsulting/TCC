@@ -1,0 +1,37 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: Zen Dots;
+    .title-container {
+        width: 400px;
+        padding-bottom: 5%;
+        margin-right: 5%;
+        h1 {
+            justify-content: unset;
+            color: #1e9705;
+            font-size: 50px;
+            img {
+                margin-left: 15px;
+                margin-top: 2px;
+                height: 50px;
+            }
+        }
+        p {
+            text-align: left;
+            font-size: 25px;
+            color: black;
+            padding-left: 5px;
+            animation: textDaily 30s infinite linear 5s;
+        }
+    }
+}
+
+@keyframes textDaily {
+    50% {
+        color: white;
+    }
+    100% {
+        color: black;
+    }
+}

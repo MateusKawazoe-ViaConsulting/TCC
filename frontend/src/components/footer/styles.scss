@@ -1,0 +1,25 @@
+.footer-container {
+    height: 35px;
+    background-color: transparent;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    .footer-information {
+        list-style-type: none;
+        position: absolute;
+        bottom: 8px;
+        color: #178a00; 
+        li {
+            cursor: default;
+            margin: 0 5px;
+            &:nth-child(3),
+            &:nth-child(4) {
+                &:hover {
+                    text-decoration: underline;
+                    cursor: pointer;
+                    color: #ffd000;
+                }
+            }
+        }
+    }
+}

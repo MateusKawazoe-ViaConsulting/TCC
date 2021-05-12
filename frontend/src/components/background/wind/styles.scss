@@ -1,0 +1,44 @@
+.wind {
+    width: 220px;
+    background-color: #eee;
+    height: 2px;
+    position: absolute;
+    top: 30%;
+    opacity: 0;
+    animation: wind 8s infinite linear;
+    &::before {
+        content: "";
+        position: absolute;
+        left: 400px;
+        width: 200px;
+        height: 1px;
+        background-color: #eee;
+        top: 180px;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        left: 850px;
+        width: 280px;
+        height: 1px;
+        background-color: #eee;
+        top: 75px;
+    }
+}
+
+@keyframes wind {
+    0% {
+        left: -50vw;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    70% {
+        left: 150vw;
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
