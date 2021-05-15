@@ -8,7 +8,7 @@
         list-style-type: none;
         position: absolute;
         bottom: 8px;
-        color: #178a00; 
+        color: #1eb400; 
         li {
             cursor: default;
             margin: 0 5px;
@@ -17,7 +17,7 @@
                 &:hover {
                     text-decoration: underline;
                     cursor: pointer;
-                    color: #ffd000;
+                    color: $yellow;
                 }
             }
         }

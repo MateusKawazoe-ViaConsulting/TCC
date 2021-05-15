@@ -8,7 +8,7 @@ module.exports = {
         const { usuario, senha } = req.headers
         const exists = await user.findOne({
             usuario
-        })
+        }).collation({ locale: 'pt', strength: 2 })
 
         if (!exists)
             return res.json('Usuário não existe')
@@ -31,11 +31,11 @@ module.exports = {
         try {
             const userExists = await user.findOne({
                 usuario
-            })
+            }).collation({ locale: 'pt', strength: 2 })
 
             const nameExists = await user.findOne({
                 nome
-            })
+            }).collation({ locale: 'pt', strength: 2 })
 
             if (userExists || nameExists) {
                 return res.json("Usuário já cadastrado!")
@@ -89,7 +89,7 @@ module.exports = {
         const usuario = req.headers.usuario
         const exists = await user.findOne({
             usuario
-        })
+        }).collation({ locale: 'pt', strength: 2 })
 
         if (exists) {
             return res.json(exists)
@@ -100,14 +100,14 @@ module.exports = {
 
     async usersNumber(req, res) {
         const result = await user.find()
-        return res.json(result)
+        return res.json(result.length)
     },
 
     async delete(req, res) {
         const usuario = req.headers.usuario
         const exists = await user.findOne({
             usuario
-        })
+        }).collation({ locale: 'pt', strength: 2 })
 
         if (exists) {
             await user.deleteOne({
@@ -129,7 +129,7 @@ module.exports = {
 
         var exists = await user.findOne({
             usuario
-        })
+        }).collation({ locale: 'pt', strength: 2 })
 
         if (exists) {
             let aux = {

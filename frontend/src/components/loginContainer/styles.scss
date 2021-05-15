@@ -12,10 +12,10 @@
                 color: black;
             }
             .MuiOutlinedInput-notchedOutline {
-                border-color: #1e9705 !important;
+                border-color: $green !important;
             }
             label {
-                color: #1e9705 !important;
+                color: $green !important;
             }
         }
     }
@@ -23,18 +23,18 @@
         font-size: 20px;
         font-weight: bold;
         &:hover {
-            background-color: #1e9705 !important;
+            background-color: $green !important;
         }
     }
     .text-small {
-        color: #1877f2;
+        color: $blue;
         cursor: pointer;
         margin-top: 15px;
         &:hover {
             text-decoration: underline;
         }
         &:active {
-            color: #5ca2ff;
+            color: $hover-blue;
         }
     }
     .line {
@@ -44,9 +44,9 @@
     .button-md {
         font-size: 15px;
         font-weight: bold;
-        background-color: #ffd000 !important;
+        background-color: $yellow !important;
         &:hover {
-            background-color: #ffae00 !important;
+            background-color: $hover-yellow !important;
         }
     }
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import MyInput from '../../common/input'
 import Button from '../../common/button'
 import api from '../../service'
-import './styles.scss'
+
 
 export default function SignupContainer({ history }) {
     const [name, setName] = useState("");
@@ -12,19 +12,19 @@ export default function SignupContainer({ history }) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [nameError, setNameError] = useState({
         visible: false,
-        message: "Nome inválido"
+        message: "Nome é obrigatório"
     });
     const [surnameError, setSurnameError] = useState({
         visible: false,
-        message: "Sobrenome inválida"
+        message: "Sobrenome é obrigatória"
     });
     const [userError, setUserError] = useState({
         visible: false,
-        message: "Usuário inválido"
+        message: "Usuário é obrigatório"
     });
     const [passwordError, setPasswordError] = useState({
         visible: false,
-        message: "Senha inválida"
+        message: "Senha é obrigatória"
     });
     const [confirmPasswordError, setConfirmPasswordError] = useState({
         visible: false,
@@ -166,7 +166,7 @@ export default function SignupContainer({ history }) {
 
                         if (user !== "" && password !== "" && name !== "" && surname !== "" && password === confirmPassword) {
                             document.getElementsByClassName("loading")[0].style.display = "flex"
-
+                            
                             try {
                                 const result = await new Promise((resolve) => {
                                     const data = api.post('/user/store', {
@@ -188,7 +188,7 @@ export default function SignupContainer({ history }) {
                                         localStorage.setItem('urbanVG-token', result.data.token)
                                         history.push('/home')
                                     }
-                                }, 1500)
+                                }, 2000)
                             } catch (err) {
                                 console.log(err)
                             }

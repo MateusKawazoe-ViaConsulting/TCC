@@ -1,6 +1,7 @@
 const express = require('express')
 const userController = require('./controllers/userController')
 const cropController = require('./controllers/cropController')
+const sensorController = require('./controllers/sensorController')
 const routes = express.Router()
 
 // Users routes --
@@ -36,14 +37,32 @@ routes.put('/crop/insert/user', cropController.insertUser)
 
 routes.put('/crop/remove/user', cropController.removeUser)
 
-// routes.put('/crop/insert/sensor', cropController.insertSensor)
-
-// routes.put('/crop/remove/sensor', cropController.removeSensor)
-
 routes.put('/crop/update/name', cropController.update)
 
 // routes.put('/crop/update/sensor', cropController.updateSensor)
 
 // -- Crop routes
+
+// Sensor routes --
+
+routes.post('/sensor/store', sensorController.store)
+
+routes.get('/sensor/number', sensorController.sensorsNumber)
+
+routes.get('/sensor/show/all', sensorController.showAll)
+
+routes.get('/sensor/show/one', sensorController.showOne)
+
+routes.put('/sensor/insert/crop', sensorController.insertIntoACrop)
+
+routes.put('/sensor/remove/crop', sensorController.removeFromACrop)
+
+routes.put('/sensor/update/sensor', sensorController.updateSensor)
+
+routes.put('/sensor/update/feed', sensorController.updateFeed)
+
+routes.delete('/sensor/delete', sensorController.delete)
+
+// -- Sensor routes
 
 module.exports = routes

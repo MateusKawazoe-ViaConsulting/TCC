@@ -25,6 +25,7 @@ const userSchema = new Schema({
     },
     horta: [],
     publicacoes: [],
+    sensores: [],
     nivel: {},
     integridade: Number
 }, {

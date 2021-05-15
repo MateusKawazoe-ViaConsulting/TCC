@@ -1,7 +1,8 @@
 import React from 'react'
 import Background from '../../components/background'
+import Header from '../../components/header'
 import Loading from '../../components/loading'
-import './styles.scss'
+
 
 export default function Home({ history }) {
     if (!localStorage.getItem('urbanVG-token')) {
@@ -10,6 +11,7 @@ export default function Home({ history }) {
 
     return (
         <div className="container">
+            <Header />
             <Background />
             {/* <Loading /> */}
         </div>

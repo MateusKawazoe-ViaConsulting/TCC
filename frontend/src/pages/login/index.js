@@ -5,7 +5,7 @@ import Loading from '../../components/loading'
 import Background from '../../components/background'
 import LoginContainer from '../../components/loginContainer'
 import SignupContiner from '../../components/signupContainer'
-import './styles.scss'
+
 
 export default function Login({ history }) {
     if (localStorage.getItem('urbanVG-token')) {

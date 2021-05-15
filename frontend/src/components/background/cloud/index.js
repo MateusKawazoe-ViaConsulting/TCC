@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles.scss'
+
 
 export function Cloud1() {
     return (

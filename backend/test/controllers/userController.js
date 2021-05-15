@@ -120,7 +120,7 @@ module.exports = () => {
 
     test('show the number of users', async () => {
         result = await axios.get('http://localhost:3333/user/users/number')
-        expect(result.data.length).toBe(2)
+        expect(result.data).toBe(2)
     })
 
     test('delete a not existing user', async () => {

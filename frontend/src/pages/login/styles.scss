@@ -5,11 +5,11 @@
     font-family: Zen Dots;
     .title-container {
         width: 400px;
-        padding-bottom: 5%;
+        padding-bottom: 15%;
         margin-right: 5%;
         h1 {
             justify-content: unset;
-            color: #1e9705;
+            color: $green;
             font-size: 50px;
             img {
                 margin-left: 15px;
@@ -24,6 +24,9 @@
             padding-left: 5px;
             animation: textDaily 30s infinite linear 5s;
         }
+    }
+    .login-container {
+        margin-bottom: 8%;
     }
 }
 

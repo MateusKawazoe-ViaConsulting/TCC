@@ -54,10 +54,10 @@
                         color: black;
                     }
                     .MuiOutlinedInput-notchedOutline {
-                        border-color: #1e9705 !important;
+                        border-color: $green !important;
                     }
                     label {
-                        color: #1e9705 !important;
+                        color: $green !important;
                     }
                 }
             }
@@ -69,10 +69,10 @@
                     color: black;
                 }
                 .MuiOutlinedInput-notchedOutline {
-                    border-color: #1e9705 !important;
+                    border-color: $green !important;
                 }
                 label {
-                    color: #1e9705 !important;
+                    color: $green !important;
                 }
             }
         }
@@ -84,12 +84,12 @@
             margin-bottom: 30px;
             span {
                 cursor: pointer;
-                color: #1877f2;
+                color: $blue;
                 &:hover {
                     text-decoration: underline;
                 }
                 &:active {
-                    color: #5ca2ff;
+                    color: $hover-blue;
                 }
             }
         }
@@ -97,9 +97,9 @@
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 10px;
-            background-color: #ffd000 !important;
+            background-color: $yellow !important;
             &:hover {
-                background-color: #ffae00 !important;
+                background-color: $hover-yellow !important;
             }
         }
     }

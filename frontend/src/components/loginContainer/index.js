@@ -2,18 +2,18 @@ import React, { useState } from 'react'
 import MyInput from '../../common/input'
 import Button from '../../common/button'
 import api from '../../service'
-import './styles.scss'
+
 
 export default function LoginContainer({ history }) {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [userError, setUserError] = useState({
         visible: false,
-        message: "E-mail inválido"
+        message: "E-mail é obrigatório"
     });
     const [passwordError, setPasswordError] = useState({
         visible: false,
-        message: "Senha inválida"
+        message: "Senha é obrigatória"
     });
 
     return (
@@ -90,7 +90,7 @@ export default function LoginContainer({ history }) {
                                     localStorage.setItem('urbanVG-token', result.data.token)
                                     history.push('/home')
                                 }
-                            }, 1500)
+                            }, 2000)
                         }
                     } catch (err) {
 
