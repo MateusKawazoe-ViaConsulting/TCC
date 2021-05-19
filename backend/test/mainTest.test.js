@@ -1,5 +1,6 @@
 const cropTest = require('./controllers/cropController')
 const userTest = require('../test/controllers/userController')
+const sensorTest = require('../test/controllers/sensorController')
 const authTest = require('../test/service/auth')
 const findLatlngTest = require('../test/service/findLatlng')
 const findZipCodeTest = require('../test/service/findZipCode')
@@ -18,6 +19,7 @@ beforeAll(async (done) => {
 describe('controllers test', () => {
     cropTest()
     userTest()
+    sensorTest()
 })
 
 describe('service test', () => {

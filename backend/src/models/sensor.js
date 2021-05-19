@@ -14,11 +14,12 @@ const sensorSchema = new Schema({
         type: String,
         required: true
     },
+    descricao: String,
     ultimo_feed_id: Number,
-    feed: {
+    feed: [{
         id: Number,
         valor: Number
-    }
+    }]
 }, {
     timestamps: true
 })

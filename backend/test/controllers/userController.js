@@ -66,8 +66,7 @@ module.exports = () => {
                 email: 'Loucura@gmail.com',
                 endereco: ''
         })
-        // expect(result.data).toBe('Endereço é obrigatório!')
-        expect(result.data).toBe('Usuário já cadastrado!')
+        expect(result.data).toBe('Endereço é obrigatório!')
     })
 
     test('show one user', async () => {
@@ -115,12 +114,12 @@ module.exports = () => {
 
     test('show all users', async () => {
         result = await axios.get('http://localhost:3333/user/show/all')
-        expect(result.data[0].nome).toBe('Loucura Camargo Shizuno')
+        expect(result.data[0].nome).toBe('Lucas Camargo Shizuno')
     })
 
     test('show the number of users', async () => {
         result = await axios.get('http://localhost:3333/user/users/number')
-        expect(result.data).toBe(2)
+        expect(result.data).toBe(1)
     })
 
     test('delete a not existing user', async () => {

@@ -13,7 +13,7 @@ export default function Home({ history }) {
         <div className="container">
             <Header />
             <Background />
-            {/* <Loading /> */}
+            <Loading />
         </div>
     )
 }

@@ -4,7 +4,7 @@ const sensor = require('../models/sensor')
 
 module.exports = {
     async store(req, res) {
-        const { dono, horta, nome, tipo, valor } = req.body
+        const { dono, horta, nome, tipo, valor, descricao } = req.body
 
         let exists = await sensor.findOne({
             nome, dono
@@ -25,14 +25,32 @@ module.exports = {
             tipo: tipo,
             horta: horta,
             dono: dono,
+            descricao: descricao,
             ultimo_feed_id: 1,
             feed: {
                 id: 1,
                 valor: valor,
                 data: new Date()
             },
-            
+
         })
+
+        await user.updateOne(
+            { usuario: dono },
+            { $addToSet: { sensores: nome } }
+        )
+
+        await crop.updateOne(
+            { dono: dono, nome: horta },
+            {
+                $addToSet: {
+                    sensores: {
+                        nome: nome,
+                        dono: dono
+                    }
+                }
+            }
+        )
 
         return res.json(result)
     },
@@ -131,7 +149,7 @@ module.exports = {
     },
 
     async updateSensor(req, res) {
-        const { dono, nome, tipo, descricao, novoNome } = req.body
+        const { dono, horta, nome, tipo, descricao, novoNome } = req.body
 
         const sensorExists = await sensor.findOne({ nome, dono }).collation({ locale: 'pt', strength: 2 })
 
@@ -158,6 +176,35 @@ module.exports = {
             }
         )
 
+        await user.updateOne(
+            { usuario: dono },
+            { $pull: { sensores: nome } }
+        )
+
+        await user.updateOne(
+            { usuario: dono },
+            { $addToSet: { sensores: novoNome } }
+        )
+
+        await crop.updateOne(
+            {
+                dono: dono, nome: horta, sensores:
+                {
+                    nome: nome,
+                    dono: dono
+                }
+
+            },
+            {
+                $set: {
+                    sensores: {
+                        nome: novoNome,
+                        dono: dono
+                    }
+                }
+            }
+        )
+
         return res.json("Sensor atualizado com sucesso!")
     },
 
@@ -175,7 +222,7 @@ module.exports = {
                 $set: {
                     ultimo_feed_id: sensorExists.ultimo_feed_id + 1
                 },
-                $addToSet: {
+                $push: {
                     feed: {
                         id: sensorExists.ultimo_feed_id + 1,
                         valor: valor,
@@ -188,13 +235,35 @@ module.exports = {
     },
 
     async delete(req, res) {
-        const { dono, nome } = req.body
+        const { dono, nome, horta } = req.headers
 
         const sensorExists = await sensor.deleteOne({ nome, dono }).collation({ locale: 'pt', strength: 2 })
 
-        if(sensorExists.deletedCount > 0)
-            return res.json("Sensor excluído com sucesso!")
+        if (sensorExists.deletedCount > 0) {
+            await user.updateOne(
+                { usuario: dono },
+                {
+                    $pull: {
+                        sensores: nome
+                    }
+                }
+            )
 
-            return res.json("Sensor não existe!")
+            await crop.updateOne(
+                { dono: dono, nome: horta },
+                {
+                    $pull: {
+                        sensores: {
+                            nome: nome,
+                            dono: dono
+                        }
+                    }
+                }
+            )
+
+            return res.json("Sensor excluído com sucesso!")
+        }
+
+        return res.json("Sensor não existe!")
     }
 }

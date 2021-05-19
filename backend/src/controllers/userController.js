@@ -41,7 +41,7 @@ module.exports = {
                 return res.json("Usuário já cadastrado!")
             }
 
-            let localizacao
+            let localizacao = {}
 
             if (endereco) {
                 let latlng = await findLatlng(endereco)
@@ -51,8 +51,7 @@ module.exports = {
                     endereco: endereco
                 }
             } else {
-                // localizacao = {}
-                // return res.json('Endereço é obrigatório!')
+                return res.json('Endereço é obrigatório!')
             }
 
             const token = await auth_token.generateToken({
@@ -116,7 +115,7 @@ module.exports = {
 
             return res.json('Usuário deletado com sucesso!')
         }
-
+        
         return res.json('Usuário não existe!')
     },
 
