@@ -1,0 +1,79 @@
+.form-container {
+    position: relative;
+    height: 390px;
+    width: 100%;
+    overflow: hidden auto;
+    padding-top: 5px;
+
+    &::-webkit-scrollbar {
+        width: 0;
+        top: 0;
+        behavior: 'smooth';
+    }
+
+    #left-user-form {
+        justify-content: end;
+    }
+
+    .form-content {
+        position: absolute;
+        left: 0;
+        transition: 0.3s linear all;
+        height: inherit;
+        width: 100%;
+
+        form {
+            height: calc(fit-content + 10px);
+            width: 100%;
+            padding: 2px 10px;
+            justify-content: flex-start;
+        }
+
+        &:last-child {
+            left: unset;
+            right: -600px;
+        }
+
+        .side-input {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .input-sm {
+            width: 100%;
+
+            &:focus-within {
+                .MuiInputBase-input:focus {
+                    color: black;
+                }
+
+                .MuiOutlinedInput-notchedOutline {
+                    border-color: $green !important;
+                }
+
+                label {
+                    color: $green !important;
+                }
+            }
+        }
+
+        .input-md {
+            width: 100%;
+            margin-bottom: 10px;
+
+            &:focus-within {
+                .MuiInputBase-input:focus {
+                    color: black;
+                }
+
+                .MuiOutlinedInput-notchedOutline {
+                    border-color: $green !important;
+                }
+
+                label {
+                    color: $green !important;
+                }
+            }
+        }
+    }
+}

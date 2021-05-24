@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "stf": "cd frontend && yarn start",
+        "stb": "cd backend && yarn dev"
+    }
+}

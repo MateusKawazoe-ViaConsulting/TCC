@@ -23,6 +23,7 @@ module.exports = {
         const {
             foto,
             usuario,
+            email,
             senha,
             nome,
             endereco
@@ -33,12 +34,14 @@ module.exports = {
                 usuario
             }).collation({ locale: 'pt', strength: 2 })
 
-            const nameExists = await user.findOne({
-                nome
+            const emailExists = await user.findOne({
+                email
             }).collation({ locale: 'pt', strength: 2 })
 
-            if (userExists || nameExists) {
+            if (userExists) {
                 return res.json("Usuário já cadastrado!")
+            } else if (emailExists) {
+                return res.json("E-mail já cadastrado!")
             }
 
             let localizacao = {}
@@ -64,6 +67,7 @@ module.exports = {
                 usuario: usuario,
                 senha: md5(senha + global.SALT_KEY),
                 nome: nome,
+                email: email,
                 localizacao: localizacao,
                 integridade: 1,
                 token: token,
@@ -75,8 +79,8 @@ module.exports = {
 
             return res.json(users)
         } catch (err) {
-            // console.log(err)
-            // return res.json("Erro interno do servidor!")
+            console.log(err)
+            return res.json("Erro interno do servidor!")
         }
     },
 
@@ -115,7 +119,7 @@ module.exports = {
 
             return res.json('Usuário deletado com sucesso!')
         }
-        
+
         return res.json('Usuário não existe!')
     },
 
@@ -123,30 +127,39 @@ module.exports = {
         const {
             foto,
             usuario,
-            senha
+            senha,
+            endereco
         } = req.body
 
         var exists = await user.findOne({
             usuario
         }).collation({ locale: 'pt', strength: 2 })
 
+
         if (exists) {
             let aux = {
                 foto: exists.foto,
                 senha: exists.senha,
-                token: exists.token
+                token: exists.token,
+                localizacao: exists.localizacao
             }
 
             if (foto)
                 aux.foto = foto
-            if (senha) {
+            else if (senha) {
                 aux.senha = md5(senha + global.SALT_KEY)
                 aux.token = await auth_token.generateToken({
                     usuario,
                     senha: aux.senha
                 })
+            } else if (endereco) {
+                let latlng = await findLatlng(endereco)
+                aux.localizacao = {
+                    latitude: latlng.lat,
+                    longitude: latlng.lng,
+                    endereco: endereco
+                }
             }
-
 
             await user.updateOne({
                 usuario
@@ -154,7 +167,8 @@ module.exports = {
                 $set: {
                     foto: aux.foto,
                     senha: aux.senha,
-                    token: aux.token
+                    token: aux.token,
+                    localizacao: aux.localizacao
                 }
             }, {
                 $upsert: false

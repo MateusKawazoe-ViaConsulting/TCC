@@ -72,3 +72,22 @@ $pink: #d42767;
   width: 100%;
   background-color: rgb(218, 218, 218);
 }
+
+.error {
+  font-size: 10px;
+  letter-spacing: -2px;
+}
+
+.input-container {
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 10px;
+
+  &:first-child {
+    margin-right: 5px;
+  }
+
+  &:last-child {
+    margin-left: 5px;
+  }
+}

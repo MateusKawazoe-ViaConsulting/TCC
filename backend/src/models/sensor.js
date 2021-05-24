@@ -17,8 +17,10 @@ const sensorSchema = new Schema({
     descricao: String,
     ultimo_feed_id: Number,
     feed: [{
+        _id: false,
         id: Number,
-        valor: Number
+        valor: Number,
+        data: Date
     }]
 }, {
     timestamps: true

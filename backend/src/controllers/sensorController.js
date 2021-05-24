@@ -229,7 +229,8 @@ module.exports = {
                         data: new Date()
                     }
                 }
-            }
+            },
+            { $upsert: false }
         )
         return res.json("Feed atualizado com sucesso!")
     },

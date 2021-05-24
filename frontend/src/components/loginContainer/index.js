@@ -9,7 +9,7 @@ export default function LoginContainer({ history }) {
     const [password, setPassword] = useState("");
     const [userError, setUserError] = useState({
         visible: false,
-        message: "E-mail é obrigatório"
+        message: "Usuário é obrigatório"
     });
     const [passwordError, setPasswordError] = useState({
         visible: false,
@@ -21,12 +21,11 @@ export default function LoginContainer({ history }) {
             <MyInput
                 error={userError.visible}
                 errorLabel={userError.message}
-                placeholder="E-mail"
+                placeholder="Usuário"
                 className="text-regular input-md"
                 onChange={e => {
-                    if (user.length < 30)
-                        setUser(e.target.value)
-                    if (user.length > 7 && /^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user))
+                    setUser(e.target.value)
+                    if (user.length > 2)
                         setUserError({ visible: false })
                 }}
             />
@@ -37,8 +36,7 @@ export default function LoginContainer({ history }) {
                 placeholder="Senha"
                 className="text-regular input-md"
                 onChange={e => {
-                    if (password.length < 30)
-                        setPassword(e.target.value)
+                    setPassword(e.target.value)
                     if (password.length > 3)
                         setPasswordError({ visible: false })
                 }}
@@ -47,10 +45,10 @@ export default function LoginContainer({ history }) {
                 type="submit"
                 className="button-lg"
                 onClick={async () => {
-                    if (!user || user.length < 8 || !/^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user)) {
+                    if (user.length < 3) {
                         setUserError({
                             visible: true,
-                            message: "E-mail inválido"
+                            message: "Usuário inválido"
                         })
                     } else {
                         setUserError({ visible: false })
@@ -66,7 +64,7 @@ export default function LoginContainer({ history }) {
                     }
 
                     try {
-                        if (user !== "" && password !== "" && /^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user)) {
+                        if (user.length > 2 && password.length > 2) {
                             document.getElementsByClassName("loading")[0].style.display = "flex"
                             const result = await api.get('/user/login', {
                                 headers: {
@@ -79,7 +77,7 @@ export default function LoginContainer({ history }) {
                                 if (result.data === 'Usuário não existe') {
                                     setUserError({
                                         visible: true,
-                                        message: "E-mail não existe"
+                                        message: "Usuário não existe"
                                     })
                                 } else if (result.data === 'Senha incorreta') {
                                     setPasswordError({
@@ -90,7 +88,7 @@ export default function LoginContainer({ history }) {
                                     localStorage.setItem('urbanVG-token', result.data.token)
                                     history.push('/home')
                                 }
-                            }, 2000)
+                            }, 1000)
                         }
                     } catch (err) {
 

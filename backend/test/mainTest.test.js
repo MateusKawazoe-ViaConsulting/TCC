@@ -3,7 +3,6 @@ const userTest = require('../test/controllers/userController')
 const sensorTest = require('../test/controllers/sensorController')
 const authTest = require('../test/service/auth')
 const findLatlngTest = require('../test/service/findLatlng')
-const findZipCodeTest = require('../test/service/findZipCode')
 const findFullAddressTest = require('../test/service/findFullAddress')
 const server = require('../src/config/server')
 const mongoose = require('mongoose')
@@ -25,7 +24,6 @@ describe('controllers test', () => {
 describe('service test', () => {
     authTest()
     findLatlngTest()
-    findZipCodeTest()
     findFullAddressTest()
 })
 

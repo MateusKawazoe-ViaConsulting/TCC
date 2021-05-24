@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './_default.scss'
 import './index.scss'
 import App from './App'
 

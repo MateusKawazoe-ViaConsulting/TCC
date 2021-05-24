@@ -1,126 +1,71 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import SignupForm from '../signupForm'
+import LocalizationForm from '../localizationForm'
+import * as Yup from "yup";
 import MyInput from '../../common/input'
 import Button from '../../common/button'
-import api from '../../service'
-
 
 export default function SignupContainer({ history }) {
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("");
-    const [user, setUser] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [nameError, setNameError] = useState({
-        visible: false,
-        message: "Nome é obrigatório"
-    });
-    const [surnameError, setSurnameError] = useState({
-        visible: false,
-        message: "Sobrenome é obrigatória"
-    });
-    const [userError, setUserError] = useState({
-        visible: false,
-        message: "Usuário é obrigatório"
-    });
-    const [passwordError, setPasswordError] = useState({
-        visible: false,
-        message: "Senha é obrigatória"
-    });
-    const [confirmPasswordError, setConfirmPasswordError] = useState({
-        visible: false,
-        message: "As senhas devem ser iguais"
-    });
+    const [formState, setFormState] = useState(false)
+    const [clicked, setClicked] = useState(false)
+    const [clicked2, setClicked2] = useState(false)
+
+    function handleNext() {
+        if (formState) {
+            document.getElementsByClassName('form-container')[0].style.height = 'fit=content'
+            document.getElementsByClassName('back-button')[0].style.opacity = 0
+            document.getElementById('left-user-form').style.left = '0'
+            document.getElementById('right-user-form').style.right = '-600px'
+            document.getElementsByClassName('user-form-title')[0].style.marginLeft = '0'
+            document.getElementsByClassName('user-form-title')[1].style.marginRight = '-1000px'
+        } else {
+            document.getElementsByClassName('back-button')[0].style.opacity = 1
+            document.getElementById('left-user-form').style.left = '-600px'
+            document.getElementById('right-user-form').style.right = '0'
+            document.getElementsByClassName('user-form-title')[0].style.marginLeft = '-1000px'
+            document.getElementsByClassName('user-form-title')[1].style.marginRight = '0'
+        }
+        setFormState(!formState)
+    }
 
     return (
         <div className="signup-container row-center">
             <span className="signup-background" />
-            <form className="signup-content column-center">
+            <div className="signup-content column-center">
+                <Button
+                    className="back-button"
+                    onClick={() => {
+                        if (formState) {
+                            setFormState(false)
+                            handleNext()
+                        }
+                    }}
+                />
                 <ul className="title-container">
                     <h1 className="text-regular">Cadastre-se</h1>
-                    <p className="text-tiny">É fácil e rápido</p>
                 </ul>
                 <img
                     src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/__geKiQnSG-.png"
                     alt="close"
                     className="close"
                     onClick={() => {
+                        if (formState) {
+                            setFormState(false)
+                            handleNext()
+                        }
+
                         document.getElementsByClassName("signup-container")[0].style.display = "none"
                     }}
                 />
-                <span className="line" />
-                <div className="name-surname">
-                    <MyInput
-                        error={nameError.visible}
-                        errorLabel={nameError.message}
-                        placeholder="Nome"
-                        className="text-regular input-sm"
-                        value={name}
-                        onChange={e => {
-                            setName(e.target.value)
-
-                            if (name.length > 2)
-                                setNameError({ visible: false })
-                        }}
-                    />
-                    <MyInput
-                        error={surnameError.visible}
-                        errorLabel={surnameError.message}
-                        placeholder="Sobrenome"
-                        className="text-regular input-sm"
-                        value={surname}
-                        onChange={e => {
-                            setSurname(e.target.value)
-
-                            if (surname.length > 2)
-                                setSurnameError({ visible: false })
-                        }}
-                    />
+                <div className="title-content row-center">
+                    <h2 className="text-regular user-form-title">Dados cadastrais</h2>
+                    <h2 className="text-regular user-form-title">Dados localizacionais</h2>
                 </div>
-                <MyInput
-                    error={userError.visible}
-                    errorLabel={userError.message}
-                    placeholder="E-mail"
-                    className="text-regular input-md"
-                    value={user}
-                    onChange={e => {
-                        setUser(e.target.value)
-
-                        if (user.length > 7 && /^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user))
-                            setUserError({ visible: false })
-                    }}
-                />
-                <MyInput
-                    type="password"
-                    error={passwordError.visible}
-                    errorLabel={passwordError.message}
-                    placeholder="Senha"
-                    className="text-regular input-md"
-                    value={password}
-                    onChange={e => {
-                        setPassword(e.target.value)
-
-                        if (password.length > 3)
-                            setPasswordError({ visible: false })
-                    }}
-                />
-                <MyInput
-                    type="password"
-                    error={confirmPasswordError.visible}
-                    errorLabel={confirmPasswordError.message}
-                    placeholder="Confirmar senha"
-                    className="text-regular input-md"
-                    value={confirmPassword}
-                    onChange={e => {
-                        setConfirmPassword(e.target.value)
-                        
-                        if (password === confirmPassword)
-                            setConfirmPasswordError({ visible: false })
-                    }}
-                    onBlur={() => {
-                        if (password === confirmPassword)
-                            setConfirmPasswordError({ visible: false })
-                    }}
-                />
+                <span className="line" />
+                <div className="form-container row-center">
+                    <SignupForm clicked={clicked} handleNext={handleNext}/>
+                    <LocalizationForm clicked={clicked2} />
+                </div>
                 <p className="text-tiny">
                     Ao clicar em Cadastre-se, você concorda com nossos <span>Termos, Política de Dados</span> e
                     <span> Política de Cookies</span>. Você poderá cancelar isso quando quiser nas configurações de perfil.
@@ -128,76 +73,17 @@ export default function SignupContainer({ history }) {
                 <Button
                     type="submit"
                     className="button-md"
-                    onClick={async () => {
-                        if (!user || user.length < 8 || !/^[\w-.]+@([\w-])+\.+[\w-]{2,4}$/.test(user)) {
-                            setUserError({
-                                visible: true,
-                                message: "E-mail inválido"
-                            })
-                        }
-
-                        if (!name || name.length < 4) {
-                            setNameError({
-                                visible: true,
-                                message: "Nome inválido"
-                            })
-                        }
-
-                        if (!surname || surname.length < 4) {
-                            setSurnameError({
-                                visible: true,
-                                message: "Sobrenome inválido"
-                            })
-                        }
-
-                        if (!password || password.length < 4) {
-                            setPasswordError({
-                                visible: true,
-                                message: "Senha inválida"
-                            })
-                        }
-
-                        if (!confirmPassword || confirmPassword !== password) {
-                            setConfirmPasswordError({
-                                visible: true,
-                                message: "As senhas devem ser iguais"
-                            })
-                        }
-
-                        if (user !== "" && password !== "" && name !== "" && surname !== "" && password === confirmPassword) {
-                            document.getElementsByClassName("loading")[0].style.display = "flex"
-                            
-                            try {
-                                const result = await new Promise((resolve) => {
-                                    const data = api.post('/user/store', {
-                                        foto: "",
-                                        usuario: user,
-                                        senha: password,
-                                        nome: name + " " + surname
-                                    })
-                                    resolve(data)
-                                })
-                                setTimeout(() => {
-                                    document.getElementsByClassName("loading")[0].style.display = "none"
-                                    if (result.data === "Usuário já cadastrado!") {
-                                        setUserError({
-                                            visible: true,
-                                            message: "E-mail já cadastrado"
-                                        })
-                                    } else {
-                                        localStorage.setItem('urbanVG-token', result.data.token)
-                                        history.push('/home')
-                                    }
-                                }, 2000)
-                            } catch (err) {
-                                console.log(err)
-                            }
+                    onClick={() => {
+                        if (!formState) {
+                            setClicked(!clicked)
+                        } else {
+                            setClicked2(!clicked2)
                         }
                     }}
                 >
-                    Cadastre-se
+                    {formState ? 'Cadastre-se' : 'Próximo'}
                 </Button>
-            </form>
-        </div>
+            </div>
+        </div >
     )
 }

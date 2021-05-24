@@ -11,6 +11,7 @@ html,
 body,
 #root {
   height: 100vh;
+  overflow-x: hidden;
 }
 
 body,
@@ -19,7 +20,7 @@ button {
   font-family: Arial, Helvetica, sans-serif, source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-@import './pages/home/styles.scss';
+@import './lib/styles/form.scss';
 @import './pages/login/styles.scss';
 @import './common/button/styles.scss';
 @import './components/background/styles.scss';
