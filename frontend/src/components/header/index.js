@@ -77,6 +77,7 @@ export default function Header({ history }) {
                     className="exit-container row-center"
                     onClick={() => {
                         localStorage.setItem('urbanVG-token', '')
+                        localStorage.setItem('urbanVG-user', '')
                         history.push('/')
                     }}
                 >

@@ -87,7 +87,12 @@ $pink: #d42767;
     margin-right: 5px;
   }
 
-  &:last-child {
-    margin-left: 5px;
-  }
+}
+
+.MuiAlert-root {
+  position: absolute;
+  bottom: 20px;
+  right: -10%;
+  z-index: 100;
+  transition: 800ms linear all!important;
 }

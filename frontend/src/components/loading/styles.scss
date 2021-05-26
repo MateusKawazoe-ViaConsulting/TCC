@@ -1,4 +1,5 @@
 .loading {
+    $leaf: linear-gradient(-45deg, #5c7658 50%, #649d66 50%);
     display: none;
     height: 100%;
     position: absolute;
@@ -72,7 +73,7 @@
                     background: green;
                     position: relative;
                     border-radius: 70px 0;
-                    background: linear-gradient(-45deg, #5c7658 50%, #649d66 50%);
+                    background: $leaf;
                     &:nth-child(1) {
                         transform: rotate(-75deg);
                         top: -8px;
@@ -96,7 +97,7 @@
                     background: green;
                     position: relative;
                     border-radius: 70px 0;
-                    background: linear-gradient(-45deg, #5c7658 50%, #649d66 50%);
+                    background: $leaf;
                     &:nth-child(1) {
                         transform: rotate(-75deg);
                         top: 4px;
@@ -120,7 +121,7 @@
                     background: green;
                     position: absolute;
                     border-radius: 70px 0;
-                    background: linear-gradient(-45deg, #5c7658 50%, #649d66 50%);
+                    background: $leaf;
                     left: 10px;
                     transform: rotate(-80deg);
                     top: 2px;

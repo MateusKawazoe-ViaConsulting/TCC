@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import SignupForm from '../signupForm'
 import LocalizationForm from '../localizationForm'
-import * as Yup from "yup";
-import MyInput from '../../common/input'
 import Button from '../../common/button'
 
 export default function SignupContainer({ history }) {
     const [formState, setFormState] = useState(false)
+    const [data, setData] = useState({
+        name: '',
+        user: '',
+        email: '',
+        password: ''
+    })
     const [clicked, setClicked] = useState(false)
     const [clicked2, setClicked2] = useState(false)
 
@@ -63,8 +67,8 @@ export default function SignupContainer({ history }) {
                 </div>
                 <span className="line" />
                 <div className="form-container row-center">
-                    <SignupForm clicked={clicked} handleNext={handleNext}/>
-                    <LocalizationForm clicked={clicked2} />
+                    <SignupForm clicked={clicked} handleNext={handleNext} setData={setData} userData={data} />
+                    <LocalizationForm clicked={clicked2} userData={data} history={history} />
                 </div>
                 <p className="text-tiny">
                     Ao clicar em Cadastre-se, você concorda com nossos <span>Termos, Política de Dados</span> e

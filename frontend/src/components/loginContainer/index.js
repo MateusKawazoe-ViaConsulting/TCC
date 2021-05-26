@@ -86,6 +86,7 @@ export default function LoginContainer({ history }) {
                                     })
                                 } else {
                                     localStorage.setItem('urbanVG-token', result.data.token)
+                                    localStorage.setItem('urbanVG-user', result.data.user)
                                     history.push('/home')
                                 }
                             }, 1000)

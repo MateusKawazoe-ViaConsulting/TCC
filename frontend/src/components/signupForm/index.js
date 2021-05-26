@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Formik, Form } from "formik";
 import MyInput from '../../common/input'
+import alerts from '../../functions/alertController'
 import api from '../../service'
 import * as Yup from "yup";
 
-export default function SignupForm({ clicked, handleNext }) {
+export default function SignupForm({ clicked, handleNext, setData, userData }) {
     const [start, setStart] = useState(false)
     const [variables, setVariables] = useState({
         name: {
@@ -20,7 +21,7 @@ export default function SignupForm({ clicked, handleNext }) {
             error: undefined
         },
         email: {
-            value: 'matkawao@got.com',
+            value: 'Paulinho@gay.com',
             error: undefined
         },
         password: {
@@ -65,56 +66,68 @@ export default function SignupForm({ clicked, handleNext }) {
     useEffect(() => {
         if (
             start &&
-            Object.values(variables).filter(element => element.value !== '').length === 6 &&
             Object.values(variables).filter(element => element.error !== undefined).length === 0
         ) {
-            setTimeout(() => {
-                document.getElementsByClassName("loading")[0].style.display = "none"
-            }, 10000)
-
-            document.getElementsByClassName("loading")[0].style.display = "flex"
-            setTimeout(async () => {
-                try {
-                    const result = await new Promise((resolve) => {
-                        const data = api.post('/user/store', {
-                            foto: "",
-                            usuario: variables.user.value,
-                            email: variables.email.value,
-                            senha: variables.password.value,
-                            nome: variables.name.value + " " + variables.surname.value,
-                            endereco: ''
+            if (Object.values(variables).filter(element => element.value !== '').length > 5) {
+                document.getElementsByClassName("loading")[0].style.display = "flex"
+                setTimeout(async () => {
+                    try {
+                        const result = await new Promise((resolve) => {
+                            const data = api.post('/user/store', {
+                                foto: "",
+                                usuario: variables.user.value,
+                                email: variables.email.value,
+                                senha: variables.password.value,
+                                nome: variables.name.value + " " + variables.surname.value,
+                                endereco: ''
+                            })
+                            resolve(data)
                         })
-                        resolve(data)
-                    })
-                    setTimeout(() => {
+                        setTimeout(() => {
+                            document.getElementsByClassName("loading")[0].style.display = "none"
+                            if (result.data === "Usuário já cadastrado!") {
+                                setVariables({
+                                    ...variables,
+                                    user: {
+                                        ...variables.user,
+                                        error: result.data
+                                    }
+                                })
+                            } else if (result.data === "E-mail já cadastrado!") {
+                                setVariables({
+                                    ...variables,
+                                    email: {
+                                        ...variables.email,
+                                        error: result.data
+                                    }
+                                })
+                            } else if (variables.password.value !== variables.confirmPassword.value) {
+                                setVariables({
+                                    ...variables,
+                                    confirmPassword: {
+                                        ...variables.confirmPassword,
+                                        error: 'As senhas devem ser iguais'
+                                    }
+                                })
+                            } else {
+                                setData({
+                                    ...userData,
+                                    name: variables.name.value + " " + variables.surname.value,
+                                    user: variables.user.value,
+                                    email: variables.email.value,
+                                    password: variables.password.value
+                                })
+                                handleNext()
+                            }
+                        })
+                    } catch (err) {
                         document.getElementsByClassName("loading")[0].style.display = "none"
-                        if (result.data === "Usuário já cadastrado!") {
-                            setVariables({
-                                ...variables,
-                                user: {
-                                    ...variables.user,
-                                    error: result.data
-                                }
-                            })
-                            document.getElementsByClassName("loading")[0].style.display = "none"
-                        } else if (result.data === "E-mail já cadastrado!") {
-                            setVariables({
-                                ...variables,
-                                email: {
-                                    ...variables.email,
-                                    error: result.data
-                                }
-                            })
-                            document.getElementsByClassName("loading")[0].style.display = "none"
-                        } else {
-                            handleNext()
-                        }
-                    })
-                } catch (err) {
-                    console.log(err)
-
-                }
-            }, 1000)
+                        alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
+                    }
+                }, 1000)
+            } else {
+                alerts.showAlert('Existem campos em branco!', 'Error', 'singup-alert')
+            }
         } else {
             setStart(true)
         }
@@ -191,8 +204,8 @@ export default function SignupForm({ clicked, handleNext }) {
                         </div>
                         <div className="input-container column-center">
                             <MyInput
-                                error={errors.user && touched.user}
-                                errorLabel={errors.user}
+                                error={(errors.user && touched.user) || variables.user.error !== undefined}
+                                errorLabel={errors.user ? errors.user : variables.user.error}
                                 placeholder="Usuário"
                                 className="text-regular input-md"
                                 values={values.user}
@@ -200,6 +213,13 @@ export default function SignupForm({ clicked, handleNext }) {
                                     setValues({
                                         ...values,
                                         user: e.target.value
+                                    })
+                                    setVariables({
+                                        ...variables,
+                                        user: {
+                                            ...variables.user,
+                                            error: undefined
+                                        }
                                     })
                                 }}
                                 onBlur={() => {
@@ -217,8 +237,8 @@ export default function SignupForm({ clicked, handleNext }) {
                         </div>
                         <div className="input-container column-center">
                             <MyInput
-                                error={errors.email && touched.email}
-                                errorLabel={errors.email}
+                                error={(errors.email && touched.email) || variables.email.error !== undefined}
+                                errorLabel={errors.email ? errors.email : variables.email.error}
                                 placeholder="E-mail"
                                 className="text-regular input-md"
                                 values={values.email}
@@ -226,6 +246,13 @@ export default function SignupForm({ clicked, handleNext }) {
                                     setValues({
                                         ...values,
                                         email: e.target.value
+                                    })
+                                    setVariables({
+                                        ...variables,
+                                        email: {
+                                            ...variables.email,
+                                            error: undefined
+                                        }
                                     })
                                 }}
                                 onBlur={() => {
@@ -270,8 +297,8 @@ export default function SignupForm({ clicked, handleNext }) {
                         </div>
                         <div className="input-container column-center">
                             <MyInput
-                                error={errors.confirmPassword && touched.confirmPassword}
-                                errorLabel={errors.confirmPassword}
+                                error={(errors.confirmPassword && touched.confirmPassword) || variables.confirmPassword.error !== undefined}
+                                errorLabel={errors.confirmPassword ? errors.confirmPassword : variables.confirmPassword.error}
                                 placeholder="Confirmar senha"
                                 className="text-regular input-md"
                                 values={values.confirmPassword}

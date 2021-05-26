@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react'
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import MyInput from '../../common/input'
+import alerts from '../../functions/alertController'
 import cepMask from '../../validation/cepMask'
 import findZipCode from '../../service/findZipCode'
+import api from '../../service'
 
-export default function LocalizationForm({ clicked }) {
+export default function LocalizationForm({ clicked, userData, history }) {
   const [start, setStart] = useState(false)
+  const [cep, setCep] = useState({
+    rua: undefined,
+    cidade: undefined,
+    uf: undefined
+  })
   const [variables, setVariables] = useState({
     street: {
       value: '',
@@ -24,7 +31,7 @@ export default function LocalizationForm({ clicked }) {
       value: '',
       error: undefined
     },
-    state: {
+    uf: {
       value: '',
       error: undefined
     },
@@ -39,7 +46,8 @@ export default function LocalizationForm({ clicked }) {
 
   const localizatrionSchema = Yup.object().shape({
     zipCode: Yup.string()
-      .test('len', 'CEP deve ter 8 números', val => val.length === 9)
+      .min(8, 'CEP deve ter 8 números')
+      .max(9, 'CEP deve ter 8 números')
       .required('CEP é obrigatório')
       .matches(/^\d{0,5}[0-9-]{0,4}$/, 'CEP inválido'),
     city: Yup.string()
@@ -47,11 +55,11 @@ export default function LocalizationForm({ clicked }) {
       .max(58, 'Cidade inválida')
       .required('Cidade é obrigatório')
       .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, 'Cidade inválida'),
-    state: Yup.string()
-      .min(1, 'Estado inválido')
-      .max(58, 'Estado inválido')
-      .required('Estado é obrigatório')
-      .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, 'Estado inválido'),
+    uf: Yup.string()
+      .min(2, 'UF inválido')
+      .max(2, 'UF inválido')
+      .required('UF é obrigatório')
+      .matches(/^[a-zA-Z]+$/, 'UF inválido'),
     street: Yup.string()
       .min(1, 'Rua inválida')
       .max(60, 'Rua inválida')
@@ -69,8 +77,41 @@ export default function LocalizationForm({ clicked }) {
   })
 
   useEffect(() => {
-    if (start) {
+    if (
+      start &&
+      Object.values(variables).filter(element => element.error !== undefined).length === 0
+    ) {
+      if (Object.values(variables).filter(element => element.value !== '').length > 3) {
+        document.getElementsByClassName("loading")[0].style.display = "flex"
+        setTimeout(async () => {
+          var result
+          try {
+            result = await api.post('/user/store', {
+              foto: "",
+              usuario: userData.user,
+              email: userData.email,
+              senha: userData.password,
+              nome: userData.name + " " + userData.surname,
+              endereco: `${variables.street.value},${variables.number.value},${variables.city.value},${variables.uf.value}`
+            })
+            document.getElementsByClassName("loading")[0].style.display = "none"
 
+            if (!result.data.usuario) {
+              alerts.showAlert(result.data, 'Error', 'singup-alert')
+            } else {
+              localStorage.setItem('urbanVG-token', result.data.token)
+              localStorage.setItem('urbanVG-user', result.data.user)
+              history.push('/home')
+            }
+          } catch (err) {
+            console.log(err)
+            document.getElementsByClassName("loading")[0].style.display = "none"
+            alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
+          }
+        })
+      } else {
+        alerts.showAlert('Existem campos em branco!', 'Error', 'singup-alert')
+      }
     } else {
       setStart(true)
     }
@@ -81,7 +122,7 @@ export default function LocalizationForm({ clicked }) {
       initialValues={{
         zipCode: '',
         city: '',
-        state: '',
+        uf: '',
         street: '',
         number: '',
         complement: ''
@@ -97,14 +138,26 @@ export default function LocalizationForm({ clicked }) {
                 errorLabel={errors.zipCode}
                 placeholder="CEP"
                 className="text-regular input-sm"
-                values={values.zipCode}
-                onChange={e => {
-                  setValues({
-                    ...values,
-                    zipCode: e.target.value
-                  })
+                value={values.zipCode}
+                style={{
+                  marginBottom: '10px'
                 }}
-                onBlur={() => {
+                onChange={e => {
+                  if (/^\d{0,5}[0-9-]{0,4}$/.test(e.target.value)) {
+                    setValues({
+                      ...values,
+                      zipCode: cepMask(e.target.value)
+                    })
+                  } else {
+                    setValues({
+                      ...values
+                    })
+                  }
+                }}
+                onBlur={async () => {
+                  setFieldTouched('zipCode', true, false)
+                  document.getElementsByClassName("loading")[0].style.display = "flex"
+                  const result = await findZipCode(values.zipCode)
                   setVariables({
                     ...variables,
                     zipCode: {
@@ -113,7 +166,105 @@ export default function LocalizationForm({ clicked }) {
                       value: values.zipCode
                     }
                   })
-                  setFieldTouched('zipCode', true, false)
+                  document.getElementsByClassName("loading")[0].style.display = "none"
+                  if (result.erro) {
+                    setVariables({
+                      ...variables,
+                      zipCode: {
+                        ...variables.zipCode,
+                        error: 'CEP não existe!'
+                      }
+                    })
+                    setCep({
+                      ...cep,
+                      cidade: '',
+                      uf: '',
+                      rua: ''
+                    })
+
+                    setVariables({
+                      ...variables,
+                      uf: {
+                        ...variables.uf,
+                        value: ''
+                      },
+                      city: {
+                        ...variables.city,
+                        value: ''
+                      },
+                      street: {
+                        ...variables.street,
+                        value: ''
+                      }
+                    })
+
+                    setValues({
+                      ...values,
+                      uf: '',
+                      city: '',
+                      street: ''
+                    })
+
+                    document.getElementById('signup-city-label').classList.remove('MuiFormLabel-filled')
+                    document.getElementById('signup-city-label').style.backgroundColor = 'unset'
+                    document.getElementById('signup-uf-label').classList.remove('MuiFormLabel-filled')
+                    document.getElementById('signup-uf-label').style.backgroundColor = 'unset'
+                    document.getElementById('signup-city-label').classList.remove('MuiInputLabel-shrink')
+                    document.getElementById('signup-uf-label').classList.remove('MuiInputLabel-shrink')
+
+                    if (result.logradouro) {
+                      document.getElementById('signup-street-label').classList.remove('MuiFormLabel-filled')
+                      document.getElementById('signup-street-label').classList.remove('MuiInputLabel-shrink')
+                      document.getElementById('signup-street-label').style.backgroundColor = 'unset'
+                    }
+                    return
+                  }
+
+                  setCep({
+                    ...cep,
+                    cidade: result.localidade,
+                    uf: result.uf,
+                    rua: result.logradouro
+                  })
+
+                  setVariables({
+                    ...variables,
+                    uf: {
+                      ...variables.uf,
+                      value: result.uf
+                    },
+                    city: {
+                      ...variables.city,
+                      value: result.localidade
+                    },
+                    street: {
+                      ...variables.street,
+                      value: result.logradouro
+                    }
+                  })
+
+                  setValues({
+                    ...values,
+                    uf: result.uf,
+                    city: result.localidade,
+                    street: result.logradouro
+                  })
+
+                  document.getElementById('signup-city-label').classList.add('MuiFormLabel-filled')
+                  document.getElementById('signup-city-label').style.backgroundColor = '#fff'
+                  document.getElementById('signup-uf-label').classList.add('MuiFormLabel-filled')
+                  document.getElementById('signup-uf-label').style.backgroundColor = '#fff'
+                  document.getElementById('signup-city-label').classList.add('MuiInputLabel-shrink')
+                  document.getElementById('signup-uf-label').classList.add('MuiInputLabel-shrink')
+
+                  if (result.logradouro) {
+                    document.getElementById('signup-street-label').classList.add('MuiFormLabel-filled')
+                    document.getElementById('signup-street-label').classList.add('MuiInputLabel-shrink')
+                    document.getElementById('signup-street-label').style.backgroundColor = '#fff'
+                    document.getElementById('signup-number').focus()
+                  } else {
+                    document.getElementById('signup-street').focus()
+                  }
                 }}
               />
             </div>
@@ -124,7 +275,9 @@ export default function LocalizationForm({ clicked }) {
                   errorLabel={errors.city}
                   placeholder="Cidade"
                   className="text-regular input-sm"
-                  values={values.city}
+                  value={values.city || cep.cidade}
+                  disabled={cep.cidade !== undefined}
+                  id="signup-city"
                   onChange={e => {
                     setValues({
                       ...values,
@@ -146,27 +299,29 @@ export default function LocalizationForm({ clicked }) {
               </div>
               <div className="input-container column-center">
                 <MyInput
-                  error={errors.state && touched.state}
-                  errorLabel={errors.state}
-                  placeholder="Estado"
+                  error={errors.uf && touched.uf}
+                  errorLabel={errors.uf}
+                  placeholder="UF"
                   className="text-regular input-sm"
-                  values={values.state}
+                  value={values.uf || cep.uf}
+                  disabled={cep.uf !== undefined}
+                  id="signup-uf"
                   onChange={e => {
                     setValues({
                       ...values,
-                      state: e.target.value
+                      uf: e.target.value
                     })
                   }}
                   onBlur={() => {
                     setVariables({
                       ...variables,
-                      state: {
-                        ...variables.state,
-                        error: errors.state,
-                        value: values.state
+                      uf: {
+                        ...variables.uf,
+                        error: errors.uf,
+                        value: values.uf
                       }
                     })
-                    setFieldTouched('state', true, false)
+                    setFieldTouched('uf', true, false)
                   }}
                 />
               </div>
@@ -178,7 +333,8 @@ export default function LocalizationForm({ clicked }) {
                   errorLabel={errors.street}
                   placeholder="Rua"
                   className="text-regular input-sm"
-                  values={values.street}
+                  value={values.street || cep.rua}
+                  id="signup-street"
                   onChange={e => {
                     setValues({
                       ...values,
@@ -198,18 +354,20 @@ export default function LocalizationForm({ clicked }) {
                   }}
                 />
               </div>
-              <div className="input-container column-center">
+              <div className="input-container column-center number">
                 <MyInput
                   error={errors.number && touched.number}
                   errorLabel={errors.number}
                   placeholder="Nº"
                   className="text-regular input-sm"
-                  values={values.number}
+                  value={values.number}
+                  id="signup-number"
                   onChange={e => {
-                    setValues({
-                      ...values,
-                      number: e.target.value
-                    })
+                    if (/^\d{0,6}$/g.test(e.target.value))
+                      setValues({
+                        ...values,
+                        number: e.target.value
+                      })
                   }}
                   onBlur={() => {
                     setVariables({
@@ -231,7 +389,7 @@ export default function LocalizationForm({ clicked }) {
                 errorLabel={errors.complement}
                 placeholder="Complemento"
                 className="text-regular input-sm"
-                values={values.complement}
+                value={values.complement}
                 onChange={e => {
                   setValues({
                     ...values,

@@ -28,7 +28,7 @@ module.exports = {
             nome,
             endereco
         } = req.body
-
+  
         try {
             const userExists = await user.findOne({
                 usuario

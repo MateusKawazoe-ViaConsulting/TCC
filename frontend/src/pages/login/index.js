@@ -1,10 +1,12 @@
 import React from 'react'
+import Alert from '@material-ui/lab/Alert'
 import Footer from '../../components/footer'
 import Logo from '../../lib/assets/logo.svg'
 import Loading from '../../components/loading'
 import Background from '../../components/background'
 import LoginContainer from '../../components/loginContainer'
 import SignupContiner from '../../components/signupContainer'
+import alertController from '../../functions/alertController'
 
 
 export default function Login({ history }) {
@@ -21,6 +23,11 @@ export default function Login({ history }) {
             </div>
             <LoginContainer history={history} />
             <SignupContiner history={history} />
+            <Alert onClose={() => {
+                alertController.closeAlert('singup-alert')
+            }} variant="filled" id="singup-alert">
+                <p />
+            </Alert>
             <Footer />
             <Loading />
         </div>
