@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MyInput from '../../common/input'
 import Button from '../../common/button'
+import unfocusable from '../../functions/unfocusable'
+import alerts from '../../functions/alertController'
 import api from '../../service'
 
 
@@ -16,9 +18,14 @@ export default function LoginContainer({ history }) {
         message: "Senha é obrigatória"
     });
 
+    useEffect(() => {
+        unfocusable('unfocusable-login', 'user-login')
+    }, [])
+
     return (
         <form className="login-container column-center">
             <MyInput
+                id="user-login"
                 error={userError.visible}
                 errorLabel={userError.message}
                 placeholder="Usuário"
@@ -30,6 +37,7 @@ export default function LoginContainer({ history }) {
                 }}
             />
             <MyInput
+                id="unfocusable-login"
                 type="password"
                 error={passwordError.visible}
                 errorLabel={passwordError.message}
@@ -86,13 +94,14 @@ export default function LoginContainer({ history }) {
                                     })
                                 } else {
                                     localStorage.setItem('urbanVG-token', result.data.token)
-                                    localStorage.setItem('urbanVG-user', result.data.user)
+                                    localStorage.setItem('urbanVG-user', user)
                                     history.push('/home')
                                 }
                             }, 1000)
                         }
                     } catch (err) {
-
+                        document.getElementsByClassName("loading")[0].style.display = "none"
+                        alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
                     }
                 }}
             >

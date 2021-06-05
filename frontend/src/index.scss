@@ -21,8 +21,10 @@ button {
 }
 
 @import './lib/styles/form.scss';
+@import './pages/home/styles.scss';
 @import './pages/login/styles.scss';
 @import './common/button/styles.scss';
+@import './common/colorPicker/styles.scss';
 @import './components/background/styles.scss';
 @import './components/background/cloud/styles.scss';
 @import './components/background/moon/styles.scss';
@@ -34,3 +36,6 @@ button {
 @import './components/loading/styles.scss';
 @import './components/loginContainer/styles.scss';
 @import './components/signupContainer/styles.scss';
+@import './components/sensorContainer/styles.scss';
+@import './components/barChart/styles.scss';
+@import './components/myLineChart/styles.scss';

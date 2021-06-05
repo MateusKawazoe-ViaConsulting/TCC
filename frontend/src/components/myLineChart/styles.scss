@@ -1,0 +1,10 @@
+.line-chart-container {
+    .recharts-wrapper {
+        padding: 10px 30px 0 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+
+        svg {
+            margin-left: -20px;
+        }
+    }
+}

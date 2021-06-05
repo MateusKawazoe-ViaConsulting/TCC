@@ -26,7 +26,7 @@ export default function Loading() {
                         </li>
                         <li className="vase-top" />
                         <li className="vase">
-                            <div />
+                            <div className="shadow"/>
                         </li>
                     </ol>
                     <ol className="loading-plant-container">

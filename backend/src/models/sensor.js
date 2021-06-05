@@ -15,6 +15,10 @@ const sensorSchema = new Schema({
         required: true
     },
     descricao: String,
+    cor: {
+        type: String,
+        required: true
+    },
     ultimo_feed_id: Number,
     feed: [{
         _id: false,

@@ -30,6 +30,7 @@ module.exports = () => {
             tipo: "Umidade",
             dono: 'MateusKawazoe',
             descricao: "Sensor para mediçaõ da umidade do solo da flor de abacaxi",
+            cor: "#4287f5",
             horta: '',
             valor: 100
         })
@@ -42,6 +43,7 @@ module.exports = () => {
             tipo: "Umidade",
             dono: 'MateusKawazoe',
             descricao: "Sensor para mediçaõ da umidade do solo da flor de laranja",
+            cor: "#b942f5",
             horta: '',
             valor: 100
         })
@@ -54,6 +56,7 @@ module.exports = () => {
             tipo: "Umidade",
             dono: 'MateusKawazoe',
             descricao: "Sensor para mediçaõ da umidade do solo da flor de abacaxi",
+            cor: "#4287f5",
             horta: '',
             valor: 100
         })
@@ -66,6 +69,7 @@ module.exports = () => {
             tipo: "pH",
             dono: 'MateusKawazoe',
             descricao: "Sensor para medição do pH do solo",
+            cor: "#b942f5",
             horta: '',
             novoNome: "Sensor de pH"
         })

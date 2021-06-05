@@ -5,6 +5,7 @@ import MyInput from '../../common/input'
 import alerts from '../../functions/alertController'
 import cepMask from '../../validation/cepMask'
 import findZipCode from '../../service/findZipCode'
+import unfocusable from '../../functions/unfocusable'
 import api from '../../service'
 
 export default function LocalizationForm({ clicked, userData, history }) {
@@ -100,7 +101,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
               alerts.showAlert(result.data, 'Error', 'singup-alert')
             } else {
               localStorage.setItem('urbanVG-token', result.data.token)
-              localStorage.setItem('urbanVG-user', result.data.user)
+              localStorage.setItem('urbanVG-user', userData.user)
               history.push('/home')
             }
           } catch (err) {
@@ -113,6 +114,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
         alerts.showAlert('Existem campos em branco!', 'Error', 'singup-alert')
       }
     } else {
+      unfocusable('unfocusable-signup-localization')
       setStart(true)
     }
   }, [clicked])
@@ -167,7 +169,8 @@ export default function LocalizationForm({ clicked, userData, history }) {
                     }
                   })
                   document.getElementsByClassName("loading")[0].style.display = "none"
-                  if (result.erro) {
+                  console.log(result)
+                  if (result === undefined || result.erro) {
                     setVariables({
                       ...variables,
                       zipCode: {
@@ -175,48 +178,6 @@ export default function LocalizationForm({ clicked, userData, history }) {
                         error: 'CEP não existe!'
                       }
                     })
-                    setCep({
-                      ...cep,
-                      cidade: '',
-                      uf: '',
-                      rua: ''
-                    })
-
-                    setVariables({
-                      ...variables,
-                      uf: {
-                        ...variables.uf,
-                        value: ''
-                      },
-                      city: {
-                        ...variables.city,
-                        value: ''
-                      },
-                      street: {
-                        ...variables.street,
-                        value: ''
-                      }
-                    })
-
-                    setValues({
-                      ...values,
-                      uf: '',
-                      city: '',
-                      street: ''
-                    })
-
-                    document.getElementById('signup-city-label').classList.remove('MuiFormLabel-filled')
-                    document.getElementById('signup-city-label').style.backgroundColor = 'unset'
-                    document.getElementById('signup-uf-label').classList.remove('MuiFormLabel-filled')
-                    document.getElementById('signup-uf-label').style.backgroundColor = 'unset'
-                    document.getElementById('signup-city-label').classList.remove('MuiInputLabel-shrink')
-                    document.getElementById('signup-uf-label').classList.remove('MuiInputLabel-shrink')
-
-                    if (result.logradouro) {
-                      document.getElementById('signup-street-label').classList.remove('MuiFormLabel-filled')
-                      document.getElementById('signup-street-label').classList.remove('MuiInputLabel-shrink')
-                      document.getElementById('signup-street-label').style.backgroundColor = 'unset'
-                    }
                     return
                   }
 
@@ -385,6 +346,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
             </div>
             <div className="input-container column-center">
               <MyInput
+                id="unfocusable-signup-localization"
                 error={errors.complement && touched.complement}
                 errorLabel={errors.complement}
                 placeholder="Complemento"

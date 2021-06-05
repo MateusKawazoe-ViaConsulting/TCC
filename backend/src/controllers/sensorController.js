@@ -4,7 +4,7 @@ const sensor = require('../models/sensor')
 
 module.exports = {
     async store(req, res) {
-        const { dono, horta, nome, tipo, valor, descricao } = req.body
+        const { dono, horta, nome, tipo, cor, valor, descricao } = req.body
 
         let exists = await sensor.findOne({
             nome, dono
@@ -26,6 +26,7 @@ module.exports = {
             horta: horta,
             dono: dono,
             descricao: descricao,
+            cor: cor,
             ultimo_feed_id: 1,
             feed: {
                 id: 1,
@@ -126,6 +127,15 @@ module.exports = {
     },
 
     async showAll(req, res) {
+        if (req.headers.user) {
+            const result = await sensor.find({ dono: req.headers.user })
+            
+            if(result[0])
+                return res.json(result)
+
+            return res.json(0)
+        }
+
         return res.json(await sensor.find())
     },
 
@@ -149,14 +159,14 @@ module.exports = {
     },
 
     async updateSensor(req, res) {
-        const { dono, horta, nome, tipo, descricao, novoNome } = req.body
+        const { dono, horta, nome, tipo, descricao, cor, novoNome } = req.body
 
         const sensorExists = await sensor.findOne({ nome, dono }).collation({ locale: 'pt', strength: 2 })
 
         if (!sensorExists)
             return res.json("Sensor não existe!")
 
-        let auxTipo = sensorExists.tipo, auxDescricao = sensorExists.descricao, auxNome = sensorExists.nome
+        let auxTipo = sensorExists.tipo, auxDescricao = sensorExists.descricao, auxNome = sensorExists.nome, auxCor = sensorExists.cor
 
         if (tipo)
             auxTipo = tipo
@@ -164,6 +174,8 @@ module.exports = {
             auxDescricao = descricao
         if (novoNome)
             auxNome = novoNome
+        if(cor)
+            auxCor = cor
 
         await sensor.updateOne(
             { _id: sensorExists._id },
@@ -171,7 +183,8 @@ module.exports = {
                 $set: {
                     nome: auxNome,
                     tipo: auxTipo,
-                    descricao: auxDescricao
+                    descricao: auxDescricao,
+                    cor: auxCor
                 }
             }
         )

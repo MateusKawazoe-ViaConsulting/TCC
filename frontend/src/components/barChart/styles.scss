@@ -1,0 +1,175 @@
+.bar-chart-container {
+    perspective: 1000px;
+    perspective-origin: 50% 50%;
+    height: 350px;
+    width: 150px;
+    position: relative;
+    padding-right: 20px;
+    cursor: pointer;
+    margin: 0 15px;
+
+    &:hover {
+        p {
+            text-decoration: underline;
+        }
+
+        .shadow {
+            display: unset;
+        }
+
+        .bar {
+            animation: chartJump 1.4s ease-in-out infinite, chartRotation linear 6s infinite;
+            ;
+        }
+    }
+
+    &:active {
+        opacity: 0.8;
+    }
+
+    .bar {
+        font-size: 1em;
+        position: relative;
+        width: 41px;
+        transition: transform 2s linear;
+        transform-style: preserve-3d;
+        transform: rotateX(-20deg);
+        animation: chartRotation linear 6s infinite;
+        bottom: -45px;
+
+        .face {
+            position: absolute;
+            bottom: 0;
+            width: inherit;
+            height: 15em;
+            background-position: center center;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .left-side {
+            transform: rotateY(0deg) translateZ(25px) translate(2px, 0px);
+            background-color: #f1f1f1;
+        }
+
+        .right-side {
+            transform: rotateY(180deg) translate(-2px, 0px) translateZ(15px);
+            background-color: #f1f1f1;
+        }
+
+        .front-side {
+            transform: rotateY(90deg) translateZ(22px) translateX(-5px);
+            background-color: #f1f1f1;
+        }
+
+        .back-side {
+            transform: rotateY(90deg) translateZ(-18px) translateX(-5px);
+            background-color: #f1f1f1;
+
+            .growing-bar > span {
+                transform: rotateY(180deg);
+            }
+        }
+
+        .growing-bar {
+            display: inline-block;
+            width: 100%;
+            transition: all 1s ease-in-out;
+            background-color: rgba(118, 201, 0, 1);
+            border-top: 2px dotted rgb(70, 70, 70);
+            position: relative;
+            height: 0;
+            bottom: 0;
+
+            span {
+                font-size: 10px;
+                font-weight: 700;
+                font-family: sans-serif;
+                position: relative;
+                top: -20px;
+            }
+
+            .maxValue {
+                top: 10px;
+            }
+        }
+
+        .roof {
+            transform: rotateX(90deg) translate(2px, 5px) translateZ(219px);
+            height: 41px;
+            text-align: center;
+            background-color: #fefefe;
+        }
+
+        .floor {
+            transform: rotateX(-90deg) translateZ(20px) translate(2px, -5px) rotate(180deg);
+            height: 40px;
+            text-align: center;
+            background-color: #fefefe;
+            // box-shadow: 0px 0px 10px #fefeff;
+        }
+    }
+
+    .sensor-values {
+        position: absolute;
+        bottom: 60px;
+        width: 135px;
+        max-height: 37px;
+
+        p {
+            text-align: center;
+            color: white;
+
+            &:first-child {
+                margin-bottom: 15px;
+            }
+
+            &:last-child::after  {
+                content: "%";
+            }
+        }
+    }
+
+
+
+    .shadow {
+        display: none;
+        background: #000000;
+        border-radius: 50%;
+        content: "";
+        height: 12px;
+        width: 50px;
+        opacity: 0.2;
+        position: absolute;
+        transform: scale(1);
+        bottom: 100px;
+        z-index: -1;
+        animation: shadow 1.4s ease-in-out infinite;
+    }
+}
+
+@keyframes inverseDailyText {
+    50% {
+        color: black;
+    }
+
+    100% {
+        color: white;
+    }
+}
+
+@keyframes chartRotation {
+    0% {
+        transform: rotateX(-20deg) rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateX(-20deg) rotateY(360deg);
+    }
+}
+
+@keyframes chartJump {
+    50% {
+        bottom: 0;
+    }
+}

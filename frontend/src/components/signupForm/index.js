@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Formik, Form } from "formik";
 import MyInput from '../../common/input'
 import alerts from '../../functions/alertController'
+import unfocusable from '../../functions/unfocusable'
 import api from '../../service'
 import * as Yup from "yup";
 
@@ -9,27 +10,27 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
     const [start, setStart] = useState(false)
     const [variables, setVariables] = useState({
         name: {
-            value: 'Paulo',
+            value: '',
             error: undefined
         },
         surname: {
-            value: 'Henrique',
+            value: '',
             error: undefined
         },
         user: {
-            value: 'Tixiliski',
+            value: '',
             error: undefined
         },
         email: {
-            value: 'Paulinho@gay.com',
+            value: '',
             error: undefined
         },
         password: {
-            value: 'asdasd',
+            value: '',
             error: undefined
         },
         confirmPassword: {
-            value: 'asdasd',
+            value: '',
             error: undefined
         }
     })
@@ -40,7 +41,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
             .max(30, 'Nome inválido')
             .required('Nome é obrigatório')
             .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/, 'Nome inválido'),
-        surName: Yup.string()
+        surname: Yup.string()
             .min(2, 'Sobrenome inválido')
             .max(30, 'Sobrenome inválido')
             .required('Sobrenome é obrigatório')
@@ -129,6 +130,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                 alerts.showAlert('Existem campos em branco!', 'Error', 'singup-alert')
             }
         } else {
+            unfocusable('unfocusable-signup-user')
             setStart(true)
         }
     }, [clicked])
@@ -177,27 +179,27 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                             </div>
                             <div className="input-container column-center">
                                 <MyInput
-                                    error={errors.surName && touched.surName}
-                                    errorLabel={errors.surName}
+                                    error={errors.surname && touched.surname}
+                                    errorLabel={errors.surname}
                                     placeholder="Sobrenome"
                                     className="text-regular input-sm"
-                                    values={values.surName}
+                                    values={values.surname}
                                     onChange={e => {
                                         setValues({
                                             ...values,
-                                            surName: e.target.value
+                                            surname: e.target.value
                                         })
                                     }}
                                     onBlur={() => {
                                         setVariables({
                                             ...variables,
-                                            surName: {
-                                                ...variables.surName,
-                                                error: errors.surName,
-                                                value: values.surName
+                                            surname: {
+                                                ...variables.surname,
+                                                error: errors.surname,
+                                                value: values.surname
                                             }
                                         })
-                                        setFieldTouched('surName', true, false)
+                                        setFieldTouched('surname', true, false)
                                     }}
                                 />
                             </div>
@@ -297,6 +299,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                         </div>
                         <div className="input-container column-center">
                             <MyInput
+                                id="unfocusable-signup-user"
                                 error={(errors.confirmPassword && touched.confirmPassword) || variables.confirmPassword.error !== undefined}
                                 errorLabel={errors.confirmPassword ? errors.confirmPassword : variables.confirmPassword.error}
                                 placeholder="Confirmar senha"

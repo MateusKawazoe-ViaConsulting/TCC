@@ -9,21 +9,22 @@ import LocalFloristOutlinedIcon from '@material-ui/icons/LocalFloristOutlined'
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline'
 import PersonIcon from '@material-ui/icons/Person'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import SettingsRemoteOutlinedIcon from '@material-ui/icons/SettingsRemoteOutlined';
+import SettingsRemoteIcon from '@material-ui/icons/SettingsRemote';
 
-
-export default function Header({ history }) {
+export default function Header({ setItem, history }) {
     const [selected, setSelected] = useState({
         home: true,
         map: false,
         crop: false,
-        profile: false
+        sensor: false
     })
     const [bar, setBar] = useState("0%")
 
     return (
         <ul className="header-container row-center">
             <li className="left-container">
-                {/* <img src={logo} alt="logo" /> */}
+                Bem vindo <span>{localStorage.getItem('urbanVG-user')}</span>
             </li>
             <li className="middle-container">
                 <ul className="bar-navigation row-center">
@@ -35,6 +36,7 @@ export default function Header({ history }) {
                             setSelected({
                                 home: true
                             })
+                            setItem('home')
                         }} />
                     }
 
@@ -46,6 +48,7 @@ export default function Header({ history }) {
                             setSelected({
                                 map: true
                             })
+                            setItem('map')
                         }} />
                     }
 
@@ -57,16 +60,18 @@ export default function Header({ history }) {
                             setSelected({
                                 crop: true
                             })
+                            setItem('crop')
                         }} />
                     }
-                    {selected.profile ? (
-                        <PersonIcon className="profile selected" />
+                    {selected.sensor ? (
+                        <SettingsRemoteIcon className="sensor selected" />
                     ) :
-                        <PersonOutlineIcon className="profile" onClick={() => {
+                        <SettingsRemoteOutlinedIcon className="sensor" onClick={() => {
                             setBar("82%")
                             setSelected({
-                                profile: true
+                                sensor: true
                             })
+                            setItem('sensor')
                         }} />
                     }
                 </ul>
