@@ -1,64 +1,152 @@
  .sensor-container {
      width: 100%;
-     height: 100%;
+     height: fit-content;
      position: relative;
+     transition: all .3s linear;
 
      .middle-container {
-         position: relative;
-         width: 600px;
-         height: 600px;
-         background-color: transparent;
-         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-         border-radius: 10px;
-         margin-bottom: 70px;
+         padding-bottom: 8%;
 
-         .sensor-background {
-             width: 100%;
-             height: inherit;
-             border-radius: inherit;
-             opacity: 0.4;
-             background-color: black;
-             animation: containerDaily 30s infinite linear 5s;
-             position: absolute;
-             z-index: -1;
-         }
+         .middle-content {
+             width: 700px;
+             height: 550px;
+             justify-content: space-around;
 
-         h1 {
-             position: absolute;
-             top: 25px;
-             color: white;
-             animation: inverseDailyText 30s infinite linear 5s;
-         }
+             h1 {
+                 position: absolute;
+                 top: 25px;
+                 color: white;
+             }
 
-         h2 {
-             text-align: center;
-             height: 80%;
-             max-width: 70%;
-             color: white;
-             animation: inverseDailyText 30s infinite linear 5s;
-         }
+             .chart-container {
+                 width: 30%;
+                 height: 90%;
+                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+                 position: relative;
+                 align-items: flex-end;
+                 cursor: pointer;
 
-         .chart-container {
-             margin: 50px 0 20px;
-             height: 400px;
+                 &:hover {
+                     .shadow {
+                         display: unset;
+                     }
+
+                     .bar {
+                         animation: chartJump 1.4s ease-in-out infinite, chartRotation linear 6s infinite;
+                     }
+                 }
+
+                 &:active {
+                     opacity: 0.8;
+                 }
+             }
          }
 
          .my-button {
              padding: 10px;
              justify-self: end;
+             background-color: rgb(44, 135, 255) !important;
 
              &:hover {
-                 background-color: $green !important;
+                 background-color: rgb(0, 110, 255) !important;
              }
          }
      }
 
      .right-container {
-         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-         width: 400px;
+         width: 350px;
          height: 100%;
          position: absolute;
          right: 0;
+         justify-content: space-evenly;
+
+         >* {
+             height: 320px;
+             width: 100%;
+             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+         }
+
+         .top-container {
+             position: relative;
+             justify-content: flex-start;
+
+             .sensor-list-container {
+                 width: 100%;
+                 height: 100%;
+                 background: linear-gradient(90deg, rgb(119, 167, 255) 0%, rgb(44, 135, 255) 100%, rgb(29, 191, 255) 100%);
+                 padding: 20px 5px 10px 0;
+
+                 p {
+                     text-align: center;
+                     max-width: 70%;
+                     color: white
+                 }
+
+                 .search-bar {
+                     width: 90%;
+                     height: 35px;
+                     padding-left: 5px;
+                 }
+
+                 .sensor-list {
+                     width: 94%;
+                     height: 90%;
+                     list-style-type: none;
+                     margin: 20px 0 10px 15px;
+                     justify-content: flex-start;
+                     overflow-y: scroll;
+                     padding-right: 5px;
+
+                     ul {
+                         border: 1px solid rgb(118, 118, 118);
+                         background: white;
+                         width: 100%;
+                         margin-bottom: 10px;
+                         cursor: pointer;
+                         list-style-type: none;
+                         padding: 2px;
+                         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+
+                        &:hover {
+                            background-color: #afa7ed;
+                        }
+
+                         .item-container {
+                             width: 100%;
+                             display: flex;
+                             margin: 2px 0;
+
+                             p {
+                                 padding-left: 3px;
+                                 text-align: left;
+                                 color: black;
+                                 max-width: unset;
+                                 height: fit-content;
+
+                                 &:last-child {
+                                     letter-spacing: -0.8px;
+                                 }
+                             }
+                         }
+                     }
+
+                     .active {
+                         background: linear-gradient(90deg, #afa7ed 0%, #5d4aec 100%, #897dec 100%);
+                         border-color: #5d4aec;
+
+                         li {
+                             p {
+                                 color: white;
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+
+         .bottom-container {
+             position: relative;
+         }
      }
  }
 

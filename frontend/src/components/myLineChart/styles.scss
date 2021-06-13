@@ -1,7 +1,15 @@
 .line-chart-container {
     .recharts-wrapper {
-        padding: 10px 30px 0 10px;
-        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px 0;
+        background: linear-gradient(90deg, #77a7ff 0%, #006eff 100%, #1dbfff 100%);
+
+        text {
+            fill: white;
+        }
+
+        line {
+            stroke: #f6f6f6;
+        }
 
         svg {
             margin-left: -20px;

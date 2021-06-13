@@ -1,12 +1,11 @@
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
 
-export default function MyLineChart({ data, colors }) {
+export default function MyLineChart({ data, color, keyName }) {
   return (
     <div className='line-chart-container'>
-      <LineChart width={400} height={400} data={data}>
-        <Line type="monotone" dataKey="uv" stroke={colors[0]} />
-        <Line type="monotone" dataKey="pv" stroke={colors[1]} />
+      <LineChart width={350} height={320} data={data}>
+        <Line type="monotone" dataKey={keyName} stroke={color} />
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />

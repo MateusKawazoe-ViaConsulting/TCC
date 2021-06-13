@@ -20,7 +20,7 @@ $pink: #d42767;
 }
 
 .text-regular {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .text-medium {
@@ -86,7 +86,18 @@ $pink: #d42767;
   &:first-child {
     margin-right: 5px;
   }
+}
 
+.background-transparent {
+  animation: containerDaily 30s infinite linear 5s;
+  background-color: black;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  opacity: 0.6;
+  position: absolute;
+  z-index: -1;
 }
 
 .MuiAlert-root {
@@ -94,5 +105,30 @@ $pink: #d42767;
   bottom: 20px;
   right: -100%;
   z-index: 100;
-  transition: 800ms ease-out right!important;
+  transition: 800ms ease-out right !important;
+}
+
+.divided {
+  display: flex;
+  justify-content: space-between;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

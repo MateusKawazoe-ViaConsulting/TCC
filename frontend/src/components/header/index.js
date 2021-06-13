@@ -6,8 +6,7 @@ import MapOutlinedIcon from '@material-ui/icons/MapOutlined'
 import MapIcon from '@material-ui/icons/Map'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import LocalFloristOutlinedIcon from '@material-ui/icons/LocalFloristOutlined'
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline'
-import PersonIcon from '@material-ui/icons/Person'
+import { MapSVG } from '../../lib/assets/header/icons'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import SettingsRemoteOutlinedIcon from '@material-ui/icons/SettingsRemoteOutlined';
 import SettingsRemoteIcon from '@material-ui/icons/SettingsRemote';
@@ -41,9 +40,9 @@ export default function Header({ setItem, history }) {
                     }
 
                     {selected.map ? (
-                        <MapIcon className="map selected" />
+                        <MapIcon className="selected" />
                     ) :
-                        <MapOutlinedIcon className="map" onClick={() => {
+                        <MapSVG colors={true} onClick={() => {
                             setBar("27%")
                             setSelected({
                                 map: true

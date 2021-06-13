@@ -4,72 +4,189 @@ import MyLineChart from '../myLineChart'
 import BarChart from '../barChart'
 import alerts from '../../functions/alertController'
 import api from '../../service/index'
-import ColorPicker from '../../common/colorPicker'
+import dateFormat from 'dateformat'
 
 export default function SensorContainer() {
   const [sensores, setSensores] = useState(null)
-  const data = [
-    { name: 'Jan', uv: 400, pv: 2000 },
-    { name: 'Fev', uv: 600, pv: 2400 },
-    { name: 'Mar', uv: 600, pv: 200 },
-    { name: 'Apr', pv: 400 }
-  ]
-  const colors = ['blue', 'green']
+  const [visible, setVisible] = useState(false)
+  const [data, setData] = useState([])
+  const [color, setColor] = useState("")
+  const [clicked, setClicked] = useState("")
+  const [loadContent, setLoadContent] = useState(false)
+  // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+
+  async function dataGen() {
+    if (clicked && !data[0]) {
+      try {
+        const sensorData = await api.get('/sensor/show/one', {
+          headers: {
+            dono: localStorage.getItem('urbanVG-user'),
+            nome: clicked
+          }
+        })
+
+        if (sensorData.data) {
+          setColor(sensorData.data.cor)
+
+          sensorData.data.feed.map((values) => {
+            setData(prev => [
+              ...prev,
+              {
+                name: `${(new Date(values.data).getDate()) > 9 ? (new Date(values.data).getDate()) : "0" + (new Date(values.data).getDay())}/${(new Date(values.data).getMonth() + 1) > 9 ? (new Date(values.data).getMonth()) : "0" + (new Date(values.data).getMonth() + 1)}`,
+                valor: values.valor
+              }
+            ])
+          })
+        }
+      } catch (error) {
+        alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
+      }
+    }
+  }
+
+  function setListItem(e, chart = false) {
+    console.log()
+    while (document.getElementsByClassName('active')[0]) {
+      document.getElementsByClassName('active')[0].classList.remove("active")
+    }
+
+    if (chart) {
+      document.getElementById(e.currentTarget.childNodes[2].childNodes[2].textContent).classList.add("active")
+    } else {
+      e.currentTarget.classList.add("active")
+    }
+  }
 
   useEffect(() => {
     document.getElementsByClassName("loading")[0].style.display = "flex"
+
     setTimeout(async () => {
       try {
-        const result = await api.get('/sensor/show/all', {
-          headers: {
-            user: localStorage.getItem('urbanVG-user')
-          }
+        new Promise((resolve) => {
+          resolve(api.get('/sensor/show/all', {
+            headers: {
+              user: localStorage.getItem('urbanVG-user')
+            }
+          }))
+        }).then((result) => {
+          setSensores(result)
+
+          if (!clicked)
+            setClicked(result.data[2].nome)
         })
-        setSensores(result)
-        document.getElementsByClassName("loading")[0].style.display = "none"
       } catch (error) {
-        document.getElementsByClassName("loading")[0].style.display = "none"
         alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
       }
-    }, 1000)
+      document.getElementsByClassName("loading")[0].style.display = "none"
+      setVisible(true)
+    }, 800)
   }, [])
+
+  useEffect(() => {
+    dataGen()
+  }, [clicked])
+
+  useEffect(() => {
+    if (document.getElementsByClassName('sensor-list-item-container')[0] && !loadContent) {
+      document.getElementsByClassName('sensor-list-item-container')[0].classList.add("active")
+      setLoadContent(true)
+    }
+  }, [document.getElementsByClassName('sensor-list-item-container')[0]])
 
   return (
     <>
-      <div className="sensor-container row-center">
-        {/* <ColorPicker /> */}
+      <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
-          {/* <MyLineChart data={data} colors={colors} /> */}
-          <div className="sensor-background" />
           {sensores && sensores.data ? (
-            <div className="chart-container row-center">
+            <div className="middle-content row-center">
               {sensores.data.map((element, index) => {
-                if (index < 3)
-                  return <BarChart
-                    key={element.nome}
-                    value={element.feed[(element.ultimo_feed_id - 1)].valor}
-                    name={element.nome}
-                    percentage={((element.feed[(element.ultimo_feed_id - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100).toFixed(2)}
-                  />
+                if (index < 3) {
+                  return (
+                    <div
+                      className="chart-container row-center"
+                      key={`chart-item${index}`}
+                      onClick={e => {
+                        if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[2].childNodes[2].textContent) {
+                          setData([])
+                          setListItem(e, true)
+                          setClicked(e.currentTarget.childNodes[2].childNodes[2].textContent)
+                        }
+                      }}
+                    >
+                      <div className="background-transparent" />
+                      <BarChart
+                        key={element.nome}
+                        value={element.feed[(element.ultimo_feed_id - 1)].valor}
+                        name={element.nome}
+                        percentage={Math.ceil((element.feed[(element.ultimo_feed_id - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100)}
+                        color={element.cor}
+                      />
+                    </div>
+                  )
+                }
                 return <></>
               }
               )}
             </div>
           ) : (
-            <h2 className="row-center">
-              Você não tem nenhum sensor cadastrado {":("}
-            </h2>
+            <></>
           )}
-
           <MyButton>
             Cadastre seu sensor
-        </MyButton>
+          </MyButton>
         </div>
-        {sensores && sensores.data && (
-          <div className="right-container">
 
-          </div>
-        )}
+        <ul className="right-container column-center">
+          <li className="top-container column-center">
+            <div className="sensor-list-container column-center">
+              {sensores && sensores.data ? (
+                <>
+                  <input type="text" className="text-small search-bar" placeholder="Buscar sensor pelo nome ou tipo..." />
+                  <div className="sensor-list">
+                    {sensores.data.map((element, index) => (
+                      <ul
+                        className="text-regular column-center sensor-list-item-container"
+                        key={`sensor-list-item${index}`}
+                        onClick={e => {
+                          if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[1].textContent) {
+                            setData([])
+                            setListItem(e)
+                            setClicked(e.currentTarget.childNodes[0].childNodes[1].textContent)
+                          }
+                        }}
+                        id={element.nome}
+                      >
+                        <li className="item-container">
+                          <p>Nome: </p>
+                          <p>{element.nome}</p>
+                        </li>
+                        <li className="item-container">
+                          <p>Tipo: </p>
+                          <p>{element.tipo}</p>
+                        </li>
+                        <li className="item-container">
+                          <p>Valor Atual: </p>
+                          <p>{element.feed[element.ultimo_feed_id - 1].valor}</p>
+                        </li>
+                        <li className="item-container">
+                          <p>Ultima atualização: </p>
+                          <p>{dateFormat(element.feed[element.ultimo_feed_id - 1].data, "dd/mm/yyyy  - HH:MM")}</p>
+                        </li>
+                      </ul>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p>Você não tem nenhum sensor cadastrado {":("}</p>
+              )}
+            </div>
+          </li>
+          {sensores && data && (
+            <li className="bottom-container column-center">
+              <MyLineChart data={data} color={color} keyName={"valor"} />
+            </li>
+          )}
+        </ul>
       </div>
     </>
   )
