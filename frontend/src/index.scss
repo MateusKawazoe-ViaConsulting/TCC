@@ -5,6 +5,7 @@
   padding: 0;
   outline: 0;
   box-sizing: border-box;
+  font-family: 'Brush Script MT', cursive;
 }
 
 html,
@@ -17,7 +18,7 @@ body,
 body,
 input,
 button {
-  font-family: Arial, Helvetica, sans-serif, source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: 'Brush Script MT', cursive;
 }
 
 @import './lib/styles/form.scss';
@@ -39,3 +40,4 @@ button {
 @import './components/sensorContainer/styles.scss';
 @import './components/barChart/styles.scss';
 @import './components/myLineChart/styles.scss';
+@import './components/sensorForm/styles.scss';

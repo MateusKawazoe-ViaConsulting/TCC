@@ -5,6 +5,7 @@ import BarChart from '../barChart'
 import alerts from '../../functions/alertController'
 import api from '../../service/index'
 import dateFormat from 'dateformat'
+import SensorForm from '../sensorForm'
 
 export default function SensorContainer() {
   const [sensores, setSensores] = useState(null)
@@ -13,6 +14,7 @@ export default function SensorContainer() {
   const [color, setColor] = useState("")
   const [clicked, setClicked] = useState("")
   const [loadContent, setLoadContent] = useState(false)
+  const [form, setForm] = useState(false)
   // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
   async function dataGen() {
@@ -95,6 +97,9 @@ export default function SensorContainer() {
 
   return (
     <>
+      {!form && (
+        <SensorForm />
+      )}
       <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
           {sensores && sensores.data ? (
@@ -148,29 +153,31 @@ export default function SensorContainer() {
                         className="text-regular column-center sensor-list-item-container"
                         key={`sensor-list-item${index}`}
                         onClick={e => {
-                          if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[1].textContent) {
+                          if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent) {
                             setData([])
                             setListItem(e)
-                            setClicked(e.currentTarget.childNodes[0].childNodes[1].textContent)
+                            setClicked(e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent)
                           }
                         }}
                         id={element.nome}
                       >
                         <li className="item-container">
-                          <p>Nome: </p>
-                          <p>{element.nome}</p>
+                          <p>
+                            <span>Nome: </span>
+                            {element.nome}
+                          </p>
                         </li>
                         <li className="item-container">
-                          <p>Tipo: </p>
-                          <p>{element.tipo}</p>
+                          <p>
+                            <span>Tipo: </span>
+                            {element.tipo}
+                          </p>
                         </li>
                         <li className="item-container">
-                          <p>Valor Atual: </p>
-                          <p>{element.feed[element.ultimo_feed_id - 1].valor}</p>
+                          <p>Valor Atual: {element.feed[element.ultimo_feed_id - 1].valor}</p>
                         </li>
                         <li className="item-container">
-                          <p>Ultima atualização: </p>
-                          <p>{dateFormat(element.feed[element.ultimo_feed_id - 1].data, "dd/mm/yyyy  - HH:MM")}</p>
+                          <p>Ultima atualização: {dateFormat(element.feed[element.ultimo_feed_id - 1].data, "dd/mm/yyyy  - HH:MM")}</p>
                         </li>
                       </ul>
                     ))}
@@ -183,7 +190,7 @@ export default function SensorContainer() {
           </li>
           {sensores && data && (
             <li className="bottom-container column-center">
-              <MyLineChart data={data} color={color} keyName={"valor"} />
+              <MyLineChart data={data} color={color} keyName={"valor"} className={"my-chart"} />
             </li>
           )}
         </ul>

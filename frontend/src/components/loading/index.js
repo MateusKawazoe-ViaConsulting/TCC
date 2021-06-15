@@ -4,7 +4,7 @@ import React from 'react'
 export default function Loading() {
     return (
         <div className="loading row-center">
-            <div className="loading-background" />
+            <div className="dark-background" />
             <div className="loading-container column-center">
                 <div className="loading-image-container">
                     <ol className="loading-plant-container">
@@ -46,7 +46,7 @@ export default function Loading() {
                     <div />
                     <div />
                 </div>
-                <h1 className="loading-text">
+                <h1 className="text loading-text">
                     loading
                     <span>.</span>
                     <span>.</span>

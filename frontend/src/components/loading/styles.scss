@@ -7,18 +7,8 @@
     top: 0;
     z-index: 999;
     padding-bottom: 150px;
-    .loading-background {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        right: 0;
-        background-color: #000;
-        opacity: 0.6;
-        z-index: 1;
-    }
+
     .loading-container {
-        color: #7eb377;
         width: 225px;
         height: 120px;
         border-radius: 10px;
@@ -29,27 +19,34 @@
         z-index: 1;
         position: relative;
         margin: auto;
+
         .loading-text {
             width: 185px;
             display: flex;
             justify-content: space-between;
-            > span {
+            color: #7eb377;
+
+            >span {
                 animation: blink 1.4s ease infinite;
+
                 &:nth-child(2) {
                     animation-delay: 0.2s;
                 }
+
                 &:nth-child(3) {
                     animation-delay: 0.4s;
                 }
             }
         }
     }
+
     .loading-image-container {
         display: flex;
         justify-content: space-between;
         width: 190px;
         margin-bottom: 20px;
         position: relative;
+
         .loading-plant-container {
             list-style: none;
             position: relative;
@@ -58,6 +55,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+
             .leafs {
                 width: 50px;
                 height: 65px;
@@ -67,55 +65,64 @@
                 align-items: center;
                 justify-content: center;
                 position: unset;
-                > span {
+
+                >span {
                     width: 20px;
                     height: 20px;
                     background: green;
                     position: relative;
                     border-radius: 70px 0;
                     background: $leaf;
+
                     &:nth-child(1) {
                         transform: rotate(-75deg);
                         top: -8px;
                         right: -5px;
                     }
+
                     &:nth-child(2) {
                         transform: rotate(-45deg);
                         z-index: 1;
                         left: 0px;
                         top: -10px;
                     }
+
                     &:nth-child(3) {
                         transform: rotate(-15deg);
                         left: -6px;
                         top: -8px;
                     }
                 }
-                > b {
+
+                >b {
                     width: 20px;
                     height: 20px;
                     background: green;
                     position: relative;
                     border-radius: 70px 0;
                     background: $leaf;
+
                     &:nth-child(1) {
                         transform: rotate(-75deg);
                         top: 4px;
                         right: -8px;
                     }
+
                     &:nth-child(2) {
                         transform: rotate(-45deg);
                         z-index: 1;
                         left: 0;
                         top: 3px;
                     }
+
                     &:nth-child(3) {
                         transform: rotate(-15deg);
                         left: -6px;
                         top: 2px;
                     }
                 }
-                > p {
+
+                >p {
                     width: 20px;
                     height: 20px;
                     background: green;
@@ -125,6 +132,7 @@
                     left: 10px;
                     transform: rotate(-80deg);
                     top: 2px;
+
                     &:last-child {
                         transform: rotate(-27deg);
                         right: 9px;
@@ -133,6 +141,7 @@
                     }
                 }
             }
+
             .vase-top {
                 position: absolute;
                 width: 34px;
@@ -143,6 +152,7 @@
                 left: 8px;
                 z-index: 1;
             }
+
             .vase {
                 position: absolute;
                 height: 22px;
@@ -151,7 +161,8 @@
                 background: linear-gradient(to right, #f6ad7b 50%, #ed9a73 50%);
                 -webkit-clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
                 clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
-                > div {
+
+                >div {
                     width: 28px;
                     height: 3px;
                     position: relative;
@@ -160,15 +171,17 @@
                     z-index: 2;
                 }
             }
+
             &:first-child {
                 .leafs {
-                    > li {
+                    >li {
                         list-style: none;
                         width: 10px;
                         height: 10px;
                         border-radius: 150px 0;
                         background: linear-gradient(-32deg, #5c7658 50%, #649d66 50%);
                         position: absolute;
+
                         &:nth-child(1) {
                             left: 14px;
                             bottom: 0px;
@@ -176,6 +189,7 @@
                             transform: rotate(65deg);
                             z-index: 1;
                         }
+
                         &:nth-child(2) {
                             left: 24px;
                             bottom: 0;
@@ -183,6 +197,7 @@
                             transform: rotate(6deg);
                         }
                     }
+
                     .stalk {
                         position: absolute;
                         width: 3px;
@@ -207,12 +222,14 @@
         ol:nth-child(3) {
             animation: jump 1.4s ease-in-out infinite;
             animation-delay: 0.4s;
+
             .leafs {
                 z-index: 1;
                 height: 42px;
                 margin-bottom: 40px;
                 align-items: flex-end;
             }
+
             .vase {
                 height: 36px;
                 width: 36px;
@@ -223,14 +240,17 @@
                 z-index: 0;
                 overflow: hidden;
                 clip-path: none;
-                > span {
+
+                >span {
                     position: absolute;
+
                     &:first-child {
                         height: 5px;
                         width: 36px;
                         top: 15px;
                         background: linear-gradient(to right, #fbe6d4 50%, #feceab 50%);
                     }
+
                     &:last-child {
                         top: 4px;
                         width: 30px;
@@ -242,7 +262,8 @@
                 }
             }
         }
-        > div {
+
+        >div {
             background: #000000;
             border-radius: 50%;
             content: "";
@@ -255,10 +276,12 @@
             z-index: -1;
             animation: shadow 1.4s ease-in-out infinite;
             left: 10px;
+
             &:nth-child(4) {
                 animation-delay: 0.2s;
                 left: 80px;
             }
+
             &:nth-child(5) {
                 width: 39px;
                 animation-delay: 0.4s;
@@ -298,9 +321,11 @@
     0% {
         opacity: 0.2;
     }
+
     20% {
         opacity: 1;
     }
+
     100% {
         opacity: 0.2;
     }
@@ -310,9 +335,11 @@
     0% {
         opacity: 0.2;
     }
+
     20% {
         opacity: 1;
     }
+
     100% {
         opacity: 0.2;
     }

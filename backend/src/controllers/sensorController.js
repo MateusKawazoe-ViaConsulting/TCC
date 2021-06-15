@@ -1,10 +1,13 @@
 const crop = require('../models/crop')
 const user = require('../models/user')
 const sensor = require('../models/sensor')
+const importData = require('../service/importData')
+const updateSensors = require('../models/updateSensors')
 
 module.exports = {
     async store(req, res) {
-        const { dono, horta, nome, tipo, cor, valor, descricao } = req.body
+        const { dono, horta, nome, tipo, cor, descricao } = req.body
+        const auxHorta = horta ? horta : ""
 
         let exists = await sensor.findOne({
             nome, dono
@@ -23,17 +26,12 @@ module.exports = {
         const result = await sensor.create({
             nome: nome,
             tipo: tipo,
-            horta: horta,
+            horta: auxHorta,
             dono: dono,
             descricao: descricao,
             cor: cor,
-            ultimo_feed_id: 1,
-            feed: {
-                id: 1,
-                valor: valor,
-                data: new Date()
-            },
-
+            ultimo_feed_id: 0,
+            feed: []
         })
 
         await user.updateOne(
@@ -54,6 +52,99 @@ module.exports = {
         )
 
         return res.json(result)
+    },
+
+    async updateImportedSensorFeed(req, res) {
+        const result = await updateSensors.findOne({ id: "Sensors" })
+
+        const data = result.sensors.map(element => {
+            return ({
+                
+            })
+        })
+    },
+
+    thingSpeakImportSensor(req, res) {
+        const { id, dono, horta, cor } = req.body
+        const auxHorta = horta ? horta : ""
+
+        try {
+            importData(id).then(async data => {
+
+                if (!data.data.channel.id)
+                    return res.json('Sensor não existe!')
+
+                const userExists = await user.findOne({ usuario: dono }).collation({ locale: 'pt', strength: 2 })
+
+                if (userExists.sensores.length > 49) {
+                    return res.json("Número máximo de sensores inseridos!")
+                }
+
+                const exists = await sensor.findOne({ nome: data.data.channel.name, dono: dono })
+
+                if (exists)
+                    return res.json('Sensor já cadastrado!')
+
+                var lastId = 0
+
+                const feeds = await data.data.feeds.map((element, index) => {
+                    if (index > lastId)
+                        lastId = index
+
+                    return ({
+                        data: element.created_at,
+                        id: element.entry_id,
+                        valor: element.field1
+                    })
+                })
+
+                const result = await sensor.create({
+                    nome: data.data.channel.name,
+                    tipo: data.data.channel.field1,
+                    horta: auxHorta,
+                    dono: dono,
+                    descricao: data.data.channel.description,
+                    cor: cor,
+                    ultimo_feed_id: lastId,
+                    feed: feeds,
+                })
+
+                await user.updateOne(
+                    { usuario: dono },
+                    { $addToSet: { sensores: data.data.channel.name } }
+                )
+
+                await crop.updateOne(
+                    { dono: dono, nome: horta },
+                    {
+                        $addToSet: {
+                            sensores: {
+                                nome: data.data.channel.name,
+                                dono: dono
+                            }
+                        }
+                    }
+                )
+
+                if (!await updateSensors.findOne({ id: "Sensors" })) {
+                    await updateSensors.create({
+                        id: "Sensors",
+                        sensors: []
+                    })
+                }
+
+                await updateSensors.updateOne(
+                    { id: "Sensors" },
+                    { $addToSet: { sensors: result._id } }
+                )
+
+                return res.json({
+                    message: "Sensor cadastrado com sucesso!"
+                })
+            })
+        } catch (error) {
+            console.log(e)
+        }
     },
 
     async insertIntoACrop(req, res) {
@@ -129,8 +220,8 @@ module.exports = {
     async showAll(req, res) {
         if (req.headers.user) {
             const result = await sensor.find({ dono: req.headers.user })
-            
-            if(result[0])
+
+            if (result[0])
                 return res.json(result)
 
             return res.json(0)
@@ -174,7 +265,7 @@ module.exports = {
             auxDescricao = descricao
         if (novoNome)
             auxNome = novoNome
-        if(cor)
+        if (cor)
             auxCor = cor
 
         await sensor.updateOne(
@@ -251,6 +342,8 @@ module.exports = {
     async delete(req, res) {
         const { dono, nome, horta } = req.headers
 
+
+        const sensorId = await sensor.findOne({ nome, dono })
         const sensorExists = await sensor.deleteOne({ nome, dono }).collation({ locale: 'pt', strength: 2 })
 
         if (sensorExists.deletedCount > 0) {
@@ -273,6 +366,11 @@ module.exports = {
                         }
                     }
                 }
+            )
+
+            await updateSensors.updateOne(
+                { id: "Sensors" },
+                { $pull: { sensors: sensorId._id } }
             )
 
             return res.json("Sensor excluído com sucesso!")

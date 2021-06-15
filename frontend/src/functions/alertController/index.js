@@ -10,7 +10,8 @@ module.exports = {
 
         document.getElementById(id).classList.add('MuiAlert-filled' + type)
         setTimeout(() => {
-            this.closeAlert(id)
+            if (document.getElementById(id))
+                this.closeAlert(id)
         }, 7500)
         document.getElementById(id).children[1].children[0].innerText = message
         document.getElementById(id).style.right = '60px'

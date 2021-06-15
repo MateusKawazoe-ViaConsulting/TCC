@@ -93,6 +93,7 @@ export default function LoginContainer({ history }) {
                                         message: result.data
                                     })
                                 } else {
+                                    alerts.closeAlert('singup-alert')
                                     localStorage.setItem('urbanVG-token', result.data.token)
                                     localStorage.setItem('urbanVG-user', user)
                                     history.push('/home')

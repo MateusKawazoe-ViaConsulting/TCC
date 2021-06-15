@@ -1,4 +1,37 @@
 .line-chart-container {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+
+    .expand-chart {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1;
+
+        h1 {
+            color: white;
+            opacity: 0;
+            transition: all .3s linear;
+            margin-left: 25px;
+        }
+
+        &:hover {
+            h1 {
+                opacity: .3;
+
+                &:hover {
+                    opacity: .8;
+                }
+            }
+        }
+    }
+
+    .my-chart {
+        width: 100%!important;
+        height: 100%!important;
+    }
+
     .recharts-wrapper {
         padding: 10px 0;
         background: linear-gradient(90deg, #77a7ff 0%, #006eff 100%, #1dbfff 100%);
@@ -12,7 +45,9 @@
         }
 
         svg {
-            margin-left: -20px;
+            width: 105%;
+            height: 105%;
+            margin-left: -6%;
         }
     }
 }

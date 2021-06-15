@@ -1,6 +1,6 @@
  .sensor-container {
      width: 100%;
-     height: fit-content;
+     height: 100%;
      position: relative;
      transition: all .3s linear;
 
@@ -54,16 +54,16 @@
      }
 
      .right-container {
-         width: 350px;
+         width: 20%;
          height: 100%;
          position: absolute;
          right: 0;
-         justify-content: space-evenly;
+         padding-bottom: 20px;
 
          >* {
-             height: 320px;
+             height: 38%;
              width: 100%;
-             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+             margin-bottom: 30px;
          }
 
          .top-container {
@@ -122,6 +122,11 @@
                                  color: black;
                                  max-width: unset;
                                  height: fit-content;
+                                 display: flex;
+
+                                 span {
+                                     padding-right: 3px;
+                                 }
 
                                  &:last-child {
                                      letter-spacing: -0.8px;

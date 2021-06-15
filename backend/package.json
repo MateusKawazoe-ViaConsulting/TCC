@@ -18,7 +18,8 @@
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "mongoose": "^5.12.3",
-    "node": "^13.10.1"
+    "node": "^13.10.1",
+    "node-cron": "^3.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

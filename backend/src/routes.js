@@ -47,6 +47,8 @@ routes.put('/crop/update/name', cropController.update)
 
 routes.post('/sensor/store', sensorController.store)
 
+routes.post('/sensor/importData', sensorController.thingSpeakImportSensor)
+
 routes.get('/sensor/number', sensorController.sensorsNumber)
 
 routes.get('/sensor/show/all', sensorController.showAll)

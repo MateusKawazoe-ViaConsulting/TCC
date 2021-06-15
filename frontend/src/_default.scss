@@ -1,5 +1,5 @@
 [class^="text"] {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Brush Script MT', cursive;
   color: black;
 }
 
@@ -12,7 +12,7 @@ $hover-blue: #5ca2ff;
 $pink: #d42767;
 
 .text-tiny {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .text-small {
@@ -131,4 +131,15 @@ $pink: #d42767;
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
+}
+
+.dark-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #000;
+  opacity: 0.6;
+  z-index: 1;
 }

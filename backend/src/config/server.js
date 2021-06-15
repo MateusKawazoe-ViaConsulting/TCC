@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const cron = require('node-cron')
 const routes = require('../routes')
 
 module.exports = (url) => {
@@ -14,6 +15,10 @@ module.exports = (url) => {
     server.use(cors())
     server.use(express.json())
     server.use(routes)
+
+    cron.schedule('*/30 * * * *', function () {
+        console.log('running a task every 10 seconds');
+    })
 
     const app = server.listen(3333)
 
