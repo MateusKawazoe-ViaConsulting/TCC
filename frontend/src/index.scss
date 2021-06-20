@@ -1,11 +1,12 @@
 @import './default';
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   outline: 0;
   box-sizing: border-box;
-  font-family: 'Brush Script MT', cursive;
+  font-family: 'Ubuntu Mono', monospace;
 }
 
 html,
@@ -18,14 +19,13 @@ body,
 body,
 input,
 button {
-  font-family: 'Brush Script MT', cursive;
+  font-family: 'Ubuntu Mono', monospace;
 }
 
 @import './lib/styles/form.scss';
 @import './pages/home/styles.scss';
 @import './pages/login/styles.scss';
 @import './common/button/styles.scss';
-@import './common/colorPicker/styles.scss';
 @import './components/background/styles.scss';
 @import './components/background/cloud/styles.scss';
 @import './components/background/moon/styles.scss';
@@ -41,3 +41,5 @@ button {
 @import './components/barChart/styles.scss';
 @import './components/myLineChart/styles.scss';
 @import './components/sensorForm/styles.scss';
+@import './components/colorPicker/styles.scss';
+@import './components/importSensorForm/styles.scss';

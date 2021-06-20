@@ -108,6 +108,10 @@ $pink: #d42767;
   transition: 800ms ease-out right !important;
 }
 
+.MuiInputLabel-outlined {
+  z-index: 0!important;
+}
+
 .divided {
   display: flex;
   justify-content: space-between;

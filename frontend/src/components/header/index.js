@@ -9,7 +9,9 @@ import LocalFloristOutlinedIcon from '@material-ui/icons/LocalFloristOutlined'
 import { MapSVG } from '../../lib/assets/header/icons'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import SettingsRemoteOutlinedIcon from '@material-ui/icons/SettingsRemoteOutlined';
-import SettingsRemoteIcon from '@material-ui/icons/SettingsRemote';
+import crop from '../../lib/assets/header/crop.png'
+import home from '../../lib/assets/header/home.png'
+import sensor from '../../lib/assets/header/sensor.png'
 
 export default function Header({ setItem, history }) {
     const [selected, setSelected] = useState({
@@ -27,52 +29,42 @@ export default function Header({ setItem, history }) {
             </li>
             <li className="middle-container">
                 <ul className="bar-navigation row-center">
-                    {selected.home ? (
-                        <HomeIcon className="home selected" />
-                    ) :
-                        <HomeOutlinedIcon className="home" onClick={() => {
-                            setBar("0%")
-                            setSelected({
-                                home: true
-                            })
-                            setItem('home')
-                        }} />
-                    }
-
-                    {selected.map ? (
-                        <MapIcon className="selected" />
-                    ) :
-                        <MapSVG colors={true} onClick={() => {
-                            setBar("27%")
-                            setSelected({
-                                map: true
-                            })
-                            setItem('map')
-                        }} />
-                    }
-
-                    {selected.crop ? (
-                        <LocalFloristIcon className="crop selected" />
-                    ) :
-                        <LocalFloristOutlinedIcon className="crop" onClick={() => {
-                            setBar("55%")
-                            setSelected({
-                                crop: true
-                            })
-                            setItem('crop')
-                        }} />
-                    }
-                    {selected.sensor ? (
-                        <SettingsRemoteIcon className="sensor selected" />
-                    ) :
-                        <SettingsRemoteOutlinedIcon className="sensor" onClick={() => {
-                            setBar("82%")
-                            setSelected({
-                                sensor: true
-                            })
-                            setItem('sensor')
-                        }} />
-                    }
+                    <li className="row-center" onClick={() => {
+                        setBar("0%")
+                        setSelected({
+                            home: true
+                        })
+                        setItem('home')
+                    }}>
+                        <img src={home} alt="home"/>
+                    </li>
+                    <li className="row-center" onClick={() => {
+                        setBar("27%")
+                        setSelected({
+                            map: true
+                        })
+                        setItem('map')
+                    }} >
+                        <MapSVG colors={true} />
+                    </li>
+                    <li className="row-center" onClick={() => {
+                        setBar("54.5%")
+                        setSelected({
+                            crop: true
+                        })
+                        setItem('crop')
+                    }} >
+                        <img src={crop} alt="crop" />
+                    </li>
+                    <li className="row-center" onClick={() => {
+                        setBar("82%")
+                        setSelected({
+                            sensor: true
+                        })
+                        setItem('sensor')
+                    }}>
+                        <img src={sensor} alt="sensor" />
+                    </li>
                 </ul>
                 <span className="slider" style={{ marginLeft: bar }} />
             </li>

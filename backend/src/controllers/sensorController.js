@@ -59,7 +59,7 @@ module.exports = {
 
         const data = result.sensors.map(element => {
             return ({
-                
+
             })
         })
     },
@@ -70,7 +70,6 @@ module.exports = {
 
         try {
             importData(id).then(async data => {
-
                 if (!data.data.channel.id)
                     return res.json('Sensor não existe!')
 
@@ -138,12 +137,12 @@ module.exports = {
                     { $addToSet: { sensors: result._id } }
                 )
 
-                return res.json({
-                    message: "Sensor cadastrado com sucesso!"
-                })
+                return res.json(result)
+            }).catch(() => {
+                return res.json("Sensor informado não é público!")
             })
         } catch (error) {
-            console.log(e)
+            return res.json("Erro ao tentar processar a requisição!")
         }
     },
 

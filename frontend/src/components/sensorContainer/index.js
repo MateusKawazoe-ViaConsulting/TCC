@@ -5,16 +5,14 @@ import BarChart from '../barChart'
 import alerts from '../../functions/alertController'
 import api from '../../service/index'
 import dateFormat from 'dateformat'
-import SensorForm from '../sensorForm'
 
-export default function SensorContainer() {
+export default function SensorContainer({ setForm, setImportForm, newSensor }) {
   const [sensores, setSensores] = useState(null)
   const [visible, setVisible] = useState(false)
   const [data, setData] = useState([])
   const [color, setColor] = useState("")
   const [clicked, setClicked] = useState("")
   const [loadContent, setLoadContent] = useState(false)
-  const [form, setForm] = useState(false)
   // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
   async function dataGen() {
@@ -30,15 +28,30 @@ export default function SensorContainer() {
         if (sensorData.data) {
           setColor(sensorData.data.cor)
 
-          sensorData.data.feed.map((values) => {
-            setData(prev => [
-              ...prev,
-              {
-                name: `${(new Date(values.data).getDate()) > 9 ? (new Date(values.data).getDate()) : "0" + (new Date(values.data).getDay())}/${(new Date(values.data).getMonth() + 1) > 9 ? (new Date(values.data).getMonth()) : "0" + (new Date(values.data).getMonth() + 1)}`,
-                valor: values.valor
+          if (sensorData.data.feed[0]) {
+            if (sensorData.data.feed.length > 5) {
+              for (let i = 0; i < 5; i++) {
+                let feedAux = sensorData.data.feed[(sensorData.data.feed.length - 6) + i];
+                setData(prev => [
+                  ...prev,
+                  {
+                    name: `${(new Date(feedAux.data).getDate()) > 9 ? (new Date(feedAux.data).getDate()) : "0" + (new Date(feedAux.data).getDay())}/${(new Date(feedAux.data).getMonth() + 1) > 9 ? (new Date(feedAux.data).getMonth()) : "0" + (new Date(feedAux.data).getMonth() + 1)}`,
+                    valor: feedAux.valor
+                  }
+                ])
               }
-            ])
-          })
+            } else {
+              sensorData.data.feed.map(element => {
+                setData(prev => [
+                  ...prev,
+                  {
+                    name: `${(new Date(element.data).getDate()) > 9 ? (new Date(element.data).getDate()) : "0" + (new Date(element.data).getDay())}/${(new Date(element.data).getMonth() + 1) > 9 ? (new Date(element.data).getMonth()) : "0" + (new Date(element.data).getMonth() + 1)}`,
+                    valor: element.valor
+                  }
+                ])
+              })
+            }
+          }
         }
       } catch (error) {
         alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
@@ -47,7 +60,6 @@ export default function SensorContainer() {
   }
 
   function setListItem(e, chart = false) {
-    console.log()
     while (document.getElementsByClassName('active')[0]) {
       document.getElementsByClassName('active')[0].classList.remove("active")
     }
@@ -71,10 +83,10 @@ export default function SensorContainer() {
             }
           }))
         }).then((result) => {
-          setSensores(result)
+          setSensores(result.data)
 
           if (!clicked)
-            setClicked(result.data[2].nome)
+            setClicked(result.data[0].nome)
         })
       } catch (error) {
         alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
@@ -95,16 +107,22 @@ export default function SensorContainer() {
     }
   }, [document.getElementsByClassName('sensor-list-item-container')[0]])
 
+  useEffect(() => {
+    if (newSensor && sensores && newSensor !== Object.values(sensores)[0][Object.values(sensores)[0].length - 1]) {
+      setSensores([
+        ...sensores,
+        newSensor
+      ])
+    }
+  }, [newSensor])
+
   return (
     <>
-      {!form && (
-        <SensorForm />
-      )}
       <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
-          {sensores && sensores.data ? (
+          {sensores && sensores[0] ? (
             <div className="middle-content row-center">
-              {sensores.data.map((element, index) => {
+              {sensores.map((element, index) => {
                 if (index < 3) {
                   return (
                     <div
@@ -136,24 +154,29 @@ export default function SensorContainer() {
           ) : (
             <></>
           )}
-          <MyButton>
-            Cadastre seu sensor
-          </MyButton>
+          <div className="row-center">
+            <MyButton onClick={() => { setForm(true) }}>
+              Cadastre seu sensor
+            </MyButton>
+            <MyButton onClick={() => { setImportForm(true) }}>
+              Importe seu sensor
+            </MyButton>
+          </div>
         </div>
 
         <ul className="right-container column-center">
           <li className="top-container column-center">
             <div className="sensor-list-container column-center">
-              {sensores && sensores.data ? (
+              {sensores && sensores[0] ? (
                 <>
                   <input type="text" className="text-small search-bar" placeholder="Buscar sensor pelo nome ou tipo..." />
                   <div className="sensor-list">
-                    {sensores.data.map((element, index) => (
+                    {sensores.map((element, index) => (
                       <ul
                         className="text-regular column-center sensor-list-item-container"
                         key={`sensor-list-item${index}`}
                         onClick={e => {
-                          if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent) {
+                          if (document.getElementsByClassName('active')[0].id && document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent) {
                             setData([])
                             setListItem(e)
                             setClicked(e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent)
@@ -173,12 +196,16 @@ export default function SensorContainer() {
                             {element.tipo}
                           </p>
                         </li>
-                        <li className="item-container">
-                          <p>Valor Atual: {element.feed[element.ultimo_feed_id - 1].valor}</p>
-                        </li>
-                        <li className="item-container">
-                          <p>Ultima atualização: {dateFormat(element.feed[element.ultimo_feed_id - 1].data, "dd/mm/yyyy  - HH:MM")}</p>
-                        </li>
+                        {element.feed[0] && (
+                          <>
+                            <li className="item-container">
+                              <p>Valor Atual: {element.feed[element.ultimo_feed_id - 1].valor}</p>
+                            </li>
+                            <li className="item-container">
+                              <p>Ultima atualização: {dateFormat(element.feed[element.ultimo_feed_id - 1].data, "dd/mm/yyyy  - HH:MM")}</p>
+                            </li>
+                          </>
+                        )}
                       </ul>
                     ))}
                   </div>

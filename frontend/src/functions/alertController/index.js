@@ -1,6 +1,9 @@
 module.exports = {
     showAlert(message, type, id) {
         // document.getElementById(id).classList.replace(/\b(\w*error\w*)\b|\b(\w*success\w*)\b|\b(\w*info\w*)\b|\b(\w*warning\w*)\b/igm, type)
+        if (!document.getElementById(id))
+            return
+            
         const classList = []
         document.getElementById(id).classList.forEach(element => classList.push(element))
         const aux = classList.find(element => /\b(\w*error\w*)\b|\b(\w*success\w*)\b|\b(\w*info\w*)\b|\b(\w*warning\w*)\b/igm.test(element))

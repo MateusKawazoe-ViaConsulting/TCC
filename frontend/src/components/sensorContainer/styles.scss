@@ -46,6 +46,7 @@
              padding: 10px;
              justify-self: end;
              background-color: rgb(44, 135, 255) !important;
+             margin-right: 30px;
 
              &:hover {
                  background-color: rgb(0, 110, 255) !important;
@@ -107,9 +108,9 @@
                          padding: 2px;
                          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
 
-                        &:hover {
-                            background-color: #afa7ed;
-                        }
+                         &:hover {
+                             background-color: #afa7ed;
+                         }
 
                          .item-container {
                              width: 100%;

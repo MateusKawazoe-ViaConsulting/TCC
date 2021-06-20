@@ -61,6 +61,15 @@ module.exports = {
     },
 
     async showAll(req, res) {
+        if (req.headers.user) {
+            const result = await user.findOne({ usuario: req.headers.user }).collation({ locale: 'pt', strength: 2 })
+
+            if (result.horta[0])
+                return res.json(result.horta)
+
+            return res.json(0)
+        }
+
         return res.json(await crop.find())
     },
 
