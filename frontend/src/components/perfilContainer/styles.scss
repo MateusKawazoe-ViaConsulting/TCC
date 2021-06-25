@@ -1,0 +1,138 @@
+.perfil-container {
+	width: 25%;
+	height: 35%;
+	min-height: 327px;
+	background: linear-gradient(#ffe6e6, rgb(255, 228, 217));
+	position: absolute;
+	border-radius: 10px;
+	top: 130px;
+	left: 20px;
+	z-index: 1;
+
+	>* {
+		transition: all .250s ease-out;
+	}
+
+	.left-container {
+		width: 40%;
+		min-height: 192px;
+		height: 100%;
+		background: linear-gradient(90deg, rgb(85, 144, 255) 0%, rgb(29, 191, 255) 100%);
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+		cursor: pointer;
+		position: relative;
+
+		&:hover {
+			.line {
+				opacity: 1;
+			}
+		}
+
+		.line {
+			height: 90%;
+			width: 0.5px;
+			position: absolute;
+			margin-left: 185px;
+			top: 16px;
+			background-color: rgb(85, 144, 255);
+			opacity: 0;
+			transition: all .3s linear;
+		}
+
+		.profile-information-container {
+			list-style-type: none;
+			height: 100%;
+			width: 192px;
+
+			.username {
+				span {
+					width: fit-content;
+					height: fit-content;
+					color: white;
+					margin-top: 10px;
+
+					&:first-child {
+						padding: 5px 10px;
+						border-radius: 24px;
+						background-color: rgb(0, 81, 230);
+					}
+				}
+			}
+
+			.picture {
+				img {
+					width: 125px;
+					height: 125px;
+					border-radius: 50%;
+					border: 2px solid darkblue;
+					transition: all .2s linear;
+					margin: 20px 0;
+
+					&:hover {
+						opacity: 0.7;
+					}
+
+					&:active {
+						opacity: 1;
+					}
+				}
+
+				&:hover {
+					&::after {
+						opacity: 1;
+					}
+				}
+
+				&::after {
+					content: "editar";
+					position: absolute;
+					color: white;
+					font-size: 20px;
+					font-weight: 500;
+					opacity: 0;
+					transition: all .2s linear;
+				}
+			}
+
+			.lvl-content {
+				div {
+					width: 120px;
+					height: 20px;
+					background-color: rgb(0, 81, 230);
+					border: 2px solid rgb(0, 81, 230);
+					margin-bottom: 10px;
+					position: relative;
+
+					span {
+						height: 100%;
+						background-color: rgb(104, 157, 255);
+						position: absolute;
+						transition: all .3s linear;
+					}
+				}
+
+				p {
+					width: 120px;
+					text-align: center;
+					padding: 3px 10px;
+					color: white;
+				}
+			}
+		}
+
+		&:hover {
+			width: 100%;
+			border-top-right-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
+	}
+
+	.right-container {
+		list-style-type: none;
+		width: 60%;
+		height: 100%;
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+}

@@ -7,12 +7,14 @@
     animation: dayTimeAnimation 30s infinite linear;
     z-index: -1;
     top: 0;
+
     .moon-sun-container {
         width: 100%;
         height: 100%;
         position: relative;
         display: flex;
         justify-content: center;
+
         .day-transition {
             position: absolute;
             height: 120vw;
@@ -20,6 +22,7 @@
             margin: auto;
             animation: dayTime 30s infinite linear;
             bottom: -100vw;
+
             .sun {
                 &:nth-child(3) {
                     top: unset;
@@ -28,6 +31,7 @@
                     right: -63px;
                 }
             }
+
             .moon {
                 &:last-child {
                     top: unset;
@@ -37,10 +41,12 @@
             }
         }
     }
+
     .wind-container {
         opacity: 0;
         animation: dayNight 30s infinite linear;
     }
+
     .city {
         width: 100%;
         bottom: -40px;
@@ -48,6 +54,7 @@
         animation: city 30s infinite linear;
         z-index: 1;
     }
+
     .earth {
         width: 100%;
         position: absolute;
@@ -57,6 +64,7 @@
         z-index: 2;
         padding-bottom: 4.5%;
         justify-content: space-evenly;
+
         .vegetables {
             width: fit-content;
             height: 250px;
@@ -68,21 +76,27 @@
     0% {
         background-color: #70c4c6;
     }
+
     25% {
         background-color: #f0d458;
     }
+
     40% {
         background-color: #ffa24b;
     }
+
     50% {
         background-color: #354a4a;
     }
+
     65% {
         background-color: #354a4a;
     }
+
     90% {
         background-color: #524b64;
     }
+
     100% {
         background-color: #70c4c6;
     }
@@ -92,6 +106,7 @@
     0% {
         transform: rotate(90deg);
     }
+
     100% {
         transform: rotate(-90deg);
     }
@@ -101,12 +116,15 @@
     0% {
         opacity: 1;
     }
+
     50% {
         opacity: 0;
     }
+
     90% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
@@ -116,12 +134,15 @@
     30% {
         opacity: 1;
     }
+
     60% {
         opacity: 0.5;
     }
+
     80% {
         opacity: 0.5;
     }
+
     100% {
         opacity: 1;
     }

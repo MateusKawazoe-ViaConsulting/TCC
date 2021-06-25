@@ -5,11 +5,13 @@ const sensorController = require('./controllers/sensorController')
 const routes = express.Router()
 
 // Users routes --
-routes.get('/user/login', userController.login)
+routes.get('/user/lvl/next', userController.nextLvl)
+
+routes.post('/user/login', userController.login)
 
 routes.post('/user/store', userController.store)
 
-routes.get('/user/users/number', userController.usersNumber)
+routes.get('/user/number', userController.usersNumber)
 
 routes.get('/user/show/all', userController.showAll)
 

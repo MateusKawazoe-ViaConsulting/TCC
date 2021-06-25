@@ -2,10 +2,15 @@ const user = require('../models/user')
 const auth_token = require('../service/auth')
 const md5 = require("md5")
 const findLatlng = require('../service/findLatlng')
+const lvlManager = require('../common/nivel')
 
 module.exports = {
+    async nextLvl(req, res) {
+        return res.json(lvlManager.calcularXpProximoNivel(req.headers.lvl));
+    },
+
     async login(req, res) {
-        const { usuario, senha } = req.headers
+        const { usuario, senha } = req.body
         const exists = await user.findOne({
             usuario
         }).collation({ locale: 'pt', strength: 2 })
@@ -28,7 +33,7 @@ module.exports = {
             nome,
             endereco
         } = req.body
-  
+
         try {
             const userExists = await user.findOne({
                 usuario
@@ -72,7 +77,7 @@ module.exports = {
                 integridade: 1,
                 token: token,
                 nivel: {
-                    lvl: 0,
+                    lvl: 1,
                     xp: 0
                 }
             })

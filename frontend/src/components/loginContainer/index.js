@@ -74,11 +74,9 @@ export default function LoginContainer({ history }) {
                     try {
                         if (user.length > 2 && password.length > 2) {
                             document.getElementsByClassName("loading")[0].style.display = "flex"
-                            const result = await api.get('/user/login', {
-                                headers: {
-                                    usuario: user,
-                                    senha: password
-                                }
+                            const result = await api.post('/user/login', {
+                                usuario: user,
+                                senha: password
                             })
                             setTimeout(() => {
                                 document.getElementsByClassName("loading")[0].style.display = "none"
@@ -95,6 +93,13 @@ export default function LoginContainer({ history }) {
                                 } else {
                                     alerts.closeAlert('singup-alert')
                                     localStorage.setItem('urbanVG-token', result.data.token)
+                                    localStorage.setItem('urbanVG-user_lvl', result.data.nivel.lvl)
+                                    localStorage.setItem('urbanVG-user_xp', result.data.nivel.xp)
+                                    localStorage.setItem('urbanVG-user_crop', result.data.crop ? result.data.crop.length : 0)
+                                    localStorage.setItem('urbanVG-user_sensor', result.data.sensores ? result.data.sensores.length : 0)
+                                    localStorage.setItem('urbanVG-user_public', result.data.publicacoes ? result.data.publicacoes.length : 0)
+                                    localStorage.setItem('urbanVG-user_foto', result.data.foto ? result.data.foto : null)
+                                    localStorage.setItem('urbanVG-user_name', result.data.name)
                                     localStorage.setItem('urbanVG-user', user)
                                     history.push('/home')
                                 }

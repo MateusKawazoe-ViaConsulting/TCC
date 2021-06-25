@@ -85,7 +85,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
         }).then((result) => {
           setSensores(result.data)
 
-          if (!clicked)
+          if (!clicked && result.data[0])
             setClicked(result.data[0].nome)
         })
       } catch (error) {
@@ -120,7 +120,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
     <>
       <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
-          {sensores && sensores[0] ? (
+          {sensores ? (
             <div className="middle-content row-center">
               {sensores.map((element, index) => {
                 if (index < 3) {
@@ -167,7 +167,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
         <ul className="right-container column-center">
           <li className="top-container column-center">
             <div className="sensor-list-container column-center">
-              {sensores && sensores[0] ? (
+              {sensores ? (
                 <>
                   <input type="text" className="text-small search-bar" placeholder="Buscar sensor pelo nome ou tipo..." />
                   <div className="sensor-list">

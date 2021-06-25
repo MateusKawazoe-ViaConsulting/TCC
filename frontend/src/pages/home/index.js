@@ -8,6 +8,7 @@ import Alert from '@material-ui/lab/Alert'
 import SensorForm from '../../components/sensorForm'
 import alertController from '../../functions/alertController'
 import ImportSensorForm from '../../components/importSensorForm'
+import PerfilContainer from '../../components/perfilContainer'
 
 export default function Home({ history }) {
     const [selected, setSelected] = useState('')
@@ -30,6 +31,7 @@ export default function Home({ history }) {
             <Header setItem={setSelected} history={history} />
             <Background />
             <Loading />
+            <PerfilContainer />
             <div className="body-container row-center">
                 {selected === 'sensor' && (
                     <SensorContainer setForm={setForm} setImportForm={setImportForm} newSensor={newSensor} />

@@ -1,7 +1,7 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField';
 
-export default function MyInput({ placeholder, error, errorLabel, type = 'text', ...props }) {
+export default function MyInput({ placeholder, error, errorLabel, type = 'text', autoComplete, ...props }) {
     return (
         <TextField
             type={type}

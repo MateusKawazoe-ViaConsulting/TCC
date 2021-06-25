@@ -25,10 +25,12 @@ export default function ImportSensorForm({ setImportForm, setNewSensor }) {
 
 	async function loadCrops() {
 		const data = await api.get('/crop/show/all', { headers: { user: localStorage.getItem('urbanVG-user') } })
-		const result = data.data.map(element => {
-			return { value: element, label: element }
-		})
-		setCrops(result)
+		if (data.data) {
+			const result = data.data.map(element => {
+				return { value: element, label: element }
+			})
+			setCrops(result)
+		}
 	}
 
 	useEffect(() => {

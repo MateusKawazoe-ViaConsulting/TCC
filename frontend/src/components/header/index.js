@@ -21,12 +21,10 @@ export default function Header({ setItem, history }) {
         sensor: false
     })
     const [bar, setBar] = useState("0%")
+    const [color, setColor] = useState("#c20000")
 
     return (
         <ul className="header-container row-center">
-            <li className="left-container">
-                Bem vindo <span>{localStorage.getItem('urbanVG-user')}</span>
-            </li>
             <li className="middle-container">
                 <ul className="bar-navigation row-center">
                     <li className="row-center" onClick={() => {
@@ -35,6 +33,7 @@ export default function Header({ setItem, history }) {
                             home: true
                         })
                         setItem('home')
+                        setColor("#c20000")
                     }}>
                         <img src={home} alt="home"/>
                     </li>
@@ -44,6 +43,7 @@ export default function Header({ setItem, history }) {
                             map: true
                         })
                         setItem('map')
+                        setColor("#858585")
                     }} >
                         <MapSVG colors={true} />
                     </li>
@@ -53,6 +53,7 @@ export default function Header({ setItem, history }) {
                             crop: true
                         })
                         setItem('crop')
+                        setColor("#1e9400")
                     }} >
                         <img src={crop} alt="crop" />
                     </li>
@@ -62,11 +63,12 @@ export default function Header({ setItem, history }) {
                             sensor: true
                         })
                         setItem('sensor')
+                        setColor("#006eff ")
                     }}>
                         <img src={sensor} alt="sensor" />
                     </li>
                 </ul>
-                <span className="slider" style={{ marginLeft: bar }} />
+                <span className="slider" style={{ marginLeft: bar, backgroundColor: color }} />
             </li>
             <li className="right-container row-center">
                 <button

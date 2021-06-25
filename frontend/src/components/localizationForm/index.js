@@ -78,10 +78,12 @@ export default function LocalizationForm({ clicked, userData, history }) {
   })
 
   useEffect(() => {
+    console.log("vamo ve: " + JSON.stringify(variables))
     if (
       start &&
       Object.values(variables).filter(element => element.error !== undefined).length === 0
     ) {
+      console.log("oie: " + Object.values(variables).filter(element => element.value !== '').length)
       if (Object.values(variables).filter(element => element.value !== '').length > 3) {
         document.getElementsByClassName("loading")[0].style.display = "flex"
         setTimeout(async () => {
@@ -92,7 +94,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
               usuario: userData.user,
               email: userData.email,
               senha: userData.password,
-              nome: userData.name + " " + userData.surname,
+              nome: userData.name,
               endereco: `${variables.street.value},${variables.number.value},${variables.city.value},${variables.uf.value}`
             })
             document.getElementsByClassName("loading")[0].style.display = "none"
@@ -102,6 +104,13 @@ export default function LocalizationForm({ clicked, userData, history }) {
             } else {
               localStorage.setItem('urbanVG-token', result.data.token)
               localStorage.setItem('urbanVG-user', userData.user)
+              localStorage.setItem('urbanVG-user_lvl', 1)
+              localStorage.setItem('urbanVG-user_xp', 0)
+              localStorage.setItem('urbanVG-user_crop', 0)
+              localStorage.setItem('urbanVG-user_sensor', 0)
+              localStorage.setItem('urbanVG-user_public', 0)
+              localStorage.setItem('urbanVG-user_foto', null)
+              localStorage.setItem('urbanVG-user_name', userData.name)
               history.push('/home')
             }
           } catch (err) {
@@ -160,17 +169,10 @@ export default function LocalizationForm({ clicked, userData, history }) {
                   setFieldTouched('zipCode', true, false)
                   document.getElementsByClassName("loading")[0].style.display = "flex"
                   const result = await findZipCode(values.zipCode)
-                  setVariables({
-                    ...variables,
-                    zipCode: {
-                      ...variables.zipCode,
-                      error: errors.zipCode,
-                      value: values.zipCode
-                    }
-                  })
                   document.getElementsByClassName("loading")[0].style.display = "none"
-                  console.log(result)
+
                   if (result === undefined || result.erro) {
+                    console.log(errors)
                     setVariables({
                       ...variables,
                       zipCode: {
@@ -190,6 +192,11 @@ export default function LocalizationForm({ clicked, userData, history }) {
 
                   setVariables({
                     ...variables,
+                    zipCode: {
+                      ...variables.zipCode,
+                      error: errors.zipCode,
+                      value: values.zipCode
+                    },
                     uf: {
                       ...variables.uf,
                       value: result.uf
@@ -206,6 +213,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
 
                   setValues({
                     ...values,
+                    cep: result.cep,
                     uf: result.uf,
                     city: result.localidade,
                     street: result.logradouro
