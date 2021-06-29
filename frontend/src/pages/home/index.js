@@ -28,10 +28,10 @@ export default function Home({ history }) {
             {importForm && (
                 <ImportSensorForm setImportForm={setImportForm} setNewSensor={setNewSensor} />
             )}
-            <Header setItem={setSelected} history={history} />
+            <Header setItem={setSelected} item={selected} history={history} />
             <Background />
             <Loading />
-            <PerfilContainer />
+            <PerfilContainer setItem={setSelected}/>
             <div className="body-container row-center">
                 {selected === 'sensor' && (
                     <SensorContainer setForm={setForm} setImportForm={setImportForm} newSensor={newSensor} />

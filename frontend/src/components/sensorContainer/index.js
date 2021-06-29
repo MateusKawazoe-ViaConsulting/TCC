@@ -120,7 +120,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
     <>
       <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
-          {sensores ? (
+          {sensores && sensores[0] ? (
             <div className="middle-content row-center">
               {sensores.map((element, index) => {
                 if (index < 3) {
@@ -139,9 +139,9 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
                       <div className="background-transparent" />
                       <BarChart
                         key={element.nome}
-                        value={element.feed[(element.ultimo_feed_id - 1)].valor}
+                        value={element.feed[(element.feed.length - 1)].valor}
                         name={element.nome}
-                        percentage={Math.ceil((element.feed[(element.ultimo_feed_id - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100)}
+                        percentage={Math.ceil((element.feed[(element.feed.length - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100)}
                         color={element.cor}
                       />
                     </div>
@@ -199,10 +199,10 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
                         {element.feed[0] && (
                           <>
                             <li className="item-container">
-                              <p>Valor Atual: {element.feed[element.ultimo_feed_id - 1].valor}</p>
+                              <p>Valor Atual: {element.feed[(element.feed.length - 1)].valor}</p>
                             </li>
                             <li className="item-container">
-                              <p>Ultima atualização: {dateFormat(element.feed[element.ultimo_feed_id - 1].data, "dd/mm/yyyy  - HH:MM")}</p>
+                              <p>Ultima atualização: {dateFormat(element.feed[(element.feed.length - 1)].data, "dd/mm/yyyy  - HH:MM")}</p>
                             </li>
                           </>
                         )}

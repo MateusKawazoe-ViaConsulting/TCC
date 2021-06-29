@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const cron = require('node-cron')
 const routes = require('../routes')
+const sensorController = require('../controllers/sensorController')
 
 module.exports = (url) => {
     const server = express()
@@ -16,8 +17,8 @@ module.exports = (url) => {
     server.use(express.json())
     server.use(routes)
 
-    cron.schedule('*/30 * * * *', function () {
-        console.log('running a task every 10 seconds');
+    cron.schedule('*/5 * * * * *', function () {
+        sensorController.updateImportedSensorFeed();
     })
 
     const app = server.listen(3333)

@@ -4,6 +4,10 @@
      position: relative;
      transition: all .3s linear;
 
+     @media (max-width: 1660px) {
+         margin-left: 150px;
+     }
+
      .middle-container {
          padding-bottom: 8%;
 

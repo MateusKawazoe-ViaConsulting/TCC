@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose')
 
 const updateSensors = new Schema({
 	id: String,
-	sensors: []
+	sensores: []
 }, {
 	timestamps: true
 })

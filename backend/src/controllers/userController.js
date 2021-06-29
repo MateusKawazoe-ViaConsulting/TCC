@@ -1,5 +1,5 @@
 const user = require('../models/user')
-const auth_token = require('../service/auth')
+const tokenServices = require('../service/auth')
 const md5 = require("md5")
 const findLatlng = require('../service/findLatlng')
 const lvlManager = require('../common/nivel')
@@ -62,9 +62,8 @@ module.exports = {
                 return res.json('Endereço é obrigatório!')
             }
 
-            const token = await auth_token.generateToken({
-                usuario,
-                senha: md5(senha + global.SALT_KEY)
+            const token = await tokenServices.generateToken({
+                usuario
             })
 
             const users = await user.create({
@@ -84,7 +83,6 @@ module.exports = {
 
             return res.json(users)
         } catch (err) {
-            console.log(err)
             return res.json("Erro interno do servidor!")
         }
     },
@@ -133,29 +131,29 @@ module.exports = {
             foto,
             usuario,
             senha,
-            endereco
+            endereco,
+            email
         } = req.body
 
         var exists = await user.findOne({
             usuario
         }).collation({ locale: 'pt', strength: 2 })
 
-
         if (exists) {
             let aux = {
                 foto: exists.foto,
                 senha: exists.senha,
                 token: exists.token,
-                localizacao: exists.localizacao
+                localizacao: exists.localizacao,
+                email: exists.email
             }
 
             if (foto)
                 aux.foto = foto
             else if (senha) {
                 aux.senha = md5(senha + global.SALT_KEY)
-                aux.token = await auth_token.generateToken({
-                    usuario,
-                    senha: aux.senha
+                aux.token = await tokenServices.generateToken({
+                    usuario
                 })
             } else if (endereco) {
                 let latlng = await findLatlng(endereco)
@@ -164,6 +162,8 @@ module.exports = {
                     longitude: latlng.lng,
                     endereco: endereco
                 }
+            } else if (email) {
+                aux.email = email
             }
 
             await user.updateOne({
@@ -173,7 +173,8 @@ module.exports = {
                     foto: aux.foto,
                     senha: aux.senha,
                     token: aux.token,
-                    localizacao: aux.localizacao
+                    localizacao: aux.localizacao,
+                    email: aux.email
                 }
             }, {
                 $upsert: false

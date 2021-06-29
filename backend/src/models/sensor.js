@@ -19,6 +19,7 @@ const sensorSchema = new Schema({
         type: String,
         required: true
     },
+    thing_speak_id: Number,
     ultimo_feed_id: Number,
     feed: [{
         _id: false,

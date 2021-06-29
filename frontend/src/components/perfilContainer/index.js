@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../service'
+import crop from '../../lib/assets/header/crop.png'
+import sensor from '../../lib/assets/header/sensor.png'
+import publication from '../../lib/assets/profile/publication.png'
 
-export default function PerfilContainer() {
+export default function PerfilContainer({ setItem }) {
 	const [nextLvl, setNextLvl] = useState(0)
 	const [xpPercent, setXpPercent] = useState("1%")
+	const [address, setAddress] = useState()
 
 	async function getNextLvl() {
 		const result = await api.get('user/lvl/next', {
@@ -20,15 +24,14 @@ export default function PerfilContainer() {
 		setNextLvl(parseInt(result.data))
 	}
 
-	useEffect(() => {
-		getNextLvl();
-		document.getElementById('profile-informations').addEventListener('mouseover', (e) => {
-			document.getElementById('user-informations').style.width = "0%"
-		})
+	function loadAddress() {
+		const splitedAddress = localStorage.getItem('urbanVG-user_address').split(',')
+		setAddress(splitedAddress[splitedAddress.length - 2] + ", " + splitedAddress[splitedAddress.length - 1])
+	}
 
-		document.getElementById('profile-informations').addEventListener('mouseleave', () => {
-			document.getElementById('user-informations').style.width = "60%"
-		})
+	useEffect(() => {
+		getNextLvl()
+		loadAddress()
 	}, [])
 
 	return (
@@ -44,14 +47,44 @@ export default function PerfilContainer() {
 						<img src={localStorage.getItem('urbanVG-user_foto')} alt="Foto de perfil" />
 					</li>
 					<li className="lvl-content column-center">
-						<div>
+						<div className="row-center">
 							<span style={{ width: xpPercent }} />
 						</div>
 						<p>{localStorage.getItem('urbanVG-user_xp')} / {nextLvl}</p>
 					</li>
 				</ul>
+				<ul className="profile-achievements-container column-center">
+					<li className="text-medium name-container">
+						{localStorage.getItem('urbanVG-user_name')}
+						<div>
+							<p class="text-small">{address}</p>
+						</div>
+					</li>
+					<li className="achiviments-items row-center">
+						<ul className="profile-icon-container row-center">
+							<li className="column-center" onClick={() => setItem("home")}>
+								<p>Posts</p>
+								<img src={publication} alt="publication" className="profile-icon" />
+								<p className="text-medium">{localStorage.getItem('urbanVG-user_public')}</p>
+							</li>
+							<li className="column-center" onClick={() => setItem("crop")}>
+								<p>Hortas</p>
+								<img src={crop} alt="crop" className="profile-icon" />
+								<p className="text-medium">{localStorage.getItem('urbanVG-user_crop')}</p>
+							</li>
+							<li className="column-center" onClick={() => setItem("sensor")}>
+								<p>Sensores</p>
+								<img src={sensor} alt="sensor" className="profile-icon" />
+								<p className="text-medium">{localStorage.getItem('urbanVG-user_sensor')}</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 			<ul className="right-container" id="user-informations">
+				<li className="text-medium name-container row-center">
+					{localStorage.getItem('urbanVG-user_name')}
+				</li>
 			</ul>
 		</div>
 	)

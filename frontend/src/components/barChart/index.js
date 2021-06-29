@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 
 export default function BarChart({ color, value, percentage, name }) {
+    console.log(percentage)
+
     return (
         <>
             <div className='bar-chart-container row-center'>

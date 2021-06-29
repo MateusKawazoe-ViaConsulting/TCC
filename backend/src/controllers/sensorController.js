@@ -54,13 +54,46 @@ module.exports = {
         return res.json(result)
     },
 
-    async updateImportedSensorFeed(req, res) {
-        const result = await updateSensors.findOne({ id: "Sensors" })
+    async updateImportedSensorFeed() {
+        const result = await updateSensors.find()
 
-        const data = result.sensors.map(element => {
-            return ({
+        if (!result[0].sensores[0])
+            return
 
-            })
+        result[0].sensores.map(async element => {
+            const data = await sensor.findById(element)
+
+            if (!data.nome)
+                return
+
+            try {
+                importData(data.thing_speak_id).then(async response => {
+                    const diff = response.data.channel.last_entry_id - data.ultimo_feed_id
+
+                    for (let i = 0; i < diff; i++) {
+                        const feed = response.data.feeds[response.data.feeds.length - (i + 1)];
+
+                        if (feed) {
+                            log = await sensor.updateOne(
+                                { _id: data._id },
+                                {
+                                    ultimo_feed_id: response.data.channel.last_entry_id,
+                                    $addToSet: {
+                                        feed: {
+                                            id: feed.entry_id,
+                                            valor: feed.field1,
+                                            data: feed.created_at
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    console.log(diff)
+                })
+            } catch (error) {
+                console.log(error)
+            }
         })
     },
 
@@ -84,12 +117,7 @@ module.exports = {
                 if (exists)
                     return res.json('Sensor já cadastrado!')
 
-                var lastId = 0
-
                 const feeds = await data.data.feeds.map((element, index) => {
-                    if (index > lastId)
-                        lastId = index
-
                     return ({
                         data: element.created_at,
                         id: element.entry_id,
@@ -104,7 +132,8 @@ module.exports = {
                     dono: dono,
                     descricao: data.data.channel.description,
                     cor: cor,
-                    ultimo_feed_id: lastId,
+                    thing_speak_id: id,
+                    ultimo_feed_id: data.data.channel.last_entry_id,
                     feed: feeds,
                 })
 
@@ -134,7 +163,7 @@ module.exports = {
 
                 await updateSensors.updateOne(
                     { id: "Sensors" },
-                    { $addToSet: { sensors: result._id } }
+                    { $addToSet: { sensores: result._id } }
                 )
 
                 return res.json(result)
@@ -230,7 +259,7 @@ module.exports = {
     },
 
     async showOne(req, res) {
-        const { dono, nome } = req.headers
+        const { dono, nome } = req.body
         const exists = await sensor.findOne({
             dono,
             nome
@@ -339,13 +368,28 @@ module.exports = {
     },
 
     async delete(req, res) {
-        const { dono, nome, horta } = req.headers
-
+        const { dono, nome, horta } = req.body
 
         const sensorId = await sensor.findOne({ nome, dono })
         const sensorExists = await sensor.deleteOne({ nome, dono }).collation({ locale: 'pt', strength: 2 })
+        const sensorArray = await updateSensors.find()
 
         if (sensorExists.deletedCount > 0) {
+            if (sensorArray[0]) {
+                sensorArray[0].sensores.forEach(async element => {
+                    if (JSON.stringify(sensorId._id) === JSON.stringify(element)) {
+                        await updateSensors.updateOne(
+                            { id: "Sensors" },
+                            {
+                                $pull: {
+                                    sensores: element
+                                }
+                            }
+                        )
+                    }
+                })
+            }
+
             await user.updateOne(
                 { usuario: dono },
                 {

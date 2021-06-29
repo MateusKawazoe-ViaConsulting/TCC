@@ -1,27 +1,35 @@
 .perfil-container {
-	width: 25%;
-	height: 35%;
+	width: 460.5px;
+	height: 327px;
 	min-height: 327px;
-	background: linear-gradient(#ffe6e6, rgb(255, 228, 217));
 	position: absolute;
 	border-radius: 10px;
 	top: 130px;
 	left: 20px;
-	z-index: 1;
+	justify-content: unset;
+	z-index: 10;
+	cursor: default;
 
 	>* {
 		transition: all .250s ease-out;
+	}
+
+	.name-container {
+		width: 100%;
+		margin-top: 40px;
 	}
 
 	.left-container {
 		width: 40%;
 		min-height: 192px;
 		height: 100%;
+		z-index: 0;
 		background: linear-gradient(90deg, rgb(85, 144, 255) 0%, rgb(29, 191, 255) 100%);
 		border-top-left-radius: 10px;
 		border-bottom-left-radius: 10px;
-		cursor: pointer;
 		position: relative;
+		transition: all .3s ease-in-out;
+		overflow: hidden;
 
 		&:hover {
 			.line {
@@ -43,7 +51,7 @@
 		.profile-information-container {
 			list-style-type: none;
 			height: 100%;
-			width: 192px;
+			width: 185px;
 
 			.username {
 				span {
@@ -61,6 +69,8 @@
 			}
 
 			.picture {
+				cursor: pointer;
+
 				img {
 					width: 125px;
 					height: 125px;
@@ -104,11 +114,18 @@
 					margin-bottom: 10px;
 					position: relative;
 
+					&::after {
+						content: "EXP";
+						color: white;
+						z-index: 1;
+					}
+
 					span {
 						height: 100%;
 						background-color: rgb(104, 157, 255);
 						position: absolute;
 						transition: all .3s linear;
+						left: 0;
 					}
 				}
 
@@ -125,14 +142,82 @@
 			width: 100%;
 			border-top-right-radius: 10px;
 			border-bottom-right-radius: 10px;
+			z-index: 20;
+		}
+
+		.profile-achievements-container {
+			position: absolute;
+			top: 0;
+			left: 185px;
+			width: 276.3px;
+			height: 100%;
+			z-index: 0;
+			list-style-type: none;
+			justify-content: unset;
+			justify-content: space-between;
+
+			.name-container {
+				color: white;
+				width: fit-content;
+			}
+
+			.text-small {
+				margin-top: 20px;
+				color: white;
+			}
+
+			.achiviments-items {
+				width: 100%;
+				margin-bottom: 10px;
+
+				.profile-icon-container {
+					width: inherit;
+					list-style-type: none;
+					justify-content: space-evenly;
+
+					li {
+						cursor: pointer;
+						padding: 5px 10px;
+						border-radius: 10px;
+
+						.profile-icon {
+							width: 30px;
+							height: 30px;
+						}
+
+						p {
+							color: white;
+							margin: 5px 0;
+							text-transform: uppercase;
+							font-weight: 600;
+
+							&:last-child {
+								margin-top: 0;
+							}
+						}
+
+						&:hover {
+							background-color: rgba(255, 255, 255, 0.26);
+						}
+
+						&:active {
+							opacity: 0.8;
+						}
+					}
+				}
+			}
 		}
 	}
 
 	.right-container {
+		background: linear-gradient(#ffe6e6, rgb(255, 228, 217));
 		list-style-type: none;
 		width: 60%;
 		height: 100%;
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 10px;
+		position: absolute;
+		right: 0;
+		z-index: 1;
 	}
 }

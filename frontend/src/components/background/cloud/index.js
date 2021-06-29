@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 export function Cloud1() {
     return (
         <div className="cloud-container">

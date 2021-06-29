@@ -1,12 +1,27 @@
 const jwt = require('jsonwebtoken')
 require('dotenv/config')
 
-exports.generateToken = async (data) => {
+const generateToken = async (data) => {
     return jwt.sign(data, process.env.SALT_KEY, {
         expiresIn: '1d'
     })
 }
 
-exports.decodeToken = async (token) => {
-    return await jwt.verify(token, process.env.SALT_KEY)
+const encodeToken = (data) => {
+    return jwt.sign(data, process.env.SALT_KEY)
+}
+
+const decodeToken = (token) => {
+    return jwt.decode(token, process.env.SALT_KEY)
+}
+
+const verifyToken = (token) => {
+    return jwt.verify(token, process.env.SALT_KEY)
+}
+
+module.exports = {
+    generateToken,
+    encodeToken,
+    decodeToken,
+    verifyToken
 }

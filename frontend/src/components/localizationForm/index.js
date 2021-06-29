@@ -78,12 +78,10 @@ export default function LocalizationForm({ clicked, userData, history }) {
   })
 
   useEffect(() => {
-    console.log("vamo ve: " + JSON.stringify(variables))
     if (
       start &&
       Object.values(variables).filter(element => element.error !== undefined).length === 0
     ) {
-      console.log("oie: " + Object.values(variables).filter(element => element.value !== '').length)
       if (Object.values(variables).filter(element => element.value !== '').length > 3) {
         document.getElementsByClassName("loading")[0].style.display = "flex"
         setTimeout(async () => {
@@ -111,10 +109,10 @@ export default function LocalizationForm({ clicked, userData, history }) {
               localStorage.setItem('urbanVG-user_public', 0)
               localStorage.setItem('urbanVG-user_foto', null)
               localStorage.setItem('urbanVG-user_name', userData.name)
+              localStorage.setItem('urbanVG-user_name', result.data.localizacao.endereco)
               history.push('/home')
             }
           } catch (err) {
-            console.log(err)
             document.getElementsByClassName("loading")[0].style.display = "none"
             alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
           }
@@ -172,7 +170,6 @@ export default function LocalizationForm({ clicked, userData, history }) {
                   document.getElementsByClassName("loading")[0].style.display = "none"
 
                   if (result === undefined || result.erro) {
-                    console.log(errors)
                     setVariables({
                       ...variables,
                       zipCode: {
