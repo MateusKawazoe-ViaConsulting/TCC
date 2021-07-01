@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import socketIOClient from "socket.io-client"
 import MyButton from '../../common/button'
 import MyLineChart from '../myLineChart'
 import BarChart from '../barChart'
@@ -7,19 +8,20 @@ import api from '../../service/index'
 import dateFormat from 'dateformat'
 
 export default function SensorContainer({ setForm, setImportForm, newSensor }) {
-  const [sensores, setSensores] = useState(null)
+  const [sensores, setSensores] = useState([])
   const [visible, setVisible] = useState(false)
   const [data, setData] = useState([])
   const [color, setColor] = useState("")
   const [clicked, setClicked] = useState("")
   const [loadContent, setLoadContent] = useState(false)
+  const [request, setRequest] = useState("")
   // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
   async function dataGen() {
     if (clicked && !data[0]) {
       try {
         const sensorData = await api.get('/sensor/show/one', {
-          headers: {
+          params: {
             dono: localStorage.getItem('urbanVG-user'),
             nome: clicked
           }
@@ -72,6 +74,20 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
   }
 
   useEffect(() => {
+    const socket = socketIOClient("http://127.0.0.1:3333", {
+      query: {
+        user: localStorage.getItem("urbanVG-user")
+      }
+    })
+
+    socket.on("FromAPI", req => {
+      setRequest(req);
+    })
+
+    return () => socket.disconnect()
+  }, [])
+
+  useEffect(() => {
     document.getElementsByClassName("loading")[0].style.display = "flex"
 
     setTimeout(async () => {
@@ -83,10 +99,15 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
             }
           }))
         }).then((result) => {
+          if (!result.data[0])
+            return
+
           setSensores(result.data)
 
           if (!clicked && result.data[0])
             setClicked(result.data[0].nome)
+        }).catch(err => {
+          console.log(err)
         })
       } catch (error) {
         alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
@@ -108,7 +129,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
   }, [document.getElementsByClassName('sensor-list-item-container')[0]])
 
   useEffect(() => {
-    if (newSensor && sensores && newSensor !== Object.values(sensores)[0][Object.values(sensores)[0].length - 1]) {
+    if (newSensor) {
       setSensores([
         ...sensores,
         newSensor
@@ -129,6 +150,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
                       className="chart-container row-center"
                       key={`chart-item${index}`}
                       onClick={e => {
+                        console.log(request)
                         if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[2].childNodes[2].textContent) {
                           setData([])
                           setListItem(e, true)
@@ -139,9 +161,9 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
                       <div className="background-transparent" />
                       <BarChart
                         key={element.nome}
-                        value={element.feed[(element.feed.length - 1)].valor}
+                        value={element.feed[0] ? element.feed[(element.feed.length - 1)].valor : 0}
                         name={element.nome}
-                        percentage={Math.ceil((element.feed[(element.feed.length - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100)}
+                        percentage={element.feed[0] ? Math.ceil((element.feed[(element.feed.length - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100) : 0}
                         color={element.cor}
                       />
                     </div>
@@ -167,7 +189,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
         <ul className="right-container column-center">
           <li className="top-container column-center">
             <div className="sensor-list-container column-center">
-              {sensores ? (
+              {sensores && sensores[0] ? (
                 <>
                   <input type="text" className="text-small search-bar" placeholder="Buscar sensor pelo nome ou tipo..." />
                   <div className="sensor-list">
@@ -215,7 +237,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
               )}
             </div>
           </li>
-          {sensores && data && (
+          {sensores && sensores[0] && data && (
             <li className="bottom-container column-center">
               <MyLineChart data={data} color={color} keyName={"valor"} className={"my-chart"} />
             </li>

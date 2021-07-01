@@ -57,7 +57,7 @@ export default function PerfilContainer({ setItem }) {
 					<li className="text-medium name-container">
 						{localStorage.getItem('urbanVG-user_name')}
 						<div>
-							<p class="text-small">{address}</p>
+							<p className="text-small">{address}</p>
 						</div>
 					</li>
 					<li className="achiviments-items row-center">

@@ -83,6 +83,8 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                                 endereco: ''
                             })
                             resolve(data)
+                        }).catch(err => {
+                            console.log(err)
                         })
                         setTimeout(() => {
                             document.getElementsByClassName("loading")[0].style.display = "none"

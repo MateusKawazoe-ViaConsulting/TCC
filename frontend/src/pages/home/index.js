@@ -11,7 +11,7 @@ import ImportSensorForm from '../../components/importSensorForm'
 import PerfilContainer from '../../components/perfilContainer'
 
 export default function Home({ history }) {
-    const [selected, setSelected] = useState('')
+    const [selected, setSelected] = useState('sensor')
     const [newSensor, setNewSensor] = useState(null)
     const [form, setForm] = useState(false)
     const [importForm, setImportForm] = useState(false)

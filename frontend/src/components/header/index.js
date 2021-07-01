@@ -6,7 +6,7 @@ import home from '../../lib/assets/header/home.png'
 import sensor from '../../lib/assets/header/sensor.png'
 
 export default function Header({ setItem, item, history }) {
-    const [bar, setBar] = useState("0%")
+    const [bar, setBar] = useState("82%")
     const [color, setColor] = useState("#c20000")
 
     function selectItem(selected) {

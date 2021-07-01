@@ -1,8 +1,11 @@
+const eventEmitter = require('events')
 const crop = require('../models/crop')
 const user = require('../models/user')
 const sensor = require('../models/sensor')
 const importData = require('../service/importData')
 const updateSensors = require('../models/updateSensors')
+
+const emitter = new eventEmitter.EventEmitter()
 
 module.exports = {
     async store(req, res) {
@@ -89,7 +92,6 @@ module.exports = {
                             )
                         }
                     }
-                    console.log(diff)
                 })
             } catch (error) {
                 console.log(error)
@@ -259,7 +261,8 @@ module.exports = {
     },
 
     async showOne(req, res) {
-        const { dono, nome } = req.body
+        const { dono, nome } = req.query
+
         const exists = await sensor.findOne({
             dono,
             nome
@@ -364,6 +367,12 @@ module.exports = {
             },
             { $upsert: false }
         )
+
+        emitter.emit("dataUpdate", {
+            value: valor,
+            user: dono
+        })
+        
         return res.json("Feed atualizado com sucesso!")
     },
 
