@@ -14,13 +14,11 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
   const [color, setColor] = useState("")
   const [clicked, setClicked] = useState("")
   const [loadContent, setLoadContent] = useState(false)
-  const [request, setRequest] = useState(false)
+  const [request, setRequest] = useState("")
   // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
   async function dataGen() {
-    if ((clicked || request) && !data[0]) {
-      setRequest(false)
-
+    if (clicked && !data[0]) {
       try {
         const sensorData = await api.get('/sensor/show/one', {
           params: {
@@ -35,11 +33,11 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
           if (sensorData.data.feed[0]) {
             if (sensorData.data.feed.length > 5) {
               for (let i = 0; i < 5; i++) {
-                let feedAux = sensorData.data.feed[(sensorData.data.feed.length - 5) + i];
+                let feedAux = sensorData.data.feed[(sensorData.data.feed.length - 6) + i];
                 setData(prev => [
                   ...prev,
                   {
-                    name: `${(new Date(feedAux.data).getDate()) > 9 ? (new Date(feedAux.data).getDate()) : "0" + (new Date(feedAux.data).getDate())}/${(new Date(feedAux.data).getMonth() + 1) > 9 ? (new Date(feedAux.data).getMonth()) : "0" + (new Date(feedAux.data).getMonth() + 1)}`,
+                    name: `${(new Date(feedAux.data).getDate()) > 9 ? (new Date(feedAux.data).getDate()) : "0" + (new Date(feedAux.data).getDay())}/${(new Date(feedAux.data).getMonth() + 1) > 9 ? (new Date(feedAux.data).getMonth()) : "0" + (new Date(feedAux.data).getMonth() + 1)}`,
                     valor: feedAux.valor
                   }
                 ])
@@ -49,7 +47,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
                 setData(prev => [
                   ...prev,
                   {
-                    name: `${(new Date(element.data).getDate()) > 9 ? (new Date(element.data).getDate()) : "0" + (new Date(element.data).getDate())}/${(new Date(element.data).getMonth() + 1) > 9 ? (new Date(element.data).getMonth()) : "0" + (new Date(element.data).getMonth() + 1)}`,
+                    name: `${(new Date(element.data).getDate()) > 9 ? (new Date(element.data).getDate()) : "0" + (new Date(element.data).getDay())}/${(new Date(element.data).getMonth() + 1) > 9 ? (new Date(element.data).getMonth()) : "0" + (new Date(element.data).getMonth() + 1)}`,
                     valor: element.valor
                   }
                 ])
@@ -75,33 +73,6 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
     }
   }
 
-  function generateBarChartData() {
-    try {
-      new Promise((resolve) => {
-        resolve(api.get('/sensor/show/all', {
-          headers: {
-            user: localStorage.getItem('urbanVG-user')
-          }
-        }))
-      }).then((result) => {
-        if (!result.data[0])
-          return
-
-        setSensores(result.data)
-
-        if (!clicked && result.data[0])
-          setClicked(result.data[0].nome)
-
-
-      }).catch(err => {
-        console.log(err)
-      })
-
-    } catch (error) {
-      alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
-    }
-  }
-
   useEffect(() => {
     const socket = socketIOClient("http://127.0.0.1:3333", {
       query: {
@@ -109,11 +80,8 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
       }
     })
 
-    socket.on("dataUpdate", req => {
-      generateBarChartData()
-      setData([])
-      setRequest(true)
-      dataGen()
+    socket.on("dataUpdate", function(msg) {
+      console.log(msg);
     })
 
     return () => socket.disconnect()
@@ -123,17 +91,34 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
     document.getElementsByClassName("loading")[0].style.display = "flex"
 
     setTimeout(async () => {
-      generateBarChartData()
+      try {
+        new Promise((resolve) => {
+          resolve(api.get('/sensor/show/all', {
+            headers: {
+              user: localStorage.getItem('urbanVG-user')
+            }
+          }))
+        }).then((result) => {
+          if (!result.data[0])
+            return
+
+          setSensores(result.data)
+
+          if (!clicked && result.data[0])
+            setClicked(result.data[0].nome)
+        }).catch(err => {
+          console.log(err)
+        })
+      } catch (error) {
+        alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
+      }
       document.getElementsByClassName("loading")[0].style.display = "none"
       setVisible(true)
     }, 800)
   }, [])
 
   useEffect(() => {
-    if (clicked) {
-      dataGen()
-    }
-
+    dataGen()
   }, [clicked])
 
   useEffect(() => {
@@ -159,32 +144,32 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
           {sensores && sensores[0] ? (
             <div className="middle-content row-center">
               {sensores.map((element, index) => {
-                if (index > 2) {
-                  return <></>
+                if (index < 3) {
+                  return (
+                    <div
+                      className="chart-container row-center"
+                      key={`chart-item${index}`}
+                      onClick={e => {
+                        console.log(request)
+                        if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[2].childNodes[2].textContent) {
+                          setData([])
+                          setListItem(e, true)
+                          setClicked(e.currentTarget.childNodes[2].childNodes[2].textContent)
+                        }
+                      }}
+                    >
+                      <div className="background-transparent" />
+                      <BarChart
+                        key={element.nome}
+                        value={element.feed[0] ? element.feed[(element.feed.length - 1)].valor : 0}
+                        name={element.nome}
+                        percentage={element.feed[0] ? Math.ceil((element.feed[(element.feed.length - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100) : 0}
+                        color={element.cor}
+                      />
+                    </div>
+                  )
                 }
-
-                return (
-                  <div
-                    className="chart-container row-center"
-                    key={`chart-item${index}`}
-                    onClick={e => {
-                      if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[2].childNodes[2].textContent) {
-                        setData([])
-                        setListItem(e, true)
-                        setClicked(e.currentTarget.childNodes[2].childNodes[2].textContent)
-                      }
-                    }}
-                  >
-                    <div className="background-transparent" />
-                    <BarChart
-                      key={element.nome}
-                      value={element.feed[0] ? element.feed[(element.feed.length - 1)].valor : 0}
-                      name={element.nome}
-                      percentage={element.feed[0] ? Math.ceil((element.feed[(element.feed.length - 1)].valor / Math.max.apply(Math, element.feed.map((obj) => obj.valor))) * 100) : 0}
-                      color={element.cor}
-                    />
-                  </div>
-                )
+                return <></>
               }
               )}
             </div>
@@ -252,7 +237,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
               )}
             </div>
           </li>
-          {sensores && sensores[0] && (
+          {sensores && sensores[0] && data && (
             <li className="bottom-container column-center">
               <MyLineChart data={data} color={color} keyName={"valor"} className={"my-chart"} />
             </li>

@@ -4,7 +4,7 @@ const user = require('../models/user')
 const sensor = require('../models/sensor')
 const importData = require('../service/importData')
 const updateSensors = require('../models/updateSensors')
-const { Socket } = require("../config/socket");
+const { Socket } = require("../config/sockets");
 
 const emitter = new eventEmitter.EventEmitter()
 
@@ -78,7 +78,7 @@ module.exports = {
                         const feed = response.data.feeds[response.data.feeds.length - (i + 1)];
 
                         if (feed) {
-                            await sensor.updateOne(
+                            log = await sensor.updateOne(
                                 { _id: data._id },
                                 {
                                     ultimo_feed_id: response.data.channel.last_entry_id,
@@ -369,13 +369,13 @@ module.exports = {
             { $upsert: false }
         )
 
+        console.log("Chamou")
         Socket.emit_user("dataUpdate", dono, {
             value: valor,
-            user: dono,
-            name: nome,
-            id: sensorExists.ultimo_feed_id + 1,
-            date: new Date()
+            user: dono
         });
+        //
+        // emitter.emit("dataUpdate", )
 
         return res.json("Feed atualizado com sucesso!")
     },

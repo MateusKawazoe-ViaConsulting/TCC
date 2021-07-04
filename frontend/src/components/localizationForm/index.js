@@ -109,7 +109,8 @@ export default function LocalizationForm({ clicked, userData, history }) {
               localStorage.setItem('urbanVG-user_public', 0)
               localStorage.setItem('urbanVG-user_foto', null)
               localStorage.setItem('urbanVG-user_name', userData.name)
-              localStorage.setItem('urbanVG-user_name', result.data.localizacao.endereco)
+              localStorage.setItem('urbanVG-user_adress', result.data.localizacao.endereco)
+              localStorage.setItem('urbanVG-user_email', result.data.email)
               history.push('/home')
             }
           } catch (err) {

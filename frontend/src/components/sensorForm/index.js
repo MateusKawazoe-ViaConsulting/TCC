@@ -5,8 +5,8 @@ import alerts from '../../functions/alertController'
 import unfocusable from '../../functions/unfocusable'
 import ColorPicker from '../colorPicker'
 import api from '../../service'
-import * as Yup from "yup";
-import MySelect from '../../common/select';
+import * as Yup from "yup"
+import MySelect from '../../common/select'
 import MyButton from '../../common/button'
 
 export default function SensorForm({ setForm, setNewSensor }) {
@@ -214,7 +214,6 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                                 handleSubmit()
                                             }}>Confirmar</MyButton>
                                         </div>
-
                                     </div>
                                 )}
                             </Formik>

@@ -1,7 +1,7 @@
 .perfil-container {
-	width: 460.5px;
-	height: 327px;
-	min-height: 327px;
+	width: 500px;
+	max-height: 420px;
+	height: 100%;
 	position: absolute;
 	border-radius: 10px;
 	top: 130px;
@@ -16,7 +16,25 @@
 
 	.name-container {
 		width: 100%;
-		margin-top: 40px;
+		margin-top: 20px;
+	}
+
+	.profile-container {
+		height: 88.5%;
+
+		.input-container {
+			height: 100%;
+
+			.input-profile {
+				+ .input-profile {
+					margin-top: 20px;
+				}
+			}
+
+			.my-button {
+				margin-top: 20px;
+			}
+		}
 	}
 
 	.left-container {
@@ -49,6 +67,7 @@
 		}
 
 		.profile-information-container {
+			justify-content: space-evenly;
 			list-style-type: none;
 			height: 100%;
 			width: 185px;
@@ -148,7 +167,7 @@
 		.profile-achievements-container {
 			position: absolute;
 			top: 0;
-			left: 185px;
+			left: 210px;
 			width: 276.3px;
 			height: 100%;
 			z-index: 0;

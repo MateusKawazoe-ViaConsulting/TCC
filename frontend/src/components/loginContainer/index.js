@@ -99,6 +99,7 @@ export default function LoginContainer({ history }) {
                                     localStorage.setItem('urbanVG-user_sensor', result.data.sensores ? result.data.sensores.length : 0)
                                     localStorage.setItem('urbanVG-user_public', result.data.publicacoes ? result.data.publicacoes.length : 0)
                                     localStorage.setItem('urbanVG-user_foto', result.data.foto ? result.data.foto : null)
+                                    localStorage.setItem('urbanVG-user_email', result.data.email)
                                     localStorage.setItem('urbanVG-user_name', result.data.nome)
                                     localStorage.setItem('urbanVG-user_address', result.data.localizacao.endereco)
                                     localStorage.setItem('urbanVG-user', user)
