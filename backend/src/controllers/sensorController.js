@@ -93,6 +93,7 @@ module.exports = {
                             )
                         }
                     }
+                    Socket.emit_user("dataUpdate", { dono: data.dono });
                 })
             } catch (error) {
                 console.log(error)
@@ -369,7 +370,7 @@ module.exports = {
             { $upsert: false }
         )
 
-        Socket.emit_user("dataUpdate", dono, {
+        Socket.emit_user("dataUpdate", {
             value: valor,
             user: dono,
             name: nome,

@@ -1,10 +1,10 @@
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
 
-export default function MyLineChart({ data, color, keyName, className }) {
+export default function MyLineChart({ data, color, keyName, className, setDisplay }) {
   return (
-    <div className='line-chart-container'>
-      <span className="expand-chart row-center"> 
+    <div className='line-chart-container' onClick={() => setDisplay(true)}>
+      <span className="expand-chart row-center">
         <h1>Ver detalhes</h1>
       </span>
       <LineChart width={350} height={320} data={data} className={className}>

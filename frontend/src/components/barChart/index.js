@@ -30,11 +30,7 @@ export default function BarChart({ color, value, percentage, name }) {
                 </div>
                 <div className="shadow" />
             </div>
-            <div className="sensor-values row-center"
-                onClick={e => {
-
-                }}
-            >
+            <div className="sensor-values row-center">
                 <span className="sensor-value-background" />
                 <span className="percentage-value column-center">
                     <p>{percentage > 0 ? percentage : 0}</p>

@@ -369,7 +369,6 @@ module.exports = {
             { $upsert: false }
         )
 
-        console.log("Chamou")
         Socket.emit_user("dataUpdate", dono, {
             value: valor,
             user: dono

@@ -6,7 +6,7 @@ const io = new Server({cors: {
 const socketArray = []
 
 var Socket = {
-    emit_user: function (event, user, data) {
+    emit_user: function (event, data) {
         const result = socketArray.map((element, index) => {
             if (element.user === data.user)
                 return index

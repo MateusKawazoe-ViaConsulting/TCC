@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import socketIOClient from "socket.io-client"
 import MyButton from '../../common/button'
 import MyLineChart from '../myLineChart'
+import FullChart from '../fullChart'
 import BarChart from '../barChart'
 import alerts from '../../functions/alertController'
 import api from '../../service/index'
@@ -15,6 +16,8 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
   const [clicked, setClicked] = useState("")
   const [loadContent, setLoadContent] = useState(false)
   const [request, setRequest] = useState(false)
+  const [fullchart, setFullchart] = useState(false)
+  const [fullData, setFullData] = useState(null)
   // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
   async function dataGen() {
@@ -31,6 +34,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
 
         if (sensorData.data) {
           setColor(sensorData.data.cor)
+          setFullData(sensorData.data)
 
           if (sensorData.data.feed[0]) {
             if (sensorData.data.feed.length > 5) {
@@ -154,6 +158,11 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
 
   return (
     <>
+      <FullChart
+        setDisplay={setFullchart}
+        fullData={fullData}
+        display={fullchart ? "flex" : "none"}
+      />
       <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
           {sensores && sensores[0] ? (
@@ -254,7 +263,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
           </li>
           {sensores && sensores[0] && (
             <li className="bottom-container column-center">
-              <MyLineChart data={data} color={color} keyName={"valor"} className={"my-chart"} />
+              <MyLineChart data={data} setDisplay={setFullchart} color={color} keyName={"valor"} className={"my-chart"} />
             </li>
           )}
         </ul>
