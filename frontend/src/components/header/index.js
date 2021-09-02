@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { MapSVG } from '../../lib/assets/header/icons'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import exit from '../../lib/assets/header/exit.png'
 import crop from '../../lib/assets/header/crop.png'
 import home from '../../lib/assets/header/home.png'
 import sensor from '../../lib/assets/header/sensor.png'
@@ -68,8 +68,7 @@ export default function Header({ setItem, item, history }) {
                         history.push('/')
                     }}
                 >
-                    <ExitToAppIcon className="exit" />
-                    <h1 className="text-medium">Sair</h1>
+                    <img src={exit} alt="exit" />
                 </button>
             </li>
         </ul>

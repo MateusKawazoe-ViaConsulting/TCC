@@ -9,6 +9,7 @@
 	justify-content: unset;
 	z-index: 10;
 	cursor: default;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 	>* {
 		transition: all .250s ease-out;
@@ -83,6 +84,7 @@
 						padding: 5px 10px;
 						border-radius: 24px;
 						background-color: rgb(0, 81, 230);
+						transition: all .5s linear;
 					}
 				}
 			}
@@ -94,7 +96,7 @@
 					width: 125px;
 					height: 125px;
 					border-radius: 50%;
-					border: 2px solid darkblue;
+					border: 2px solid #0051e6;
 					transition: all .2s linear;
 					margin: 20px 0;
 
@@ -229,7 +231,7 @@
 	}
 
 	.right-container {
-		background: linear-gradient(#ffe6e6, rgb(255, 228, 217));
+		background: linear-gradient(#fff4f4, rgb(255, 238, 231));
 		list-style-type: none;
 		width: 60%;
 		height: 100%;

@@ -9,6 +9,10 @@
 		cursor: pointer;
 	}
 
+	.line-chart-container {
+		cursor: default;
+	}
+
 	.full-chart-content {
 		position: relative;
 		height: 80%;
@@ -17,5 +21,33 @@
 		border-radius: 24px;
 		z-index: 2;
 		margin-top: 2.8%;
+
+		.chart-config {
+			background: transparent;
+			align-self: center;
+			margin-left: 80px;
+			margin-top: 40px;
+
+			.recharts-surface {
+				cursor: pointer;
+			}
+		}
+
+		.tools {
+			width: 100%;
+			height: 100px;
+			background-color: white;
+			margin-bottom: 40px;
+
+			.initial-date {
+				height: 35px;
+				padding: 0 7px;
+				width: 120px;
+			}
+
+			.react-datepicker__close-icon {
+				padding-right: 10px;
+			}
+		}
 	}
 }

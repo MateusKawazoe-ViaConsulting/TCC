@@ -22,6 +22,7 @@ button {
   font-family: 'Ubuntu Mono', monospace;
 }
 
+@import "~react-datepicker/dist/react-datepicker.css";
 @import './lib/styles/form.scss';
 @import './pages/home/styles.scss';
 @import './pages/login/styles.scss';
@@ -45,3 +46,4 @@ button {
 @import './components/importSensorForm/styles.scss';
 @import './components/perfilContainer/styles.scss';
 @import './components/fullChart/styles.scss';
+@import './components/cropContainer/styles.scss';

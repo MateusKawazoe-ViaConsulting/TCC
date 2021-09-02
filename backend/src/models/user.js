@@ -31,6 +31,10 @@ const userSchema = new Schema({
     publicacoes: [],
     sensores: [],
     nivel: {},
+    seguindo: {
+        horta: [],
+        usuario: []
+    },
     integridade: Number
 }, {
     timestamps: true

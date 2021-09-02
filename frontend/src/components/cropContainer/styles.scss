@@ -1,0 +1,274 @@
+.crop-container {
+	height: 100%;
+	width: 30%;
+	margin-bottom: 7%;
+
+	.left-container {
+		width: 26%;
+		height: 310px;
+		background-color: white;
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+		position: absolute;
+		left: 1%;
+		bottom: 4%;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+
+		>* {
+			margin-top: 20px;
+		}
+
+		label {
+			font-size: 30px;
+			color: rgb(30, 151, 0);
+			font-weight: bold;
+		}
+
+		.splited-container {
+			width: 100%;
+
+			.publicacoes-list {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				height: 217px;
+				padding-top: 10px;
+				width: 90%;
+				overflow-y: auto;
+				border: solid 1.5px rgb(30, 151, 0);
+				border-radius: 10px;
+
+				>* {
+					margin-bottom: 5px;
+				}
+
+				p {
+					font-size: 14px;
+					cursor: pointer;
+					padding: 5px 15px;
+					border-radius: 15px;
+					color: rgb(30, 151, 0);
+
+					&:hover {
+						background-color: rgb(220, 255, 210);
+					}
+				}
+			}
+		}
+	}
+
+	.crop-content {
+		width: 100%;
+		height: 72%;
+		background-color: white;
+		align-self: baseline;
+		border-radius: 10px;
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+		font-size: 24px;
+		color: rgb(30, 151, 0);
+
+		.crop-information {
+			width: 100%;
+
+			>* {
+				margin-top: 20px;
+			}
+
+			h1 {
+				font-size: 40px;
+			}
+
+			.owner {
+				margin-bottom: 5px;
+			}
+
+			.localization-container {
+				width: 90%;
+				border: solid 1.5px rgb(30, 151, 0);
+				border-radius: 5px;
+				height: 200px;
+				position: relative;
+				margin-bottom: 10px;
+
+				>* {
+					margin-top: 30px;
+				}
+
+				label {
+					position: absolute;
+					padding: 0 5px;
+					margin: 0;
+					top: -15px;
+					background-color: white;
+					margin-left: 30px;
+				}
+
+				.splited-container {
+					display: flex;
+					width: 100%;
+
+					>* {
+						margin-left: 20px;
+					}
+
+					.street-number {
+						width: 70%;
+
+						&:last-child {
+							width: 15% !important;
+						}
+					}
+
+					.city-country-district {
+						width: 28%;
+					}
+				}
+			}
+
+			.bottom-container {
+				width: 100%;
+				list-style-type: none;
+				justify-content: space-evenly;
+				position: relative;
+
+				>* {
+					border: solid 1.5px rgb(30, 151, 0);
+					width: 26.5%;
+					border-radius: 5px;
+					height: 220px;
+					display: flex;
+					justify-content: center;
+				}
+
+				label {
+					font-size: 18px;
+					background-color: white;
+					border-radius: 10px;
+					padding: 0 5px;
+					position: absolute;
+					top: -10px;
+				}
+
+				.list {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					max-height: 217px;
+					padding-top: 15px;
+					width: 100%;
+					overflow-y: auto;
+
+					>* {
+						margin-bottom: 5px;
+					}
+
+					p {
+						font-size: 14px;
+						cursor: pointer;
+						padding: 5px 15px;
+						border-radius: 15px;
+
+						&:hover {
+							background-color: rgb(220, 255, 210);
+						}
+					}
+				}
+
+				.participants {}
+			}
+		}
+	}
+
+	.button-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+
+		.my-button {
+			padding: 10px;
+			justify-self: end;
+
+			&:first-child {
+				margin-right: 30px;
+			}
+
+			&:hover {
+				background-color: rgb(30, 151, 0) !important;
+			}
+		}
+	}
+
+	.right-container {
+		position: absolute;
+		right: 1.5%;
+		height: 85%;
+		width: 20%;
+
+		>* {
+			background-color: white;
+			width: 100%;
+			height: 50%;
+			margin-top: 40px;
+			border-radius: 10px;
+			box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+			color: rgb(30, 151, 0);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-weight: bold;
+		}
+
+		label {
+			font-size: 30px;
+			margin-top: 20px;
+		}
+
+		.crop-card {
+			list-style-type: none;
+			font-weight: 500;
+			border-radius: 10px;
+			padding: 5px 10px;
+			width: 100%;
+			cursor: pointer;
+			border: solid 1.5px rgb(30, 151, 0);
+			margin-bottom: 10px;
+
+			&:hover {
+				background-color: rgb(204, 253, 190);
+			}
+		}
+
+		.search-bar {
+			width: 89%;
+			margin-top: 20px;
+			padding: 3px 10px;
+		}
+
+		.crop-list {
+			width: 90%;
+			height: 200px;
+			margin-top: 20px;
+			border-radius: 10px;
+			overflow-y: auto;
+
+			p {
+				font-size: 14px;
+				cursor: pointer;
+				width: fit-content;
+				padding: 5px 15px;
+				border-radius: 15px;
+
+				&:hover {
+					background-color: rgb(220, 255, 210);
+				}
+			}
+		}
+
+		.owner-crops {}
+
+		.all-crops {}
+	}
+}

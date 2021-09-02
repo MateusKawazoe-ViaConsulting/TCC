@@ -4,7 +4,7 @@ const user = require('../models/user')
 const sensor = require('../models/sensor')
 const importData = require('../service/importData')
 const updateSensors = require('../models/updateSensors')
-const { Socket } = require("../config/socket");
+const { Socket } = require("../config/socket")
 
 const emitter = new eventEmitter.EventEmitter()
 

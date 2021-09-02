@@ -182,10 +182,83 @@ module.exports = {
 
             return res.json(exists)
         }
+
         return res.json('Usuário não existe!')
     },
 
-    // async xpUpdate(req, res) {
+    async follow(req, res) {
+        const { type, nome, usuario } = req.body
 
-    // }
+        const exists = await user.findOne({ usuario })
+
+        if (!exists)
+            return res.json(`Erro ao tentar seguir ${type}!`)
+
+        if (type === "horta")
+            await user.updateOne(
+                { usuario },
+                {
+                    $addToSet: {
+                        'seguindo.horta': nome
+                    }
+                }
+            )
+        else
+            await user.updateOne(
+                { usuario: usuario },
+                {
+                    $addToSet: {
+                        'seguindo.usuario': nome
+                    }
+                }
+            )
+
+        return res.json(`Seguindo ${nome}!`)
+    },
+
+    async unfollow(req, res) {
+        const { type, nome, usuario } = req.body
+
+        const exists = await user.findOne({ usuario })
+
+        if (!exists)
+            return res.json(`Erro ao tentar deixar de seguir ${type}!`)
+
+        if (type === "horta")
+            await user.updateOne(
+                { usuario },
+                {
+                    $pull: {
+                        'seguindo.horta': nome
+                    }
+                }
+            )
+        else
+            await user.updateOne(
+                { usuario },
+                {
+                    $pull: {
+                        'seguindo.usuario': nome
+                    }
+                }
+            )
+
+        return res.json(`Deixou de seguir ${nome}!`)
+    },
+
+    async updateXp(req, res) {
+        const { usuario, tipo } = req.headers
+
+        const exists = await user.findOne({ usuario: usuario })
+
+        if (exists) {
+            lvlManager.xpUpdate(user, {
+                _id: exists._id, lvl: exists.nivel.lvl, xp: exists.nivel.xp,
+                integridade: exists.integridade, tipo: parseFloat(tipo), usuario: usuario
+            }, "userXpUpdate")
+            return res.json("Experiência atualizada com sucesso!")
+        } else {
+            return res.json("Problema na atualização da experiência!")
+        }
+    }
 }

@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
 
-const publicSchema = new Schema({
+const publicationSchema = new Schema({
     titulo: {
         type: String,
         required: true
@@ -10,15 +10,14 @@ const publicSchema = new Schema({
     },
     tipo: String,
     cor: String,
-    paladar: String,
     avaliacao: {
         required: true,
         positiva: Number,
         negativa: Number,
     },
     usuario: {
-        foto: String,
-        usuario: String
+        type: String,
+        required: true
     },
     horta: {
         type: String,
@@ -30,4 +29,4 @@ const publicSchema = new Schema({
     }
 })
 
-module.export = model('public', publicSchema)
+module.export = model('publication', publicationSchema)

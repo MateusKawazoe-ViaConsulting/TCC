@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Formik, Form } from "formik";
 import api from '../../service'
+import socketIOClient from "socket.io-client"
 import crop from '../../lib/assets/header/crop.png'
 import sensor from '../../lib/assets/header/sensor.png'
 import publication from '../../lib/assets/profile/publication.png'
@@ -8,7 +9,7 @@ import MyInput from '../../common/input'
 import * as Yup from "yup"
 import MyButton from '../../common/button'
 
-export default function PerfilContainer({ setItem }) {
+export default function PerfilContainer({ setItem, color }) {
 	const [nextLvl, setNextLvl] = useState(0)
 	const [xpPercent, setXpPercent] = useState("1%")
 	const [address, setAddress] = useState()
@@ -62,6 +63,29 @@ export default function PerfilContainer({ setItem }) {
 	}
 
 	useEffect(() => {
+		document.getElementById('profile-informations').style.background = `linear-gradient(90deg, ${color.primary}, ${color.secondary})`
+		document.getElementById('username').style.backgroundColor = color.background
+		document.getElementById('profile-line').style.backgroundColor = color.background
+		document.getElementById('profile-picture').style.border = `2px solid ${color.background}`
+		document.getElementById('xp-bar').style.backgroundColor = color.background
+		document.getElementById('save-profile-button').style.backgroundColor = color.secondary
+		document.getElementById('xp-bar').style.border = `2px solid ${color.background}`
+		document.getElementById('xp-percent').style.backgroundColor = color.percent
+	}, [color])
+
+	useEffect(() => {
+		const socket = socketIOClient("http://127.0.0.1:3333", {
+			query: {
+				user: localStorage.getItem("urbanVG-user")
+			}
+		})
+
+		socket.on("userXpUpdate", req => {
+			localStorage.setItem('urbanVG-user_xp', req.xp)
+			localStorage.setItem('urbanVG-user_lvl', req.lvl)
+			getNextLvl()
+		})
+
 		getNextLvl()
 		loadAddress()
 	}, [])
@@ -69,18 +93,18 @@ export default function PerfilContainer({ setItem }) {
 	return (
 		<div className='perfil-container row-center'>
 			<div className="left-container" id="profile-informations">
-				<span className="line" />
+				<span className="line" id="profile-line"/>
 				<ul className="profile-information-container column-center">
 					<li className="username column-center">
-						<span>{localStorage.getItem('urbanVG-user')}</span>
+						<span id="username">{localStorage.getItem('urbanVG-user')}</span>
 						<span>Level {localStorage.getItem('urbanVG-user_lvl')}</span>
 					</li>
 					<li className="picture row-center">
-						<img src={localStorage.getItem('urbanVG-user_foto')} alt="Foto de perfil" />
+						<img id="profile-picture" src={localStorage.getItem('urbanVG-user_foto')} alt="Foto de perfil" />
 					</li>
 					<li className="lvl-content column-center">
-						<div className="row-center">
-							<span style={{ width: xpPercent }} />
+						<div id="xp-bar" className="row-center">
+							<span id="xp-percent" style={{ width: xpPercent }} />
 						</div>
 						<p>{localStorage.getItem('urbanVG-user_xp')} / {nextLvl}</p>
 					</li>
@@ -180,7 +204,7 @@ export default function PerfilContainer({ setItem }) {
 										setFieldTouched('senhaNova', true, false)
 									}}
 								/>
-								<MyButton onClick={handleSubmit}>Salvar</MyButton>
+								<MyButton id="save-profile-button" onClick={handleSubmit}>Salvar</MyButton>
 							</div>
 						)}
 					</Formik>

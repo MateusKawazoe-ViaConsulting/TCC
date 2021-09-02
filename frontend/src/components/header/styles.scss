@@ -88,33 +88,25 @@
         padding-top: 5px;
 
         .exit-container {
-            width: 115px;
+            width: 70px;
             position: absolute;
-            height: 50px;
-            padding-right: 25px;
+            height: 70px;
+            padding: 20px;
             color: $green;
             background-color: transparent;
             border: unset;
-            border-radius: 10px;
-            right: 5%;
+            border-radius: 50%;
+            right: 10%;
+            cursor: pointer;
+            margin-bottom: 5px;
 
             &:hover {
                 background-color: rgba(255, 255, 255, 0.15);
                 text-decoration: underline;
             }
 
-            svg {
-                padding: 8px 0;
-                padding-left: 10px;
-
-                &:hover {
-                    background-color: unset;
-                }
-            }
-
-            h1 {
-                cursor: pointer;
-                color: inherit;
+            img {
+                width: 40px;
             }
         }
     }

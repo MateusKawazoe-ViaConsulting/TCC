@@ -52,6 +52,9 @@ export default function LoginContainer({ history }) {
             <Button
                 type="submit"
                 className="button-lg"
+                style={{
+                    backgroundColor: "#42b72a"
+                }}
                 onClick={async () => {
                     if (user.length < 3) {
                         setUserError({

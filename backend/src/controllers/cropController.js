@@ -1,5 +1,6 @@
 const crop = require('../models/crop')
 const user = require('../models/user')
+const lvlManager = require('../common/nivel')
 const findLatlng = require('../service/findLatlng')
 
 module.exports = {
@@ -47,7 +48,7 @@ module.exports = {
             participantes: participantes,
             localizacao: localizacao,
             nivel: {
-                lvl: 0,
+                lvl: 1,
                 xp: 0
             }
         })
@@ -61,11 +62,11 @@ module.exports = {
     },
 
     async showAll(req, res) {
-        if (req.headers.user) {
-            const result = await user.findOne({ usuario: req.headers.user }).collation({ locale: 'pt', strength: 2 })
+        if (req.headers.usuario) {
+            const result = await crop.find({ dono: req.headers.usuario }).collation({ locale: 'pt', strength: 2 })
 
-            if (result.horta[0])
-                return res.json(result.horta)
+            if (result[0])
+                return res.json(result)
 
             return res.json(0)
         }
@@ -177,5 +178,21 @@ module.exports = {
         )
 
         return res.json("Nome da horta atualizado com sucesso!")
+    },
+
+    async updateXp(req, res) {
+        const { usuario, horta, tipo } = req.headers
+
+        const exists = await crop.findOne({ dono: usuario, nome: horta })
+
+        if (exists) {
+            lvlManager.xpUpdate(crop, {
+                _id: exists._id, lvl: exists.nivel.lvl, xp: exists.nivel.xp,
+                integridade: 1, tipo: parseFloat(tipo), usuario: usuario
+            }, "userXpUpdate")
+            return res.json("Experiência atualizada com sucesso!")
+        } else {
+            return res.json("Problema na atualização da experiência!")
+        }
     }
 }

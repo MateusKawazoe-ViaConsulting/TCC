@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react'
 import socketIOClient from "socket.io-client"
 import MyButton from '../../common/button'
 import MyLineChart from '../myLineChart'
-import FullChart from '../fullChart'
 import BarChart from '../barChart'
 import alerts from '../../functions/alertController'
 import api from '../../service/index'
 import dateFormat from 'dateformat'
 
-export default function SensorContainer({ setForm, setImportForm, newSensor }) {
+export default function SensorContainer({ setForm, setImportForm, newSensor, setFullData, setFullChart }) {
   const [sensores, setSensores] = useState([])
   const [visible, setVisible] = useState(false)
   const [data, setData] = useState([])
@@ -16,8 +15,6 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
   const [clicked, setClicked] = useState("")
   const [loadContent, setLoadContent] = useState(false)
   const [request, setRequest] = useState(false)
-  const [fullchart, setFullchart] = useState(false)
-  const [fullData, setFullData] = useState(null)
   // const calendar = ["Jan", "Fev", "Mar", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
   async function dataGen() {
@@ -120,10 +117,6 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
       dataGen()
     })
 
-    return () => socket.disconnect()
-  }, [])
-
-  useEffect(() => {
     document.getElementsByClassName("loading")[0].style.display = "flex"
 
     setTimeout(async () => {
@@ -131,13 +124,14 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
       document.getElementsByClassName("loading")[0].style.display = "none"
       setVisible(true)
     }, 800)
+
+    return () => socket.disconnect()
   }, [])
 
   useEffect(() => {
     if (clicked) {
       dataGen()
     }
-
   }, [clicked])
 
   useEffect(() => {
@@ -158,11 +152,6 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
 
   return (
     <>
-      <FullChart
-        setDisplay={setFullchart}
-        fullData={fullData}
-        display={fullchart ? "flex" : "none"}
-      />
       <div className="sensor-container row-center" style={{ opacity: visible ? 1 : 0 }}>
         <div className='middle-container column-center'>
           {sensores && sensores[0] ? (
@@ -222,7 +211,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
                         className="text-regular column-center sensor-list-item-container"
                         key={`sensor-list-item${index}`}
                         onClick={e => {
-                          if (document.getElementsByClassName('active')[0].id && document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent) {
+                          if (document.getElementsByClassName('active')[0] && document.getElementsByClassName('active')[0].id && document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent) {
                             setData([])
                             setListItem(e)
                             setClicked(e.currentTarget.childNodes[0].childNodes[0].childNodes[1].textContent)
@@ -263,7 +252,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor }) {
           </li>
           {sensores && sensores[0] && (
             <li className="bottom-container column-center">
-              <MyLineChart data={data} setDisplay={setFullchart} color={color} keyName={"valor"} className={"my-chart"} />
+              <MyLineChart data={data} setDisplay={setFullChart} color={color} keyName={"valor"} className={"my-chart"} clicable width={350} height={320} />
             </li>
           )}
         </ul>

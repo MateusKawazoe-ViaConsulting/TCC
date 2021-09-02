@@ -5,7 +5,6 @@ const sensorController = require('./controllers/sensorController')
 const routes = express.Router()
 
 // Users routes --
-routes.get('/user/lvl/next', userController.nextLvl)
 
 routes.post('/user/login', userController.login)
 
@@ -17,9 +16,17 @@ routes.get('/user/show/all', userController.showAll)
 
 routes.get('/user/show/one', userController.showOne)
 
+routes.get('/user/lvl/next', userController.nextLvl)
+
 routes.delete('/user/delete', userController.delete)
 
 routes.put('/user/update', userController.update)
+
+routes.put('/user/update/xp', userController.updateXp)
+
+routes.put('/user/follow', userController.follow)
+
+routes.put('/user/unfollow', userController.unfollow)
 
 // -- Users routes
 
@@ -40,6 +47,8 @@ routes.put('/crop/insert/user', cropController.insertUser)
 routes.put('/crop/remove/user', cropController.removeUser)
 
 routes.put('/crop/update/name', cropController.update)
+
+routes.put('/crop/update/xp', cropController.updateXp)
 
 // routes.put('/crop/update/sensor', cropController.updateSensor)
 
