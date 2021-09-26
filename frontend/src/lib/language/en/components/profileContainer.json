@@ -1,0 +1,10 @@
+{
+	"profile": {
+		"currentPass": "Current pasword",
+		"newPass": "New password",
+		"save": "Save",
+		"sensors": "SENSORS",
+		"publics": "PUBLICS",
+		"crops": "CROPS"
+	}
+}

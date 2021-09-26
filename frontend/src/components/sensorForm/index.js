@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Formik, Form } from "formik";
 import MyInput from '../../common/input'
 import alerts from '../../functions/alertController'
-import unfocusable from '../../functions/unfocusable'
 import ColorPicker from '../colorPicker'
 import api from '../../service'
 import * as Yup from "yup"
@@ -45,15 +44,15 @@ export default function SensorForm({ setForm, setNewSensor }) {
             .matches(/^[A-Za-z0-9\s.,-]+$/, 'Descrição inválida')
     })
 
-    async function loadCrops() {
-        const data = await api.get('/crop/show/all', { headers: { user: localStorage.getItem('urbanVG-user') } })
-        if (data.data) {
-            const result = data.data.map(element => {
-                return { value: element, label: element }
-            })
-            setCrops(result)
-        }
-    }
+	async function loadCrops() {
+		const data = await api.get('/crop/show/all', { headers: { usuario: localStorage.getItem('urbanVG-user') } })
+		if (data.data) {
+			const result = data.data.map(element => {
+				return { value: element.nome, label: element.nome }
+			})
+			setCrops(result)
+		}
+	}
 
     useEffect(() => {
         loadCrops()
@@ -96,13 +95,13 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                                     return
                                                 }
 
-                                                alerts.showAlert("Sensor cadastrado com sucesso!", 'Success', 'home-alert')
+                                                alerts.showAlert("Sensor registered successfully!", 'Success', 'home-alert')
                                                 setForm(false)
                                                 setNewSensor(result.data)
                                                 document.getElementsByClassName("loading")[0].style.display = "none"
                                             } catch (err) {
                                                 document.getElementsByClassName("loading")[0].style.display = "none"
-                                                alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'home-alert')
+                                                alerts.showAlert('Server connection problem!', 'Error', 'home-alert')
                                             }
                                         }, 1000)
                                     }
@@ -111,7 +110,7 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                 {({ errors, touched, values, setValues, setFieldTouched, handleSubmit }) => (
                                     <div className="sensor-form-values column-center">
                                         <MyInput
-                                            placeholder="Dono"
+                                            placeholder="Owner"
                                             className="text-regular input-md"
                                             value={localStorage.getItem('urbanVG-user')}
                                             disabled
@@ -124,11 +123,12 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                                     horta: e ? e.value : ""
                                                 })
                                             }}
+                                            placeholder="Crops..."
                                         />
                                         <MyInput
                                             error={errors.nome && touched.nome}
                                             errorLabel={errors.nome}
-                                            placeholder="* Nome"
+                                            placeholder="* Name"
                                             className="text-regular input-md"
                                             value={variables.nome.value}
                                             id="sensor-name"
@@ -153,7 +153,7 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                         <MyInput
                                             error={errors.tipo && touched.tipo}
                                             errorLabel={errors.tipo}
-                                            placeholder="* Tipo"
+                                            placeholder="* Type"
                                             className="text-regular input-md"
                                             value={variables.tipo.value}
                                             id="sensor-type"
@@ -178,7 +178,7 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                         <MyInput
                                             error={errors.descricao && touched.descricao}
                                             errorLabel={errors.descricao}
-                                            placeholder="Descrição"
+                                            placeholder="Description"
                                             className="text-regular input-md"
                                             value={variables.descricao.value}
                                             id="sensor-type"
@@ -204,7 +204,7 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                         />
                                         <ColorPicker setColor={setCor} error={corError} setError={setCorError} />
                                         <div className="sensor-buttons row-center">
-                                            <MyButton onClick={() => { setForm(false) }}>Cancelar</MyButton>
+                                            <MyButton onClick={() => { setForm(false) }}>Cancel</MyButton>
                                             <MyButton onClick={() => {
                                                 if (!cor)
                                                     setCorError(true)
@@ -212,7 +212,7 @@ export default function SensorForm({ setForm, setNewSensor }) {
                                                     setCorError(false)
 
                                                 handleSubmit()
-                                            }}>Confirmar</MyButton>
+                                            }}>Confirm</MyButton>
                                         </div>
                                     </div>
                                 )}

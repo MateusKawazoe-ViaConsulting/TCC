@@ -1,7 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 
-export default function MySelect({ options, onChange }) {
+export default function MySelect({ options, onChange, placeholder, ...props }) {
 
     const groupStyles = {
         display: 'flex',
@@ -35,10 +35,11 @@ export default function MySelect({ options, onChange }) {
                 <Select
                     isClearable
                     isSearchable
-                    placeholder="Hortas..."
+                    placeholder={placeholder}
                     options={options}
                     formatGroupLabel={format}
                     onChange={onChange}
+                    {...props}
                 />
             )}
         </div>

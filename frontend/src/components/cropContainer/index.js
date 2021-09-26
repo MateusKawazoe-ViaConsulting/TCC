@@ -3,7 +3,7 @@ import MyButton from '../../common/button'
 import MyInput from '../../common/input'
 import api from '../../service/index'
 
-export default function CropContainer() {
+export default function CropContainer({ setForm }) {
 	const [data, setData] = useState(null)
 	const [allCrops, setAllCrops] = useState(null)
 	const [nextLvl, setNextLvl] = useState(null)
@@ -24,7 +24,7 @@ export default function CropContainer() {
 		nivel: {}
 	})
 
-	async function dataGen() {
+	async function dataGen(index) {
 		try {
 			var result = await api.get('/crop/show/all', {
 				headers: {
@@ -32,10 +32,8 @@ export default function CropContainer() {
 				}
 			})
 			setData(result.data)
-			setCrop(result.data[0])
-
+			setCrop(result.data[index], null)
 			result = await api.get('/crop/show/all')
-			console.log(result)
 			setAllCrops(result.data)
 		} catch (error) {
 
@@ -51,7 +49,16 @@ export default function CropContainer() {
 		setNextLvl(result.data)
 	}
 
-	function setCrop(cropData) {
+	function selectedCrop(clicked) {
+		if (clicked.currentTarget) {
+			if (document.getElementsByClassName('active')[0])
+				document.getElementsByClassName('active')[0].classList.remove('active')
+
+			clicked.currentTarget.classList.add('active')
+		}
+	}
+
+	function setCrop(cropData, clicked) {
 		const result = cropData.localizacao.endereco.split(',')
 
 		setLocalization({
@@ -73,10 +80,15 @@ export default function CropContainer() {
 			participants: cropData.participantes,
 			nivel: cropData.nivel
 		})
+
+		if (clicked)
+			selectedCrop(clicked)
+		else
+			document.getElementById('owner-0').classList.add('active')
 	}
 
 	useEffect(() => {
-		dataGen()
+		dataGen(0)
 	}, [])
 
 	return (
@@ -84,17 +96,9 @@ export default function CropContainer() {
 			<div className="left-container">
 				<label>Publicações</label>
 				<div className="splited-container row-center">
-					{currentCrop.publications[0] ?
-						(<div className="publicacoes-list">
-							{currentCrop.publications.map(element => (
-								<p className="row-center">{element}</p>
-							))}
-						</div>
-						) : (
-							<p style={{ color: 'rgb(30, 151, 0)', fontSize: '20px', marginTop: '80px' }} className="row-center">
-								{`Você não tem nenhuma publicação :(`}
-							</p>
-						)}
+					<div className="publicacoes-list">
+
+					</div>
 				</div>
 			</div>
 			<div className='crop-content row-center' style={data ? {
@@ -200,7 +204,9 @@ export default function CropContainer() {
 						style={{
 							backgroundColor: "#42b72a"
 						}}
-						onClick={() => { }}
+						onClick={() => {
+							setForm(true)
+						 }}
 					>
 						Criar uma publicação
 					</MyButton>
@@ -220,6 +226,10 @@ export default function CropContainer() {
 										<ul
 											className="crop-card"
 											id={"owner-" + index}
+											onClick={(e) => {
+												if (allCrops)
+													setCrop(allCrops[index], e)
+											}}
 										>
 											<li className="nome">Nome: {element.nome}</li>
 											<li className="lvl">Nível: {element.nivel.lvl}</li>
@@ -246,6 +256,10 @@ export default function CropContainer() {
 										<ul
 											className="crop-card"
 											id={"all-" + index}
+											onClick={(e) => {
+												if (allCrops)
+													setCrop(allCrops[index], e)
+											}}
 										>
 											<li className="nome">Nome: {element.nome}</li>
 											<li className="dono">Dono: {element.dono}</li>

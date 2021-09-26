@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import socketIOClient from "socket.io-client"
 import MyButton from '../../common/button'
 import MyLineChart from '../myLineChart'
 import BarChart from '../barChart'
@@ -7,7 +6,7 @@ import alerts from '../../functions/alertController'
 import api from '../../service/index'
 import dateFormat from 'dateformat'
 
-export default function SensorContainer({ setForm, setImportForm, newSensor, setFullData, setFullChart }) {
+export default function SensorContainer({ setForm, setImportForm, newSensor, setFullData, setFullChart, socket }) {
   const [sensores, setSensores] = useState([])
   const [visible, setVisible] = useState(false)
   const [data, setData] = useState([])
@@ -104,29 +103,27 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
   }
 
   useEffect(() => {
-    const socket = socketIOClient("http://127.0.0.1:3333", {
-      query: {
-        user: localStorage.getItem("urbanVG-user")
-      }
-    })
-
-    socket.on("dataUpdate", req => {
-      generateBarChartData()
-      setData([])
-      setRequest(true)
-      dataGen()
-    })
-
     document.getElementsByClassName("loading")[0].style.display = "flex"
+    generateBarChartData()
 
     setTimeout(async () => {
-      generateBarChartData()
       document.getElementsByClassName("loading")[0].style.display = "none"
       setVisible(true)
-    }, 800)
-
-    return () => socket.disconnect()
+    }, 1300)
   }, [])
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("dataUpdate", req => {
+        setData([])
+        setRequest(true)
+        dataGen()
+        generateBarChartData()
+      })
+
+      return () => socket.disconnect()
+    }
+  }, [socket])
 
   useEffect(() => {
     if (clicked) {
@@ -147,6 +144,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
         ...sensores,
         newSensor
       ])
+      generateBarChartData()
     }
   }, [newSensor])
 
@@ -166,7 +164,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
                     className="chart-container row-center"
                     key={`chart-item${index}`}
                     onClick={e => {
-                      if (document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[2].childNodes[2].textContent) {
+                      if (document.getElementsByClassName('active')[0] && document.getElementsByClassName('active')[0].id !== e.currentTarget.childNodes[2].childNodes[2].textContent) {
                         setData([])
                         setListItem(e, true)
                         setClicked(e.currentTarget.childNodes[2].childNodes[2].textContent)
@@ -191,10 +189,10 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
           )}
           <div className="row-center">
             <MyButton onClick={() => { setForm(true) }}>
-              Cadastre seu sensor
+              New Sensor
             </MyButton>
             <MyButton onClick={() => { setImportForm(true) }}>
-              Importe seu sensor
+              Import a sensor
             </MyButton>
           </div>
         </div>
@@ -204,7 +202,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
             <div className="sensor-list-container column-center">
               {sensores && sensores[0] ? (
                 <>
-                  <input type="text" className="text-small search-bar" placeholder="Buscar sensor pelo nome ou tipo..." />
+                  <input type="text" className="text-small search-bar" placeholder={"Search sensor by name or type..."} />
                   <div className="sensor-list">
                     {sensores.map((element, index) => (
                       <ul
@@ -221,23 +219,23 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
                       >
                         <li className="item-container">
                           <p>
-                            <span>Nome: </span>
+                            <span>Name: </span>
                             {element.nome}
                           </p>
                         </li>
                         <li className="item-container">
                           <p>
-                            <span>Tipo: </span>
+                            <span>Type: </span>
                             {element.tipo}
                           </p>
                         </li>
                         {element.feed[0] && (
                           <>
                             <li className="item-container">
-                              <p>Valor Atual: {element.feed[(element.feed.length - 1)].valor}</p>
+                              <p>Current value: {element.feed[(element.feed.length - 1)].valor}</p>
                             </li>
                             <li className="item-container">
-                              <p>Ultima atualização: {dateFormat(element.feed[(element.feed.length - 1)].data, "dd/mm/yyyy  - HH:MM")}</p>
+                              <p>Last update: {dateFormat(element.feed[(element.feed.length - 1)].data, "dd/mm/yyyy  - HH:MM")}</p>
                             </li>
                           </>
                         )}
@@ -246,7 +244,7 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
                   </div>
                 </>
               ) : (
-                <p>Você não tem nenhum sensor cadastrado {":("}</p>
+                <p>You don't have registered sensors {":("}</p>
               )}
             </div>
           </li>

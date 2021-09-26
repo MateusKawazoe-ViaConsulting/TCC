@@ -1,0 +1,58 @@
+.sensor-form-container {
+	.crop-form-container {
+		width: 450px;
+		height: fit-content;
+		padding-bottom: 20px;
+		background-color: white;
+		z-index: 10;
+		border-radius: 15px;
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+
+		.crop-information {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: baseline;
+			margin-top: 40px;
+
+			.crop-input {
+				width: 392px;
+				margin-bottom: 10px;
+			}
+
+			h1 {
+				color: rgb(30, 151, 0);
+				margin-bottom: 40px;
+			}
+
+			.side-input {
+				display: flex;
+				margin-bottom: 10px;
+			}
+
+			.sensor-buttons {
+				width: 70%;
+				justify-content: space-between;
+				margin-bottom: 20px;
+				margin-top: 20px;
+
+				.MuiButtonBase-root {
+					width: 120px;
+					background-color: red !important;
+
+					&:hover {
+						background-color: rgb(168, 0, 0) !important;
+					}
+
+					&:last-child {
+						background-color: #0fd329 !important;
+
+						&:hover {
+							background-color: #007226 !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}

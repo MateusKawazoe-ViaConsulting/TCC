@@ -35,6 +35,7 @@ export default function ImportSensorForm({ setImportForm, setNewSensor }) {
 
 	useEffect(() => {
 		loadCrops()
+		console.log(crops)
 	}, [])
 
 	return (
@@ -85,7 +86,7 @@ export default function ImportSensorForm({ setImportForm, setNewSensor }) {
 								{({ errors, touched, values, setValues, setFieldTouched, handleSubmit }) => (
 									<div className="sensor-form-values column-center">
 										<MyInput
-											placeholder="Dono"
+											placeholder="Owner"
 											className="text-regular input-md"
 											value={localStorage.getItem('urbanVG-user')}
 											disabled
@@ -98,11 +99,12 @@ export default function ImportSensorForm({ setImportForm, setNewSensor }) {
 													horta: e ? e.value : ""
 												})
 											}}
+											placeholder="Crops..."
 										/>
 										<MyInput
 											error={errors.id && touched.id}
 											errorLabel={errors.id}
-											placeholder="* ID do ThingSpeak"
+											placeholder="* ThingSpeak's ID"
 											className="text-regular input-md"
 											value={id.value}
 											id="sensor-name"
@@ -123,7 +125,7 @@ export default function ImportSensorForm({ setImportForm, setNewSensor }) {
 										/>
 										<ColorPicker setColor={setCor} error={corError} setError={setCorError} />
 										<div className="sensor-buttons row-center">
-											<MyButton onClick={() => { setImportForm(false) }}>Cancelar</MyButton>
+											<MyButton onClick={() => { setImportForm(false) }}>Cancel</MyButton>
 											<MyButton onClick={() => {
 												if (!cor)
 													setCorError(true)
@@ -131,7 +133,7 @@ export default function ImportSensorForm({ setImportForm, setNewSensor }) {
 													setCorError(false)
 
 												handleSubmit()
-											}}>Confirmar</MyButton>
+											}}>Confirm</MyButton>
 										</div>
 
 									</div>

@@ -4,7 +4,8 @@ import Button from '../../common/button'
 import unfocusable from '../../functions/unfocusable'
 import alerts from '../../functions/alertController'
 import api from '../../service'
-
+import loginPt from '../../lib/language/pt-br/page/login.json'
+import loginEn from '../../lib/language/en/page/login.json'
 
 export default function LoginContainer({ history }) {
     const [user, setUser] = useState("");
@@ -28,7 +29,7 @@ export default function LoginContainer({ history }) {
                 id="user-login"
                 error={userError.visible}
                 errorLabel={userError.message}
-                placeholder="Usuário"
+                placeholder="User"
                 className="text-regular input-md"
                 onChange={e => {
                     setUser(e.target.value)
@@ -41,7 +42,7 @@ export default function LoginContainer({ history }) {
                 type="password"
                 error={passwordError.visible}
                 errorLabel={passwordError.message}
-                placeholder="Senha"
+                placeholder="Password"
                 className="text-regular input-md"
                 onChange={e => {
                     setPassword(e.target.value)
@@ -101,7 +102,7 @@ export default function LoginContainer({ history }) {
                                     localStorage.setItem('urbanVG-user_crop', result.data.crop ? result.data.crop.length : 0)
                                     localStorage.setItem('urbanVG-user_sensor', result.data.sensores ? result.data.sensores.length : 0)
                                     localStorage.setItem('urbanVG-user_public', result.data.publicacoes ? result.data.publicacoes.length : 0)
-                                    localStorage.setItem('urbanVG-user_foto', result.data.foto ? result.data.foto : null)
+                                    localStorage.setItem('urbanVG-user_foto', result.data.foto ? result.data.foto : '')
                                     localStorage.setItem('urbanVG-user_email', result.data.email)
                                     localStorage.setItem('urbanVG-user_name', result.data.nome)
                                     localStorage.setItem('urbanVG-user_address', result.data.localizacao.endereco)
@@ -116,9 +117,9 @@ export default function LoginContainer({ history }) {
                     }
                 }}
             >
-                Entrar
+               {loginEn.login.signIn}
             </Button>
-            <span className="text-small">Esqueceu sua senha?</span>
+            <span className="text-small">{loginEn.login.forgotPass}</span>
             <span className="line" />
             <Button
                 className="button-md"
@@ -126,7 +127,7 @@ export default function LoginContainer({ history }) {
                     document.getElementsByClassName("signup-container")[0].style.display = "flex"
                 }}
             >
-                Criar nova conta
+                {loginEn.login.signUp}
             </Button>
         </form>
     )

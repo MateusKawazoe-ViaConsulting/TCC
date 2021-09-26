@@ -59,18 +59,18 @@ module.exports = {
     },
 
     async updateImportedSensorFeed() {
-        const result = await updateSensors.find()
+        try {
+            const result = await updateSensors.find()
 
-        if (!result[0].sensores[0])
-            return
-
-        result[0].sensores.map(async element => {
-            const data = await sensor.findById(element)
-
-            if (!data.nome)
+            if (!result[0].sensores[0])
                 return
 
-            try {
+            result[0].sensores.map(async element => {
+                const data = await sensor.findById(element)
+
+                if (!data || !data.nome)
+                    return
+
                 importData(data.thing_speak_id).then(async response => {
                     const diff = response.data.channel.last_entry_id - data.ultimo_feed_id
 
@@ -95,10 +95,10 @@ module.exports = {
                     }
                     Socket.emit_user("dataUpdate", { dono: data.dono });
                 })
-            } catch (error) {
-                console.log(error)
-            }
-        })
+            })
+        } catch (error) {
+            console.log(error)
+        }
     },
 
     thingSpeakImportSensor(req, res) {

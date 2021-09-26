@@ -22,7 +22,7 @@ export default function ColorPicker({ setColor, error, setError }) {
 
 	return (
 		<div className="color-picker-container column-center">
-			<p className="text-regular" style={{ color: error ? "red" : "#888"}}>Cor</p>
+			<p className="text-regular" style={{ color: error ? "red" : "#888"}}>Color</p>
 			<ul className='color-picker-content row-center'>
 				{data.map((element, index) => {
 					return (

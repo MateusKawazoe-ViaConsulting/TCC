@@ -46,7 +46,7 @@ export default function SignupContainer({ history }) {
                     }}
                 />
                 <ul className="title-container">
-                    <h1 className="text-regular">Cadastre-se</h1>
+                    <h1 className="text-regular">Sign Up</h1>
                 </ul>
                 <img
                     src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/__geKiQnSG-.png"
@@ -62,8 +62,8 @@ export default function SignupContainer({ history }) {
                     }}
                 />
                 <div className="title-content row-center">
-                    <h2 className="text-regular user-form-title">Dados cadastrais</h2>
-                    <h2 className="text-regular user-form-title">Dados localizacionais</h2>
+                    <h2 className="text-regular user-form-title">Personal data</h2>
+                    <h2 className="text-regular user-form-title">Location data</h2>
                 </div>
                 <span className="line" />
                 <div className="form-container row-center">
@@ -71,8 +71,8 @@ export default function SignupContainer({ history }) {
                     <LocalizationForm clicked={clicked2} userData={data} history={history} />
                 </div>
                 <p className="text-tiny">
-                    Ao clicar em Cadastre-se, você concorda com nossos <span>Termos, Política de Dados</span> e
-                    <span> Política de Cookies</span>. Você poderá cancelar isso quando quiser nas configurações de perfil.
+                    By clicking NEXT and REGISTER, you agree to our <span>Terms, Privacy Policy</span> and
+                    <span> Cookies Policy</span>.
                 </p>
                 <Button
                     type="submit"
@@ -85,7 +85,7 @@ export default function SignupContainer({ history }) {
                         }
                     }}
                 >
-                    {formState ? 'Cadastre-se' : 'Próximo'}
+                    {formState ? 'Register' : 'Next'}
                 </Button>
             </div>
         </div >

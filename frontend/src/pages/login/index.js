@@ -7,7 +7,8 @@ import Background from '../../components/background'
 import LoginContainer from '../../components/loginContainer'
 import SignupContiner from '../../components/signupContainer'
 import alertController from '../../functions/alertController'
-
+import loginPt from '../../lib/language/pt-br/page/login.json'
+import loginEn from '../../lib/language/en/page/login.json'
 
 export default function Login({ history }) {
     if (localStorage.getItem('urbanVG-token')) {
@@ -19,7 +20,7 @@ export default function Login({ history }) {
             <Background />
             <div className="title-container">
                 <h1 className="text-large row-center">UrbanVG <img src={Logo} alt="logo" /></h1>
-                <p className="text-regular">O UrbanVG ajuda você a se conectar e compartilhar suas hortas com pessoas da sua cidade!</p>
+                <p className="text-regular">{loginEn.login.welcome}</p>
             </div>
             <LoginContainer history={history} />
             <SignupContiner history={history} />

@@ -7,11 +7,11 @@ export default function Fotter() {
             <ol className="text-small footer-information row-center">
                 <li>©UrbanVG</li>
                 |
-                <li>Todos os direitos reservados</li>
+                <li>All rights reserved</li>
                 |
-                <li>Termos de uso</li>
+                <li>Terms</li>
                 |
-                <li>Política de Privacidade</li>
+                <li>Privacy Policy</li>
             </ol>
         </div>
     )

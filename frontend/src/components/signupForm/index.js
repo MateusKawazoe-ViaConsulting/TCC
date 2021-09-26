@@ -157,7 +157,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                                 <MyInput
                                     error={errors.name && touched.name}
                                     errorLabel={errors.name}
-                                    placeholder="Nome"
+                                    placeholder="Name"
                                     className="text-regular input-sm"
                                     values={values.name}
                                     onChange={e => {
@@ -183,7 +183,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                                 <MyInput
                                     error={errors.surname && touched.surname}
                                     errorLabel={errors.surname}
-                                    placeholder="Sobrenome"
+                                    placeholder="Surname"
                                     className="text-regular input-sm"
                                     values={values.surname}
                                     onChange={e => {
@@ -210,7 +210,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                             <MyInput
                                 error={(errors.user && touched.user) || variables.user.error !== undefined}
                                 errorLabel={errors.user ? errors.user : variables.user.error}
-                                placeholder="Usuário"
+                                placeholder="User"
                                 className="text-regular input-md"
                                 values={values.user}
                                 onChange={e => {
@@ -276,7 +276,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                             <MyInput
                                 error={errors.password && touched.password}
                                 errorLabel={errors.password}
-                                placeholder="Senha"
+                                placeholder="Password"
                                 className="text-regular input-md"
                                 values={values.password}
                                 type="password"
@@ -304,7 +304,7 @@ export default function SignupForm({ clicked, handleNext, setData, userData }) {
                                 id="unfocusable-signup-user"
                                 error={(errors.confirmPassword && touched.confirmPassword) || variables.confirmPassword.error !== undefined}
                                 errorLabel={errors.confirmPassword ? errors.confirmPassword : variables.confirmPassword.error}
-                                placeholder="Confirmar senha"
+                                placeholder="Confirm Password"
                                 className="text-regular input-md"
                                 values={values.confirmPassword}
                                 type="password"

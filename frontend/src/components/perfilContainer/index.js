@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Formik, Form } from "formik";
 import api from '../../service'
-import socketIOClient from "socket.io-client"
 import crop from '../../lib/assets/header/crop.png'
 import sensor from '../../lib/assets/header/sensor.png'
 import publication from '../../lib/assets/profile/publication.png'
 import MyInput from '../../common/input'
 import * as Yup from "yup"
 import MyButton from '../../common/button'
+import picture from '../../lib/assets/profile/picture.png' 
+import profileEn from '../../lib/language/en/components/profileContainer.json'
 
-export default function PerfilContainer({ setItem, color }) {
+export default function PerfilContainer({ setItem, color, socket }) {
 	const [nextLvl, setNextLvl] = useState(0)
 	const [xpPercent, setXpPercent] = useState("1%")
 	const [address, setAddress] = useState()
@@ -74,33 +75,33 @@ export default function PerfilContainer({ setItem, color }) {
 	}, [color])
 
 	useEffect(() => {
-		const socket = socketIOClient("http://127.0.0.1:3333", {
-			query: {
-				user: localStorage.getItem("urbanVG-user")
-			}
-		})
-
-		socket.on("userXpUpdate", req => {
-			localStorage.setItem('urbanVG-user_xp', req.xp)
-			localStorage.setItem('urbanVG-user_lvl', req.lvl)
-			getNextLvl()
-		})
-
 		getNextLvl()
 		loadAddress()
 	}, [])
 
+	useEffect(() => {
+		if (socket) {
+			socket.on("userXpUpdate", req => {
+				localStorage.setItem('urbanVG-user_xp', req.xp)
+				localStorage.setItem('urbanVG-user_lvl', req.lvl)
+				getNextLvl()
+			})
+
+			return () => socket.disconnect()
+		}
+	}, [socket])
+
 	return (
 		<div className='perfil-container row-center'>
 			<div className="left-container" id="profile-informations">
-				<span className="line" id="profile-line"/>
+				<span className="line" id="profile-line" />
 				<ul className="profile-information-container column-center">
 					<li className="username column-center">
 						<span id="username">{localStorage.getItem('urbanVG-user')}</span>
 						<span>Level {localStorage.getItem('urbanVG-user_lvl')}</span>
 					</li>
 					<li className="picture row-center">
-						<img id="profile-picture" src={localStorage.getItem('urbanVG-user_foto')} alt="Foto de perfil" />
+						<img id="profile-picture" src={localStorage.getItem('urbanVG-user_foto') ? localStorage.getItem('urbanVG-user_foto') : picture} alt="Foto de perfil" />
 					</li>
 					<li className="lvl-content column-center">
 						<div id="xp-bar" className="row-center">
@@ -119,17 +120,17 @@ export default function PerfilContainer({ setItem, color }) {
 					<li className="achiviments-items row-center">
 						<ul className="profile-icon-container row-center">
 							<li className="column-center" onClick={() => setItem("home")}>
-								<p>Posts</p>
+								<p>{profileEn.profile.publics}</p>
 								<img src={publication} alt="publication" className="profile-icon" />
 								<p className="text-medium">{localStorage.getItem('urbanVG-user_public')}</p>
 							</li>
 							<li className="column-center" onClick={() => setItem("crop")}>
-								<p>Hortas</p>
+								<p>{profileEn.profile.crops}</p>
 								<img src={crop} alt="crop" className="profile-icon" />
 								<p className="text-medium">{localStorage.getItem('urbanVG-user_crop')}</p>
 							</li>
 							<li className="column-center" onClick={() => setItem("sensor")}>
-								<p>Sensores</p>
+								<p>{profileEn.profile.sensors}</p>
 								<img src={sensor} alt="sensor" className="profile-icon" />
 								<p className="text-medium">{localStorage.getItem('urbanVG-user_sensor')}</p>
 							</li>
@@ -172,7 +173,7 @@ export default function PerfilContainer({ setItem, color }) {
 									id="signup-user"
 									error={errors.senhaAtual && touched.senhaAtual}
 									errorLabel={errors.senhaAtual}
-									placeholder="Senha atual"
+									placeholder={profileEn.profile.currentPass}
 									className="text-regular input-profile"
 									value={values.senhaAtual}
 									type="password"
@@ -190,7 +191,7 @@ export default function PerfilContainer({ setItem, color }) {
 									id="signup-user"
 									error={errors.senhaNova && touched.senhaNova}
 									errorLabel={errors.senhaNova}
-									placeholder="Nova senha"
+									placeholder={profileEn.profile.newPass}
 									className="text-regular input-profile"
 									value={values.senhaNova}
 									type="password"
@@ -204,7 +205,7 @@ export default function PerfilContainer({ setItem, color }) {
 										setFieldTouched('senhaNova', true, false)
 									}}
 								/>
-								<MyButton id="save-profile-button" onClick={handleSubmit}>Salvar</MyButton>
+								<MyButton id="save-profile-button" onClick={handleSubmit}>{profileEn.profile.save}</MyButton>
 							</div>
 						)}
 					</Formik>

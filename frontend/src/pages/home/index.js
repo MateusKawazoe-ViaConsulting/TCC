@@ -7,6 +7,8 @@ import SensorContainer from '../../components/sensorContainer'
 import CropContainer from '../../components/cropContainer'
 import Alert from '@material-ui/lab/Alert'
 import SensorForm from '../../components/sensorForm'
+import CropForm from '../../components/cropForm'
+import socketIOClient from "socket.io-client"
 import alertController from '../../functions/alertController'
 import ImportSensorForm from '../../components/importSensorForm'
 import PerfilContainer from '../../components/perfilContainer'
@@ -19,6 +21,9 @@ export default function Home({ history }) {
     const [importForm, setImportForm] = useState(false)
     const [fullChart, setFullChart] = useState(false)
     const [fullData, setFullData] = useState(null)
+    const [socket, setSocket] = useState(null)
+    const [cropForm, setCropForm] = useState(null)
+    const [publicForm, setPublicForm] = useState(null)
     const [color, setColor] = useState({
         primary: '#5590ff',
         secondary: '#1dbfff',
@@ -31,6 +36,14 @@ export default function Home({ history }) {
     }
 
     useEffect(() => {
+        const result = socketIOClient("http://127.0.0.1:3333", {
+            query: {
+                user: localStorage.getItem("urbanVG-user")
+            }
+        })
+
+        setSocket(result)
+
         switch (selected) {
             case 'sensor':
                 setColor({
@@ -87,10 +100,13 @@ export default function Home({ history }) {
             {importForm && (
                 <ImportSensorForm setImportForm={setImportForm} setNewSensor={setNewSensor} />
             )}
+            {cropForm && (
+                <CropForm setForm={setCropForm}/>
+            )}
             <Header setItem={setSelected} item={selected} history={history} />
             <Background />
             <Loading />
-            <PerfilContainer setItem={setSelected} color={color} />
+            <PerfilContainer setItem={setSelected} color={color} socket={socket} />
             <div className="body-container row-center">
                 {selected === 'sensor' && (
                     <SensorContainer
@@ -100,10 +116,12 @@ export default function Home({ history }) {
                         setFullData={setFullData}
                         setFullChart={setFullChart}
                         setNewSensor={setNewSensor}
+                        socket={socket}
                     />
                 )}
                 {selected === 'crop' && (
                     <CropContainer
+                        setForm={setCropForm}
                     />
                 )}
             </div>

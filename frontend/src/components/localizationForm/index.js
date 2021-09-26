@@ -24,10 +24,6 @@ export default function LocalizationForm({ clicked, userData, history }) {
       value: '',
       error: undefined
     },
-    // country: {
-    //   value: '',
-    //   error: undefined
-    // },
     city: {
       value: '',
       error: undefined
@@ -68,13 +64,8 @@ export default function LocalizationForm({ clicked, userData, history }) {
       .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/, 'Estado inválido'),
     number: Yup.number()
       .required('Nº é obrigatório'),
-    // country: Yup.string()
-    //   .min(1, 'País inválido')
-    //   .max(60, 'País inválido')
-    //   .required('País é obrigatório')
-    //   .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/, 'Estado inválido'),
     complement: Yup.string()
-      .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s-,]+$/, 'Estado inválido'),
+      .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s-,]+$/, 'Estado inválido')
   })
 
   useEffect(() => {
@@ -107,9 +98,9 @@ export default function LocalizationForm({ clicked, userData, history }) {
               localStorage.setItem('urbanVG-user_crop', 0)
               localStorage.setItem('urbanVG-user_sensor', 0)
               localStorage.setItem('urbanVG-user_public', 0)
-              localStorage.setItem('urbanVG-user_foto', null)
+              localStorage.setItem('urbanVG-user_foto', '')
               localStorage.setItem('urbanVG-user_name', userData.name)
-              localStorage.setItem('urbanVG-user_adress', result.data.localizacao.endereco)
+              localStorage.setItem('urbanVG-user_address', result.data.localizacao.endereco)
               localStorage.setItem('urbanVG-user_email', result.data.email)
               history.push('/home')
             }
@@ -146,7 +137,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
               <MyInput
                 error={errors.zipCode && touched.zipCode}
                 errorLabel={errors.zipCode}
-                placeholder="CEP"
+                placeholder="Zip Code"
                 className="text-regular input-sm"
                 value={values.zipCode}
                 style={{
@@ -240,7 +231,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
                 <MyInput
                   error={errors.city && touched.city}
                   errorLabel={errors.city}
-                  placeholder="Cidade"
+                  placeholder="City"
                   className="text-regular input-sm"
                   value={values.city || cep.cidade}
                   disabled={cep.cidade !== undefined}
@@ -268,7 +259,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
                 <MyInput
                   error={errors.uf && touched.uf}
                   errorLabel={errors.uf}
-                  placeholder="UF"
+                  placeholder="State"
                   className="text-regular input-sm"
                   value={values.uf || cep.uf}
                   disabled={cep.uf !== undefined}
@@ -298,7 +289,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
                 <MyInput
                   error={errors.street && touched.street}
                   errorLabel={errors.street}
-                  placeholder="Rua"
+                  placeholder="Street"
                   className="text-regular input-sm"
                   value={values.street || cep.rua}
                   id="signup-street"
@@ -355,7 +346,7 @@ export default function LocalizationForm({ clicked, userData, history }) {
                 id="unfocusable-signup-localization"
                 error={errors.complement && touched.complement}
                 errorLabel={errors.complement}
-                placeholder="Complemento"
+                placeholder="Complement"
                 className="text-regular input-sm"
                 value={values.complement}
                 onChange={e => {

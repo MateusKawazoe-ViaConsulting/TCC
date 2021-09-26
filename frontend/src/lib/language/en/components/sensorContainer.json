@@ -1,0 +1,8 @@
+{
+	"sensor": {
+		"searchSensor": "Search sensors by name or type...",
+		"signup": "New Sensor",
+		"import": "Import sensor",
+		"noSensorRegistered": "You don't have any registered sensors :("
+	}
+}

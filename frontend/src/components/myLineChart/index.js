@@ -9,7 +9,7 @@ export default function MyLineChart({ data, color, keyName, className, setDispla
     }}>
       {clicable && (
         <span className="expand-chart row-center">
-          <h1>Ver detalhes</h1>
+          <h1>View detail</h1>
         </span>
       )}
 
