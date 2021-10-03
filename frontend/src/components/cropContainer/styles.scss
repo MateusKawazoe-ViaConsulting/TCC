@@ -3,6 +3,13 @@
 	width: 30%;
 	margin-bottom: 7%;
 
+	.button-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+	}
+
 	.left-container {
 		width: 26%;
 		height: 310px;
@@ -181,23 +188,17 @@
 		}
 	}
 
-	.button-container {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		margin-top: 20px;
+	.my-button {
+		padding: 10px;
+		justify-self: end;
+		transition: all 0.2s linear;
 
-		.my-button {
-			padding: 10px;
-			justify-self: end;
+		&:first-child {
+			margin-right: 30px;
+		}
 
-			&:first-child {
-				margin-right: 30px;
-			}
-
-			&:hover {
-				background-color: rgb(30, 151, 0) !important;
-			}
+		&:hover {
+			opacity: 0.8;
 		}
 	}
 
@@ -275,5 +276,40 @@
 		.owner-crops {}
 
 		.all-crops {}
+	}
+}
+
+.crop-delete {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+
+	.button-delete-container {
+		width: 350px;
+		height: 130px;
+		background-color: white;
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+		position: relative;
+		z-index: 2;
+		margin-bottom: 10%;
+		border-radius: 10px;
+
+		p {
+			margin-bottom: 30px;
+
+			span {
+				color: green;
+			}
+		}
+
+		.my-button {
+			&:first-child {
+				margin-right: 30px;
+			}
+
+			&:hover {
+				opacity: 0.8;
+			}
+		}
 	}
 }

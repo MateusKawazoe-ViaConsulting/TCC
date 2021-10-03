@@ -3,10 +3,11 @@ import MyButton from '../../common/button'
 import MyInput from '../../common/input'
 import api from '../../service/index'
 
-export default function CropContainer({ setForm }) {
+export default function CropContainer({ setForm, newCrop }) {
 	const [data, setData] = useState(null)
 	const [allCrops, setAllCrops] = useState(null)
 	const [nextLvl, setNextLvl] = useState(null)
+	const [cropDelete, setCropDelete] = useState(false)
 	const [localization, setLocalization] = useState({
 		street: '',
 		number: '',
@@ -89,192 +90,254 @@ export default function CropContainer({ setForm }) {
 
 	useEffect(() => {
 		dataGen(0)
-	}, [])
+	}, [newCrop])
 
 	return (
-		<div className="column-center crop-container">
-			<div className="left-container">
-				<label>Publicações</label>
-				<div className="splited-container row-center">
-					<div className="publicacoes-list">
-
-					</div>
-				</div>
-			</div>
-			<div className='crop-content row-center' style={data ? {
-				alignItems: 'baseline'
-			} : {}}>
-				{data ? (
-					<>
-						<form className="crop-information column-center">
-							<h1>
-								{currentCrop.name}
-							</h1>
-							<p className="owner">
-								{currentCrop.owner}
-							</p>
-							<div className="localization-container">
-								<label>
-									Localização
-								</label>
-								<div className="splited-container">
-									<MyInput
-										className="text-regular street-number"
-										value={localization.street}
-										disabled
-									/>
-									<MyInput
-										className="text-regular street-number"
-										value={localization.number}
-										disabled
-									/>
-								</div>
-								<div className="splited-container">
-									<MyInput
-										className="text-regular city-country-district"
-										value={localization.district}
-										disabled
-									/>
-									<MyInput
-										className="text-regular city-country-district"
-										value={localization.city}
-										disabled
-									/>
-									<MyInput
-										className="text-regular city-country-district"
-										value={localization.state}
-										disabled
-									/>
-								</div>
-							</div>
-							<ul className="bottom-container row-center">
-								<li className="participants">
-									<label>
-										Pariticipantes
-									</label>
-									<div className="list">
-										{currentCrop.participants && currentCrop.participants.map(element => (
-											<p className="row-center">{element}</p>
-										))}
-									</div>
-								</li>
-								<li className="followers">
-									<label>
-										Seguidores
-									</label>
-									<div className="list">
-										{currentCrop.followers && currentCrop.followers.map(element => (
-											<p className="row-center">{element}</p>
-										))}
-									</div>
-								</li>
-								<li className="publications">
-									<label>
-										Sensores
-									</label>
-									<div className="list">
-										{currentCrop.sensors && currentCrop.sensors.map(element => (
-											<p className="row-center">{element.nome}</p>
-										))}
-									</div>
-								</li>
-							</ul>
-						</form>
-						<div className="buttons-container">
+		<>
+			<div className="column-center crop-container">
+				<div className="left-container">
+					<label>Publicações</label>
+					<div className="splited-container row-center">
+						<div className="publicacoes-list">
 
 						</div>
-					</>
-				) : (
-					<p>
-						{`Nenhuma horta cadastrada :(`}
-					</p>
-				)}
-			</div>
-			<div className="button-container">
-				<MyButton
-					style={{
-						backgroundColor: "#42b72a"
-					}}
-					onClick={() => { }}
-				>
-					Cadastre uma horta
-				</MyButton>
-				{data && data[0] && (
+					</div>
+				</div>
+				<div className='crop-content column-center' style={data ? {
+					alignItems: 'baseline'
+				} : {}}>
+					{data ? (
+						<>
+							<form className="crop-information column-center">
+								<h1>
+									{currentCrop.name}
+								</h1>
+								<p className="owner">
+									{currentCrop.owner}
+								</p>
+								<div className="localization-container">
+									<label>
+										Localização
+									</label>
+									<div className="splited-container">
+										<MyInput
+											className="text-regular street-number"
+											value={localization.street}
+											disabled
+										/>
+										<MyInput
+											className="text-regular street-number"
+											value={localization.number}
+											disabled
+										/>
+									</div>
+									<div className="splited-container">
+										<MyInput
+											className="text-regular city-country-district"
+											value={localization.district}
+											disabled
+										/>
+										<MyInput
+											className="text-regular city-country-district"
+											value={localization.city}
+											disabled
+										/>
+										<MyInput
+											className="text-regular city-country-district"
+											value={localization.state}
+											disabled
+										/>
+									</div>
+								</div>
+								<ul className="bottom-container row-center">
+									<li className="participants">
+										<label>
+											Pariticipantes
+										</label>
+										<div className="list">
+											{currentCrop.participants && currentCrop.participants.map(element => (
+												<p className="row-center">{element}</p>
+											))}
+										</div>
+									</li>
+									<li className="followers">
+										<label>
+											Seguidores
+										</label>
+										<div className="list">
+											{currentCrop.followers && currentCrop.followers.map(element => (
+												<p className="row-center">{element}</p>
+											))}
+										</div>
+									</li>
+									<li className="publications">
+										<label>
+											Sensores
+										</label>
+										<div className="list">
+											{currentCrop.sensors && currentCrop.sensors.map(element => (
+												<p className="row-center">{element.nome}</p>
+											))}
+										</div>
+									</li>
+								</ul>
+							</form>
+							{currentCrop && currentCrop.owner === localStorage.getItem('urbanVG-user') && (
+								<div className="button-container row-center">
+									<MyButton
+										className="edit"
+										style={{
+											backgroundColor: "rgb(66, 183, 42)"
+										}}
+										onClick={() => {
+											setForm(true)
+										}}
+									>
+										Editar
+									</MyButton>
+									<MyButton
+										className="delete"
+										style={{
+											backgroundColor: "red"
+										}}
+										onClick={() => {
+											setCropDelete(true)
+										}}
+									>
+										Deletar Horta
+									</MyButton>
+								</div>
+							)}
+						</>
+					) : (
+						<p>
+							{`Nenhuma horta cadastrada :(`}
+						</p>
+					)}
+				</div>
+				<div className="button-container">
 					<MyButton
 						style={{
 							backgroundColor: "#42b72a"
 						}}
 						onClick={() => {
 							setForm(true)
-						 }}
+						}}
 					>
-						Criar uma publicação
+						Cadastre uma horta
 					</MyButton>
-				)}
-			</div>
-			<div className="right-container column-center">
-				<div className="owner-crops">
-					<label>Suas Hortas</label>
-					{data && data[0] ? (
-						<>
-							<input type="text" className="text-small search-bar" placeholder="Buscar horta..." />
-							<div className="crop-list">
-								{data.map((element, index) => {
-									getNextLvlXp(element.nivel.lvl)
-
-									return (
-										<ul
-											className="crop-card"
-											id={"owner-" + index}
-											onClick={(e) => {
-												if (allCrops)
-													setCrop(allCrops[index], e)
-											}}
-										>
-											<li className="nome">Nome: {element.nome}</li>
-											<li className="lvl">Nível: {element.nivel.lvl}</li>
-											<li className="xp">xp: {element.nivel.xp} / {nextLvl}</li>
-										</ul>
-									)
-								})}
-							</div>
-						</>
-					) : (
-						<p>{`Você não tem nenhuma horta cadastrada :(`}</p>
+					{data && data[0] && (
+						<MyButton
+							style={{
+								backgroundColor: "#42b72a"
+							}}
+						>
+							Criar uma publicação
+						</MyButton>
 					)}
 				</div>
-				<div className="all-crops">
-					<label>Todas as Hortas</label>
-					{allCrops && allCrops[0] ? (
-						<>
-							<input type="text" className="text-small search-bar" placeholder="Buscar horta..." />
-							<div className="crop-list">
-								{allCrops.map((element, index) => {
-									getNextLvlXp(element.nivel.lvl)
+				<div className="right-container column-center">
+					<div className="owner-crops">
+						<label>Suas Hortas</label>
+						{data && data[0] ? (
+							<>
+								<input type="text" className="text-small search-bar" placeholder="Buscar horta..." />
+								<div className="crop-list">
+									{data.map((element, index) => {
+										getNextLvlXp(element.nivel.lvl)
 
-									return (
-										<ul
-											className="crop-card"
-											id={"all-" + index}
-											onClick={(e) => {
-												if (allCrops)
-													setCrop(allCrops[index], e)
-											}}
-										>
-											<li className="nome">Nome: {element.nome}</li>
-											<li className="dono">Dono: {element.dono}</li>
-											<li className="lvl">Nível: {element.nivel.lvl}</li>
-											<li className="xp">xp: {element.nivel.xp} / {nextLvl}</li>
-										</ul>
-									)
-								})}
-							</div>
-						</>
-					) : (
-						<p>{`Você não tem nenhuma horta cadastrada :(`}</p>
-					)}
+										return (
+											<ul
+												className="crop-card"
+												id={"owner-" + index}
+												onClick={(e) => {
+													if (data)
+														setCrop(data[index], e)
+												}}
+											>
+												<li className="nome">Nome: {element.nome}</li>
+												<li className="lvl">Nível: {element.nivel.lvl}</li>
+												<li className="xp">xp: {element.nivel.xp} / {nextLvl}</li>
+											</ul>
+										)
+									})}
+								</div>
+							</>
+						) : (
+							<p>{`Você não tem nenhuma horta cadastrada :(`}</p>
+						)}
+					</div>
+					<div className="all-crops">
+						<label>Todas as Hortas</label>
+						{allCrops && allCrops[0] ? (
+							<>
+								<input type="text" className="text-small search-bar" placeholder="Buscar horta..." />
+								<div className="crop-list">
+									{allCrops.map((element, index) => {
+										getNextLvlXp(element.nivel.lvl)
+
+										return (
+											<ul
+												className="crop-card"
+												id={"all-" + index}
+												onClick={(e) => {
+													if (allCrops)
+														setCrop(allCrops[index], e)
+												}}
+											>
+												<li className="nome">Nome: {element.nome}</li>
+												<li className="dono">Dono: {element.dono}</li>
+												<li className="lvl">Nível: {element.nivel.lvl}</li>
+												<li className="xp">xp: {element.nivel.xp} / {nextLvl}</li>
+											</ul>
+										)
+									})}
+								</div>
+							</>
+						) : (
+							<p>{`Você não tem nenhuma horta cadastrada :(`}</p>
+						)}
+					</div>
 				</div>
 			</div>
-		</div>
+			{cropDelete && (
+				<div className="crop-delete row-center">
+					<span className="dark-background" />
+					<div className="button-delete-container column-center">
+						<p className="text-small">
+							Deseja excluír
+							<span className="text-small">
+								{" " + currentCrop.name + " "}
+							</span>
+							?
+						</p>
+						<div className="row-center">
+							<MyButton
+								className="edit"
+								style={{
+									backgroundColor: "green"
+								}}
+								onClick={() => {
+									setCropDelete(false)
+								}}
+							>
+								Não
+							</MyButton>
+							<MyButton
+								className="delete"
+								style={{
+									backgroundColor: "red"
+								}}
+								onClick={() => {
+									setCropDelete(false)
+								}}
+							>
+								Sim
+							</MyButton>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
 	)
 }

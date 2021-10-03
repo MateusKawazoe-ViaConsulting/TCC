@@ -6,18 +6,18 @@ import alerts from '../../functions/alertController'
 import unfocusable from '../../functions/unfocusable'
 import cepMask from '../../validation/cepMask'
 import findZipCode from '../../service/findZipCode'
-import MySelect from '../../common/select'
+import MultiSelect from '../../common/multiSelect'
 import MyButton from '../../common/button'
 import api from '../../service'
 
-export default function CropForm({ setForm }) {
+export default function CropForm({ setForm, setNewCrop, newCrop }) {
 	const [cep, setCep] = useState({
 		rua: undefined,
 		cidade: undefined,
 		uf: undefined
 	})
 	const [users, setUsers] = useState(null)
-	const [participants, setParticipants] = useState([])
+	const [participants, setParticipants] = useState([localStorage.getItem('urbanVG-user')])
 	const [variables, setVariables] = useState({
 		name: {
 			value: '',
@@ -57,7 +57,7 @@ export default function CropForm({ setForm }) {
 			.min(2, 'Nome inválido')
 			.max(30, 'Nome inválido')
 			.required('Nome é obrigatório')
-			.matches(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/, 'Nome inválido'),
+			.matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, 'Nome inválido'),
 		zipCode: Yup.string()
 			.min(8, 'CEP deve ter 8 números')
 			.max(9, 'CEP deve ter 8 números')
@@ -100,7 +100,6 @@ export default function CropForm({ setForm }) {
 	useEffect(() => {
 		unfocusable('unfocusable-signup-localization')
 		loadUsers()
-		console.log(users)
 	}, [])
 
 	return (
@@ -116,8 +115,31 @@ export default function CropForm({ setForm }) {
 					complement: ''
 				}}
 				validationSchema={cropSchema}
+				onSubmit={async (values) => {
+					document.getElementsByClassName("loading")[0].style.display = "flex"
+					try {
+						console.log(participants)
+						const result = await api.post('/crop/store', {
+							nome: values.name,
+							dono: localStorage.getItem('urbanVG-user'),
+							participantes: participants,
+							endereco: `${values.street}, ${values.number}, ${values.zipCode}, ${values.city}, ${values.uf}`
+						})
+						if (!result.data.localizacao) {
+							console.log(result.data)
+							alerts.showAlert(result.data, 'Error', 'home-alert')
+						} else {
+							setNewCrop(!newCrop)
+							setForm(false)
+							alerts.showAlert("Crop registered successfully!", 'Success', 'home-alert')
+						}
+					} catch (error) {
+						alerts.showAlert('Server connection problem!', 'Error', 'home-alert')
+					}
+					document.getElementsByClassName("loading")[0].style.display = "none"
+				}}
 			>
-				{({ errors, touched, values, setValues, setFieldTouched }) => (
+				{({ errors, touched, values, setValues, setFieldTouched, handleSubmit }) => (
 					<div className="crop-form-container form-content" id="right-user-form">
 						<Form className="crop-information">
 							<h1>Cadastrar Horta</h1>
@@ -149,14 +171,11 @@ export default function CropForm({ setForm }) {
 									/>
 								</div>
 								<div className="input-container column-center">
-									<MySelect
-										className="crop-input"
-										options={users}
-										onChange={e => {
-											if (e)
-												setParticipants(prevState => [...prevState, e.value])
-										}}
-										placeholder="Users..."
+									<MultiSelect
+										users={users}
+										setParticipants={setParticipants}
+										participants={participants}
+										setUsers={setUsers}
 									/>
 								</div>
 								{participants[0] && (
@@ -400,8 +419,7 @@ export default function CropForm({ setForm }) {
 							</div>
 							<div className="sensor-buttons row-center">
 								<MyButton onClick={() => { setForm(false) }}>Cancel</MyButton>
-								<MyButton onClick={() => {
-								}}>Confirm</MyButton>
+								<MyButton onClick={() => handleSubmit(values)}>Confirm</MyButton>
 							</div>
 						</Form>
 					</div>

@@ -60,6 +60,10 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
       } catch (error) {
         alerts.showAlert('Problema na conexão com o servidor!', 'Error', 'singup-alert')
       }
+      setTimeout(async () => {
+        document.getElementsByClassName("loading")[0].style.display = "none"
+        setVisible(true)
+      }, 1300)
     }
   }
 
@@ -105,11 +109,6 @@ export default function SensorContainer({ setForm, setImportForm, newSensor, set
   useEffect(() => {
     document.getElementsByClassName("loading")[0].style.display = "flex"
     generateBarChartData()
-
-    setTimeout(async () => {
-      document.getElementsByClassName("loading")[0].style.display = "none"
-      setVisible(true)
-    }, 1300)
   }, [])
 
   useEffect(() => {

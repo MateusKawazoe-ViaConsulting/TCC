@@ -23,6 +23,7 @@ export default function Home({ history }) {
     const [fullData, setFullData] = useState(null)
     const [socket, setSocket] = useState(null)
     const [cropForm, setCropForm] = useState(null)
+    const [newCrop, setNewCrop] = useState(false)
     const [publicForm, setPublicForm] = useState(null)
     const [color, setColor] = useState({
         primary: '#5590ff',
@@ -101,7 +102,7 @@ export default function Home({ history }) {
                 <ImportSensorForm setImportForm={setImportForm} setNewSensor={setNewSensor} />
             )}
             {cropForm && (
-                <CropForm setForm={setCropForm}/>
+                <CropForm setForm={setCropForm} setNewCrop={setNewCrop} newCrop={newCrop} />
             )}
             <Header setItem={setSelected} item={selected} history={history} />
             <Background />
@@ -122,6 +123,7 @@ export default function Home({ history }) {
                 {selected === 'crop' && (
                     <CropContainer
                         setForm={setCropForm}
+                        newCrop={newCrop}
                     />
                 )}
             </div>

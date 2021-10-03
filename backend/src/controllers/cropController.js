@@ -12,11 +12,7 @@ module.exports = {
             endereco
         } = req.body
 
-        const cropExists = await crop.findOne({ dono }).collation({ locale: 'pt', strength: 2 })
-        const userExists = await user.findOne({ usuario: dono }).collation({ locale: 'pt', strength: 2 })
-
-        if (!userExists)
-            return res.json("Usuário não existe!")
+        const cropExists = await crop.findOne({ dono, nome }).collation({ locale: 'pt', strength: 2 })
 
         if (cropExists) {
             if (cropExists.nome == nome)
