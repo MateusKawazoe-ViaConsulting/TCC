@@ -5,6 +5,7 @@ import Loading from '../../components/loading'
 import Footer from '../../components/footer'
 import SensorContainer from '../../components/sensorContainer'
 import CropContainer from '../../components/cropContainer'
+import MapContainer from '../../components/mapContainer'
 import Alert from '@material-ui/lab/Alert'
 import SensorForm from '../../components/sensorForm'
 import CropForm from '../../components/cropForm'
@@ -122,6 +123,10 @@ export default function Home({ history }) {
                 {selected === 'crop' && (
                     <CropContainer
                         setForm={setCropForm}
+                    />
+                )}
+                {selected === 'map' && (
+                    <MapContainer
                     />
                 )}
             </div>

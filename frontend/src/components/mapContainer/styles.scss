@@ -1,0 +1,18 @@
+.map-container{
+  position:relative !important;
+  height: 72%;
+	width: 50%;
+  margin-top: 0px;
+  margin-left: 150px;
+  align-self: baseline;
+	margin-bottom: 5%;
+	margin-top: 2%;
+}
+
+.marker{
+	cursor:pointer;
+
+	img {
+			width: 30px;
+	}
+}
